@@ -1,0 +1,27 @@
+Bubble
+Our Implementation document. This includes everything in the App, from Power Up to Shut down. Obvious 1000x more to come with group meeting, just what I thought of to start
+
+Power Up
+Loading
+        Images -
+        Sounds - 
+        Messages - 
+Interface    
+    Menu
+        Settings
+            What are we leaving up to the user
+    Main Page (Bubbles)
+        Bubble (definition)
+            What Is a bubble? -
+            Attributes - 
+            Settings (per bubble)
+        Create a Bubble
+            How - 
+        Look at a Bubble
+            How - 
+        PoP a Bubble
+Animation -  
+    List View
+        How does it differ from bubble (besides look) - 
+Shut Down
+    
