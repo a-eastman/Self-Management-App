@@ -183,7 +183,7 @@ class TextEntryBubble extends State<EntryPage> {
       appBar: AppBar(
         title: Text(t1),
       ),
-      body: makeBubble(new Bubble('spaghetti', 500)),
+      body: makeBubble(new Bubble('I am Caeleb', 500)),
       backgroundColor: Colors.red[500],
     );
   }
