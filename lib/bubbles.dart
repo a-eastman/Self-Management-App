@@ -1,145 +1,27 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget{
-  @override
-  Widget build(BuildContext context){
-    return MaterialApp(
-      title:'App3',
-      home: EntryPage(),
-    );
-  }
-}
-
-class MyGrid extends State<EntryPage>{
-  int _widthTiles;
-  int _heightTiles;
-  List<Widget> _myList;
-  BubblesList _bList;
-
-  MyGrid(int _widthTiles, int _heightTiles){
-    this._widthTiles = _widthTiles;
-    this._heightTiles = _heightTiles;
-    this._myList = genBubbles(_widthTiles);
-    this._bList = new BubblesList(5);
-  }
-
-  int getHeightTiles(){
-    return this._heightTiles;
-  }
-
-  int getWidthTiles(){
-    return this._widthTiles;
-  }
-
-
-
-  Widget buildGrid(int crossCount, double padding, double spacing){
-    List<Widget> _list = genBubbles(crossCount);
-    return new GridView.count(
-      primary: false,
-      padding: EdgeInsets.all(padding),
-      crossAxisSpacing: spacing,
-      crossAxisCount: crossCount,
-      children: _list,
-    );
-  }
-
-  List<Widget> genBubbles(int size){
-    List<Widget> _list = List<Widget>(size);
-    for (int i = 0; i < size; i++){
-      _list[i] = makeBubble(new Bubble(i.toString(), (i+1)*10.0, true));
-    }
-    return _list;
-  }
-
-  Widget makeBubbles(double padding, double spacing, int crossCount){
-    List<Widget> wList = [];
-    for (int i = 0; i < this._bList.getBubbleList().length; i++) {
-      wList.add(new Container(width: 200.0,
-        height: 200.0,
-        child: Center(
-            child: Container(
-                width: _bList.getElement(i).getPriority(),
-                height: _bList.getElement(i).getPriority(),
-                child: Opacity(
-                    opacity: _bList.getElement(i).getPressed() ? 1.0 : 0.0,
-                    child: FloatingActionButton(
-                        backgroundColor: Colors.blueAccent[300],
-                        child: Text(_bList.getElement(i).getEntry()),
-                        onPressed: () {
-                          setState(() {
-                            print(_bList.getElement(i).getPressed().toString());
-                            _bList.changeElementPressed(i);
-                            print(_bList.getElement(i).getPressed().toString());
-                          });
-                        }
-                    )
-                )
-            )
-        ),
-      ));
-    }
-    return new GridView.count(
-      primary: false,
-      padding: EdgeInsets.all(padding),
-      crossAxisSpacing: spacing,
-      crossAxisCount: crossCount,
-      children: wList,
-    );
-
-
-  }
-
-  Widget makeBubble(Bubble b) {
-    print('Visibility' + b.getPressed().toString());
-    return Container(
-      width: 200.0,
-      height: 200.0,
-      child: Center(
-          child: Container(
-              width: b.getPriority(),
-              height: b.getPriority(),
-              child: Opacity(
-                  opacity: b.getPressed() ? 1.0 : 0.0,
-                  child: FloatingActionButton(
-                      backgroundColor: Colors.blueAccent[300],
-                      child: Text(b.getEntry()),
-                      onPressed: () {
-                        setState(() {
-                          print(b.getPressed().toString());
-                          b.changePressed();
-                          print(b.getPressed().toString());
-                        });
-                      }
-                  )
-              )
-          )
-      ),
-    );
-  }
-  Bubble b1 = new Bubble('Pop!', 300, true);
-
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('BUBL'),
-      ),
-      body: makeBubbles(5.0, 5.0, 5),
-    );
-  }
-}
-
+//Bubble class
 class Bubble{
-  String _entry;
-  double _priority;
-  bool _pressed;
+  String _entry; //The task to be displayed
+  double _priority; //Priority/size of the bubble (0.0 to 1.0)
+  bool _pressed; //Keeps track if the bubble is in a pressed state
+  int _numPressed; //How many times the bubble has been pressed
+  int _colPos; //Which column the bubble is in
+  int _rowPos; //Which row the bubble is in
 
-  Bubble(String _entry, double _priority, bool _pressed){
+  Bubble(String _entry, double _priority, bool _pressed, int _rowPos, int _colPos){
     this._entry = _entry;
     this._priority = _priority;
+    if (this._priority >= 1.0){
+      this._priority = 0.99;
+    }
+    else if (this._priority <= 0.05){
+      this._priority = 0.05;
+    }
     this._pressed = _pressed;
+    this._numPressed = 0; //Initially
+    this._rowPos =_rowPos;
+    this._colPos = _colPos;
   }
 
   bool getPressed(){
@@ -147,6 +29,18 @@ class Bubble{
   }
   void changePressed(){
     _pressed = !_pressed;
+    increment();
+  }
+
+  //Increments the value of _numPressed
+  void increment(){
+    if(_pressed == false){
+     _numPressed++;
+    }
+  }
+
+  int getNumPressed(){
+    return _numPressed;
   }
 
   String getEntry(){
@@ -156,46 +50,84 @@ class Bubble{
   double getPriority(){
     return this._priority;
   }
+
+  int getRow(){
+    return this._rowPos;
+  }
+
+  int getCol(){
+    return this._colPos;
+  }
+  
+  //Changes the priority of the bubble (affects size)
   void setPriority(double newPri){
     this._priority = newPri;
   }
+
+  //Changes the row position
+  void changeRow(int r){
+    this._rowPos = r;
+  }
+  //Changes the column position
+  void changeCol(int c){
+    this._colPos = c;
+  }
 }
 
+
+//A BubblesList class, used to wrap the Bubbles in so that pass by reference can be simulated 
 class BubblesList{
-  List<Bubble> _myList;
-  int _initSize;
-  BubblesList(int _initSize){
-    _myList = [];
-    this._initSize = _initSize;
-    for (int i = 0; i < this._initSize; i++){
-      _myList.add(new Bubble(i.toString(), (i+1)*20.0, true));
-    }
+  List<Bubble> _myList; //List of bubbles
+  int _numBubbles; //Number of bubbles in list
+
+  BubblesList(){
+    _myList = []; //Sets an empty list
+    this._numBubbles = 0; //Initial size is 0
   }
 
+  List<Bubble> getList(){
+    return _myList;
+  }
+
+  int getSize(){
+    return _numBubbles;
+  }
+
+  Bubble getBubbleAt(int i){
+    return _myList[i];
+  }
+
+  //Adds a bubble to the end of _myList
+  void addBubble(Bubble b){
+    _myList.add(b);
+    _numBubbles++;
+  }
+
+  //Deletes a bubble at index i
+  void removeBubbleAt(int i){
+    _myList.removeAt(i);
+    _numBubbles--;
+  }
+
+  //Changes the Pressed State of bubble at index i in _myList
   void changeElementPressed(int i){
     _myList[i].changePressed();
   }
 
-  int getInitSize(){
-    return this._initSize;
+  //Sets the current list to the settings of another BubblesList
+  void setTo(BubblesList nList){
+    _myList = nList.getList();
+    _numBubbles = nList.getSize();
   }
 
-  Bubble getElement(int i){
-    return _myList[i];
+  //Returns a list of filled positions (row, col)
+  List<List<int>> getFilledPos(){
+    List<List<int>> fillers;
+    List<int> currPos;
+    for (int i = 0; i < _numBubbles; i++){
+      currPos = [_myList[i].getRow(), _myList[i].getCol()];
+      fillers.add(currPos);
+    }
+    return fillers;
   }
-
-  void deleteElement(int i){
-    _myList.removeAt(i);
-  }
-
-  List<Bubble> getBubbleList(){
-    return _myList;
-  }
-
-  void changeList(List<Bubble> nList){
-    _myList = nList;
-  }
-}
-class EntryPage extends StatefulWidget{
-  MyGrid createState() => MyGrid(5, 5);
 }
