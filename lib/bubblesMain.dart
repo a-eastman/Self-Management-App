@@ -28,11 +28,12 @@ class MyGrid extends State<EntryPage>{
     this._maxHeightTiles =_maxHeightTiles;
     _tileWidth = 0.0; //Initialized to 0, will set in makeBubble
     _tileHeight = 0.0; //Initialized to 0, will set in makeBubble
-    makeBubbles();
+    _myList = new List<Widget>();
+    //makeBubbles();
   }
-  
+
   //Widget creation instructions for a bubble widget based on Bubble b
-  Widget makeBubble(Bubble b){
+  Widget makeBubble(Bubble b, BuildContext context){
     double _screenWidth = MediaQuery.of(context).size.width; //width of the screen
     double _screenHeight = MediaQuery.of(context).size.height; //height of the screen
 
@@ -44,41 +45,41 @@ class MyGrid extends State<EntryPage>{
     double _bubbleSize = b.getPriority() * _tileSize;
 
     return Container(
-      width: _tileSize,
-      height: _tileSize,
-      child: Center(
-        child: Container(
-          width: _bubbleSize,
-          height:_bubbleSize,
-          child: Opacity(
-            opacity: b.getPressed() ? 1.0 : 0.0,
-            child:InkResponse(
-              onTap: (){
-                setState((){
-                  print(b.getPressed().toString());
-                  b.changePressed();
-                  print(b.getPressed().toString());
-                });
-              },
-              onLongPress: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BubbleDescription()),
-                );
-              },
-              child: new Container(
-                width: _bubbleSize,
-                height:_bubbleSize,
-                decoration: new BoxDecoration(
-                  color: Colors.blue,
-                  border: new Border.all(color:Colors.white, width: _bubbleSize),
-                  borderRadius: new BorderRadius.circular(_bubbleSize),
+        width: _tileSize,
+        height: _tileSize,
+        child: Center(
+          child: Container(
+            width: _bubbleSize,
+            height:_bubbleSize,
+            child: Opacity(
+              opacity: b.getPressed() ? 1.0 : 0.0,
+              child:InkResponse(
+                onTap: (){
+                  setState((){
+                    print(b.getPressed().toString());
+                    b.changePressed();
+                    print(b.getPressed().toString());
+                  });
+                },
+                onLongPress: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BubbleDescription()),
+                  );
+                },
+                child: new Container(
+                  width: _bubbleSize,
+                  height:_bubbleSize,
+                  decoration: new BoxDecoration(
+                    color: Colors.blue,
+                    border: new Border.all(color:Colors.white, width: _bubbleSize),
+                    borderRadius: new BorderRadius.circular(_bubbleSize),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      )
+        )
     );
   }
 
@@ -89,16 +90,16 @@ class MyGrid extends State<EntryPage>{
   BubblesList populateBList(int howMany){
     BubblesList nList = new BubblesList();
     for (int i = 0; i < howMany; i++){
-        nList.addBubble(new Bubble(i.toString(), (i*10.0)/100.0, true, 0, i));
+      nList.addBubble(new Bubble(i.toString(), (i*10.0)/100.0, true, 0, i));
     }
     return nList;
   }
 
   //FOR TESTING/PROTOTYPE 1 ONLY
   //creates a list of widgets with bubbles
-  void makeBubbles(){
+  void makeBubbles(BuildContext context){
     for (int i = 0; i < this._bList.getSize(); i++) {
-      _myList.add(makeBubble(new Bubble(i.toString(), (i*15.0)/100.0, true, 0, i)));
+      _myList.add(makeBubble(new Bubble(i.toString(), (i*15.0)/100.0, true, 0, i), context));
     }
   }
 
@@ -113,16 +114,17 @@ class MyGrid extends State<EntryPage>{
     );
   }
   Widget build(BuildContext context) {
+    makeBubbles(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('BUBL'),
-      ),
-      body: new GridView.count(
-        primary: false,
-        padding: EdgeInsets.all(5.0),
-        crossAxisSpacing: 5.0,
-        crossAxisCount: 5,
-        children: _myList,
+        appBar: AppBar(
+          title: Text('BUBL'),
+        ),
+        body: new GridView.count(
+          primary: false,
+          padding: EdgeInsets.all(5.0),
+          crossAxisSpacing: 5.0,
+          crossAxisCount: 5,
+          children: _myList,
         )
     );
   }
@@ -134,21 +136,21 @@ class EntryPage extends StatefulWidget{
 
 //Page that displays information about the Bubble that was pressed
 class BubbleDescription extends StatelessWidget{
-@override
+  @override
   int presscount;
 
   BubbleDescription({Key, key, @required this.presscount}) : super(key : key);
 
   Widget build(BuildContext context){
     return Scaffold(
-    appBar: AppBar(
-      title: Text('Bubble Info'),
-    ),
-    body: Center(
-      child: Text("Number of times button was pressed: " + presscount.toString())
-    ),
+      appBar: AppBar(
+        title: Text('Bubble Info'),
+      ),
+      body: Center(
+          child: Text("Number of times button was pressed: " + presscount.toString())
+      ),
 
-    bottomNavigationBar: 
+      bottomNavigationBar:
       RaisedButton(
         onPressed: () {
           Navigator.pop(context);
