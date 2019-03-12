@@ -20,7 +20,8 @@ class MyGrid extends State<EntryPage>{
   BubblesList _bList; //List of bubbles
   double _tileWidth; //width of a given tile
   double _tileHeight; //height of a given tile
-  List<Widget> _myList;
+  List<Widget> _myList; //List of physical widgets
+  Widget _grid;
 
   MyGrid(int _maxWidthTiles, int _maxHeightTiles){
     this._bList = populateBList(5); //TODO: Make this not for testing/prototype 1
@@ -29,7 +30,7 @@ class MyGrid extends State<EntryPage>{
     _tileWidth = 0.0; //Initialized to 0, will set in makeBubble
     _tileHeight = 0.0; //Initialized to 0, will set in makeBubble
     _myList = new List<Widget>();
-    //makeBubbles();
+    _grid = makeGrid();
   }
 
   //Widget creation instructions for a bubble widget based on Bubble b
@@ -44,42 +45,50 @@ class MyGrid extends State<EntryPage>{
 
     double _bubbleSize = b.getPriority() * _tileSize;
 
-    return Container(
+    bool vis = b.getPressed();
+    print("Vis is set to " + vis.toString());
+    return Opacity(
+      opacity: vis ? 1.0 : 0.0,
+      child: Container(
         width: _tileSize,
         height: _tileSize,
         child: Center(
-          child: Container(
-            width: _bubbleSize,
-            height:_bubbleSize,
-            child: Opacity(
-              opacity: b.getPressed() ? 1.0 : 0.0,
-              child:InkResponse(
-                onTap: (){
-                  setState((){
-                    print(b.getPressed().toString());
-                    b.changePressed();
-                    print(b.getPressed().toString());
-                  });
-                },
-                onLongPress: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => BubbleDescription()),
-                  );
-                },
-                child: new Container(
-                  width: _bubbleSize,
-                  height:_bubbleSize,
-                  decoration: new BoxDecoration(
-                    color: Colors.blue,
-                    border: new Border.all(color:Colors.white, width: _bubbleSize),
-                    borderRadius: new BorderRadius.circular(_bubbleSize),
+          child: Opacity(
+            opacity: vis ? 1.0 : 0.0,
+            child: Container(
+              width: _bubbleSize,
+              height:_bubbleSize,
+              child: Opacity(
+                opacity: vis ? 1.0 : 0.0,
+                child:InkResponse(
+                  onTap: (){
+                    setState((){
+                      // print(b.getPressed().toString());
+                      b.changePressed();
+                      // print(b.getPressed().toString());
+                    });
+                  },
+                  onLongPress: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BubbleDescription(presscount: b.getNumPressed(),)),
+                    );
+                  },
+                  child: new Container(
+                    width: _bubbleSize,
+                    height:_bubbleSize,
+                    decoration: new BoxDecoration(
+                      color: Colors.blue,
+                      border: new Border.all(color:Colors.white, width: _bubbleSize),
+                      borderRadius: new BorderRadius.circular(_bubbleSize),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
+          )
         )
+      )
     );
   }
 
@@ -99,10 +108,11 @@ class MyGrid extends State<EntryPage>{
   //creates a list of widgets with bubbles
   void makeBubbles(BuildContext context){
     for (int i = 0; i < this._bList.getSize(); i++) {
-      _myList.add(makeBubble(new Bubble(i.toString(), (i*15.0)/100.0, true, 0, i), context));
+      _myList.add(makeBubble(this._bList.getBubbleAt(i), context));
     }
   }
 
+  //Specifies how to build grid
   //TODO: Remove magic numbers
   Widget makeGrid(){
     return new GridView.count(
@@ -119,14 +129,8 @@ class MyGrid extends State<EntryPage>{
         appBar: AppBar(
           title: Text('BUBL'),
         ),
-        body: new GridView.count(
-          primary: false,
-          padding: EdgeInsets.all(5.0),
-          crossAxisSpacing: 5.0,
-          crossAxisCount: 5,
-          children: _myList,
-        )
-    );
+        body: makeGrid()
+        );
   }
 }
 
