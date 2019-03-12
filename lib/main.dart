@@ -126,9 +126,10 @@ class MainPage extends StatefulWidget{
 
 class Bubble{
   String _entry;
+  String _imagePath;
   double _priority;
 
-  Bubble(String _entry, double _priority){
+  Bubble(String _entry, this._imagePath, double _priority){
     this._entry = _entry;
     this._priority = _priority;
   }
@@ -137,13 +138,15 @@ class Bubble{
     return this._entry;
   }
 
+  String getImagePath() => this._imagePath;
+
   double getPriority(){
     return this._priority;
   }
 }
 
 class TextEntryBubble extends State<EntryPage> {
-  Bubble b1 = new Bubble('hello', 300);
+  Bubble b1 = new Bubble('hello', 'bitch', 300);
   String t1 = 'BUBL';
   Widget makeBubble(Bubble bubble) {
     {
@@ -166,13 +169,23 @@ class TextEntryBubble extends State<EntryPage> {
               ),
 
             ),
-            Text(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
               bubble.getEntry(),
               style: TextStyle(
                 fontSize: 20.0,
                 color: Colors.blue[700],
               ),
             ),
+                Image.asset(bubble.getImagePath(), width: 200 , height: 200),
+            
+              ],
+            )
+            ,
+            
           ]
       );
     }
@@ -183,7 +196,7 @@ class TextEntryBubble extends State<EntryPage> {
       appBar: AppBar(
         title: Text(t1),
       ),
-      body: makeBubble(new Bubble('spaghetti', 500)),
+      body: makeBubble(new Bubble('spaghetti', 'images/spaghet.png', 500)),
       backgroundColor: Colors.red[500],
     );
   }
