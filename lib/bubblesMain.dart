@@ -45,27 +45,23 @@ class MyGrid extends State<EntryPage>{
 
     double _bubbleSize = b.getPriority() * _tileSize;
 
-    bool vis = b.getPressed();
-    print("Vis is set to " + vis.toString());
-    return Opacity(
-      opacity: vis ? 1.0 : 0.0,
-      child: Container(
+    // bool vis = b.getPressed();
+    // print("Vis is set to " + vis.toString());
+    return Container(
         width: _tileSize,
         height: _tileSize,
         child: Center(
           child: Opacity(
-            opacity: vis ? 1.0 : 0.0,
+            opacity: b.getPressed() ? 1.0 : 0.0,
             child: Container(
               width: _bubbleSize,
               height:_bubbleSize,
-              child: Opacity(
-                opacity: vis ? 1.0 : 0.0,
                 child:InkResponse(
                   onTap: (){
-                    setState((){
-                      // print(b.getPressed().toString());
+                    setState((){ //TODO: FIX THIS PLEASE SOMEONE
+                      print(b.getPressed().toString());
                       b.changePressed();
-                      // print(b.getPressed().toString());
+                      print(b.getPressed().toString());
                     });
                   },
                   onLongPress: (){
@@ -87,8 +83,6 @@ class MyGrid extends State<EntryPage>{
               ),
             ),
           )
-        )
-      )
     );
   }
 
@@ -140,7 +134,6 @@ class EntryPage extends StatefulWidget{
 
 //Page that displays information about the Bubble that was pressed
 class BubbleDescription extends StatelessWidget{
-  @override
   int presscount;
 
   BubbleDescription({Key, key, @required this.presscount}) : super(key : key);
