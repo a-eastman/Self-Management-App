@@ -5,3 +5,5 @@ Adjusted priority to size in order to implement draggables instead of gridview
 Set constraints for size (TODO: Test/Update Values)
 Set constraints for X Percent and Y Percent (TODO: Test/Update Values)
 Added static vars section to Bubble class
+Added color parameter to Bubble class
+Added some forgotten getters and setters

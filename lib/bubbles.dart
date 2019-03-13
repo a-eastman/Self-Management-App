@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 //Bubble class
 class Bubble{
-  String _entry; //The task to be displayed
+  String _entry; //The title of the task to be displayed
   String _description; //Description of task
+  Color _color;
   double _size; //Priority/size of the bubble (0.0 to 1.0)
   bool _pressed; //Keeps track if the bubble is in a pressed state
   int _numPressed; //How many times the bubble has been pressed
@@ -16,6 +17,7 @@ class Bubble{
   //STATIC VARS
   static final String _defEntry = "Entry";
   static final String _defDesc = "Description";
+  static final Color _defColor = Colors.blue;
   static final bool _defPressed = true;
   static final double _defX = 0.5;
   static final double _defY = 0.5;
@@ -33,9 +35,10 @@ class Bubble{
   static final int _defBehind = 0;
   static final int _defInfront = 0;
 
-  Bubble(String _entry, String _description, double _size, bool _pressed, double _perX, double _perY){
+  Bubble(String _entry, String _description, Color _color, double _size, bool _pressed, double _perX, double _perY){
     this._entry = _entry;
     this._description =_description;
+    this._color = _color;
     this._size = _size;
     //sets the size constraint
     if (this._size > _sizeConstraintMax){
@@ -78,6 +81,7 @@ class Bubble{
   Bubble.defaultBubble(){
     this._entry = _defEntry;
     this._description =_defDesc;
+    this._color =_defColor;
     this._size =_defSize;
     this._pressed =_defPressed;
     this._numPressed =_defNumPressed;
@@ -115,6 +119,10 @@ class Bubble{
     return this._description;
   }
 
+  Color getColor(){
+    return this._color;
+  }
+
   double getSize(){
     return this._size;
   }
@@ -129,6 +137,18 @@ class Bubble{
 
   double getOpacity(){
     return this._opacity;
+  }
+
+  void setEntry(String newEntry){
+    this._entry = newEntry;
+  }
+
+  void setDescription(String nDesc){
+    this._description = nDesc;
+  }
+
+  void setColor(Color nColor){
+    this._color = nColor;
   }
   
   //Changes the size of the bubble
