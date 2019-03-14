@@ -110,6 +110,11 @@ class Bubble{
     }
   }
 
+  // For testing purposes only!
+  void testIncrement(){
+    _numPressed++;
+  }
+
   int getNumPressed(){
     return _numPressed;
   }

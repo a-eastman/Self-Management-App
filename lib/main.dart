@@ -13,7 +13,7 @@ class BubbleView extends StatelessWidget {
   }
 }
 
-class BubbleWidget extends StatelessWidget {
+class BubbleWidget extends State {
   // GestureTapCallback _onTap;
   // GestureLongPressCallback _onLongPress;
   Bubble _myBubble;
@@ -24,7 +24,7 @@ class BubbleWidget extends StatelessWidget {
     this._myBubble =_myBubble;
   }
 
-  BubbleWidget.defaultBubbleWidget(){
+  BubbleWidget.defaultBubbleWidget() {
     this._myBubble = new Bubble.defaultBubble();
   }
   // BubbleWidget ({Key key, this._myBubble, this._onLongPress, this._initTop, this._initLeft}) : super(key: key);
@@ -34,47 +34,59 @@ class BubbleWidget extends StatelessWidget {
     double screenHeight =MediaQuery.of(context).size.height;
     double screenWidth =MediaQuery.of(context).size.width;
     return new Positioned( 
-    child: new Opacity(
-      opacity: _myBubble.getOpacity(),
-      child: new Draggable(
-        child: new Material(
-          child:InkResponse(
-          onTap: (){
-            doOnTap();
-          },
-          onLongPress: (){
-            doOnLongHold();
-          },
-          child: new Container(
-            width: _myBubble.getSize(),
-            height: _myBubble.getSize(),
-            decoration: new BoxDecoration(
-              color: _myBubble.getColor(),
-              border: new Border.all(color: Colors.white, width: _myBubble.getSize()),
-              borderRadius: new BorderRadius.circular(_myBubble.getSize()),
+      child: new Opacity(
+        opacity: _myBubble.getPressed() ? 1.0 : 0.0,
+        child: new Draggable(
+          child: new Material(
+            child:InkResponse(
+            onTap: (){
+              _myBubble.testIncrement(); //This utilizes the testIncrement
+            },
+            onLongPress: (){
+              Navigator.push(
+                context,
+                //Pass into Bubble Description Page ---> presscount, entry, description
+                MaterialPageRoute(builder: (context) => BubbleDescription(presscount: _myBubble.getNumPressed(), 
+                                                                          entry: _myBubble.getEntry(), 
+                                                                          description: _myBubble.getDescription(),
+                                                        )
+                ),
+              );
+            },
+            child: new Container(
+              width: _myBubble.getSize(),
+              height: _myBubble.getSize(),
+              decoration: new BoxDecoration(
+                color: _myBubble.getColor(),
+                border: new Border.all(color: Colors.white, width: _myBubble.getSize()),
+                borderRadius: new BorderRadius.circular(_myBubble.getSize()),
+              ),
             ),
           ),
         ),
-        ),
-      feedback: new Material(
-        color: Colors.white,
-        child: new InkResponse(
-          radius: _myBubble.getSize(),
-          child: new Container(
-            width: _myBubble.getSize(),
-            height: _myBubble.getSize(),
-            decoration: new BoxDecoration(
-              color: _myBubble.getColor(),
-              //shape: BoxShape.circle,
-              border: new Border.all(color: Colors.white, width: _myBubble.getSize()),
-              borderRadius: new BorderRadius.circular(_myBubble.getSize()),
+    
+
+        feedback: new Material(
+          color: Colors.white,
+          child: new InkResponse(
+            radius: _myBubble.getSize(),
+            child: new Container(
+              width: _myBubble.getSize(),
+              height: _myBubble.getSize(),
+              decoration: new BoxDecoration(
+                color: _myBubble.getColor(),
+                //shape: BoxShape.circle,
+                border: new Border.all(color: Colors.white, width: _myBubble.getSize()),
+                borderRadius: new BorderRadius.circular(_myBubble.getSize()),
+              ),
             ),
           ),
         ),
+        childWhenDragging: Container(),
       ),
-      childWhenDragging: Container(),
     ),
-    ),
+    
+    
     top: screenHeight * _myBubble.getYPercent(),
     left: screenWidth * _myBubble.getXPercent(),
     );
@@ -127,6 +139,43 @@ class EntryPage extends State<BubblePage>{
             //),
           ],
         ),
+      ),
+    );
+  }
+}
+
+//*OnLongHold:* Bubble Description Page
+class BubbleDescription extends StatelessWidget{
+  @override
+  int presscount;
+  String entry;
+  String description;
+
+  BubbleDescription({Key, key, @required this.presscount, @required this.entry, @required this.description}) : super(key : key);
+
+  Widget build(BuildContext context){
+    return Scaffold(
+    appBar: AppBar(
+      title: Text('Bubble Info'),
+    ),
+    body: Center(
+      child: Text("Number of times button was pressed: " + presscount.toString() + 
+      "\nEntry: " + entry +
+      "\nDescription: " + description,
+      style: new TextStyle(
+          fontSize: 18.0,
+          fontFamily: 'Roboto',
+          color: Colors.black
+        )
+      )
+    ),
+
+    bottomNavigationBar: 
+      RaisedButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text('Back'),
       ),
     );
   }
