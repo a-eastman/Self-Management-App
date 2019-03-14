@@ -35,46 +35,49 @@ class Bubble{
   static final int _defBehind = 0;
   static final int _defInfront = 0;
 
-  Bubble(String _entry, String _description, Color _color, double _size, bool _pressed, double _perX, double _perY){
+  Bubble(String _entry, String _description, Color _color, double _size, bool _pressed, double _perX, double _perY, double _opacity){
     this._entry = _entry;
     this._description =_description;
     this._color = _color;
-    this._size = _size;
+    
     //sets the size constraint
-    if (this._size > _sizeConstraintMax){
-      this._size = _sizeConstraintMax;
+    if (_size > _sizeConstraintMax){
+      _size = _sizeConstraintMax;
     }
-    else if (this._size < _sizeConstraintMin){
-      this._size = _sizeConstraintMin;
+    else if (_size < _sizeConstraintMin){
+      _size = _sizeConstraintMin;
     }
+    this._size = _size;
     this._pressed = _pressed;
     this._numPressed = _defNumPressed; //Initially 0
 
     //sets the position constraint for x and y percent positions
-    if (this._perX > _perXConstraintMax){
+    if (_perX > _perXConstraintMax){
       _perX = _perXConstraintMax;
     }
-    else if (this._perX < _perXConstraintMin){
+    else if (_perX < _perXConstraintMin){
       _perX =_perXConstraintMin;
     }
-    if (this._perY > _perYConstraintMax){
+    if (_perY > _perYConstraintMax){
       _perY = _perYConstraintMax;
     }
-    else if (this._perY < _perYConstraintMin){
+    else if (_perY < _perYConstraintMin){
       _perY =_perYConstraintMin;
     }
+    this._perX =_perX;
+    this._perY = _perY;
 
     this._numBehind = _defBehind; //This will be checked and updated every build with the widgets
     this._numInfront = _defInfront; //Will be checked and updated every build with the widgets
 
     //verify opacity is between 0.0 and 1.0
     if (_opacity > _greatestOpacity){
-      _opacity =_greatestOpacity;
+      _opacity = _greatestOpacity;
     }
     else if (_opacity < _leastOpacity){
       _opacity =_leastOpacity;
     }
-    this._opacity = _defOpacity; //Will be updated based off of number of overlapping bubbles, set to 1.0 by default
+    this._opacity = _opacity; //Will be updated based off of number of overlapping bubbles, set to 1.0 by default
   }
 
   //Default Bubble constructor, sets all values to default values

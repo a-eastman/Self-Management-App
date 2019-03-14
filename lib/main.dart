@@ -1,194 +1,133 @@
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
+import 'bubbles.dart';
 
-void main() => runApp(MyApp3());
+void main() => runApp(BubbleView());
 
-class MyApp extends StatelessWidget{
-  @override
-  Widget build(BuildContext context){
-    return MaterialApp(
-      title: 'Startup Name Generator',
-      home: RandomWords(),
-    );
-  }
-}
-
-class MyApp2 extends StatelessWidget{
-  @override
-  Widget build(BuildContext context){
-    return MaterialApp(
-      title: 'POP',
-      color: Colors.red[50],
-      home: MainPage(),
-    );
-  }
-}
-
-class MyApp3 extends StatelessWidget{
-  @override
+class BubbleView extends StatelessWidget {
+    @override
   Widget build(BuildContext context){
     return MaterialApp(
       title:'App3',
-      home: EntryPage(),
+      home: BubblePage(),
     );
   }
 }
 
-class RandomWordsState extends State<RandomWords>{
-    final _suggestions = <WordPair>[];
-    final _biggerFont = const TextStyle(fontSize: 100.0);
+class BubbleWidget extends StatelessWidget {
+  // GestureTapCallback _onTap;
+  // GestureLongPressCallback _onLongPress;
+  Bubble _myBubble;
+  // double _initTop;
+  // double _initLeft;
 
-    Widget _buildSuggestions(){
-      return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: (context, i){
-      if (i.isOdd) return Divider();
-
-      final index = i ~/ 2;
-      if (index >= _suggestions.length){
-      _suggestions.addAll(generateWordPairs().take(10));
-      }
-      return _buildRow(_suggestions[index]);
-      });
-    }
-
-    Widget _buildRow(WordPair pair){
-      return ListTile(
-        title: Text(
-          pair.asPascalCase,
-          style: _biggerFont,
-        ),
-      );
-    }
-    @override
-    Widget build(BuildContext context){
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Oranges'),
-        ),
-        body: _buildSuggestions(),
-      );
+  BubbleWidget(Bubble _myBubble){
+    this._myBubble =_myBubble;
   }
-}
 
-class RandomWords extends StatefulWidget{
+  BubbleWidget.defaultBubbleWidget(){
+    this._myBubble = new Bubble.defaultBubble();
+  }
+  // BubbleWidget ({Key key, this._myBubble, this._onLongPress, this._initTop, this._initLeft}) : super(key: key);
+  
   @override
-  RandomWordsState createState() => new RandomWordsState();
-}
-
-class MyBubble extends State<MainPage> {
-  bool pressed = false;
-
-  Widget bubble(String txt) {
-    return new Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-      Container(
-      width: 200.0,
-      height: 200.0,
-      child: new RawMaterialButton(
-        shape: new CircleBorder(),
-        fillColor: pressed ? Colors.blue[100] : Colors.red[100],
-//        fillColor: Colors.red[500],
-        onPressed: () {
-          setState(() {
-            pressed = !pressed;
-          });
-        },
+  Widget build(BuildContext context) {
+    double screenHeight =MediaQuery.of(context).size.height;
+    double screenWidth =MediaQuery.of(context).size.width;
+    return new Positioned( 
+    child: new Opacity(
+      opacity: _myBubble.getOpacity(),
+      child: new Draggable(
+        child: new Material(
+          child:InkResponse(
+          onTap: (){
+            doOnTap();
+          },
+          onLongPress: (){
+            doOnLongHold();
+          },
+          child: new Container(
+            width: _myBubble.getSize(),
+            height: _myBubble.getSize(),
+            decoration: new BoxDecoration(
+              color: _myBubble.getColor(),
+              border: new Border.all(color: Colors.white, width: _myBubble.getSize()),
+              borderRadius: new BorderRadius.circular(_myBubble.getSize()),
+            ),
+          ),
+        ),
+        ),
+      feedback: new Material(
+        color: Colors.white,
+        child: new InkResponse(
+          radius: _myBubble.getSize(),
+          child: new Container(
+            width: _myBubble.getSize(),
+            height: _myBubble.getSize(),
+            decoration: new BoxDecoration(
+              color: _myBubble.getColor(),
+              //shape: BoxShape.circle,
+              border: new Border.all(color: Colors.white, width: _myBubble.getSize()),
+              borderRadius: new BorderRadius.circular(_myBubble.getSize()),
+            ),
+          ),
+        ),
       ),
-
+      childWhenDragging: Container(),
     ),
-     Text(
-       txt,
-       style: TextStyle(
-         fontSize: 20.0,
-         color: Colors.blue[700],
-       ),
-     ),]
-     );
-  }
-
-
-  Widget build(BuildContext context){
-    return new Center(
-      child: Container(
-        alignment: Alignment.center,
-        child: bubble('Boop'),
-      )
+    ),
+    top: screenHeight * _myBubble.getYPercent(),
+    left: screenWidth * _myBubble.getXPercent(),
     );
   }
-}
 
-
-class MainPage extends StatefulWidget{
-  MyBubble createState() => MyBubble();
-}
-
-class Bubble{
-  String _entry;
-  double _priority;
-
-  Bubble(String _entry, double _priority){
-    this._entry = _entry;
-    this._priority = _priority;
+  //TODO: Make method actually display description
+  void displayDescription(){
+    print("displayDescription");
   }
-
-  String getEntry(){
-    return this._entry;
+  //This is just for testing
+  void doOnTap(){
+    print("Tapped");
   }
-
-  double getPriority(){
-    return this._priority;
+  //Testing Purposes
+  void doOnLongHold(){
+    print("HOLDDDDD ON");
   }
 }
 
-class TextEntryBubble extends State<EntryPage> {
-  Bubble b1 = new Bubble('hello', 300);
-  String t1 = 'BUBL';
-  Widget makeBubble(Bubble bubble) {
-    {
-      bool pressed = false;
-      return new Stack(
-          alignment: Alignment.center,
+class BubblePage extends StatefulWidget{
+  EntryPage createState() => EntryPage();
+}
+
+class EntryPage extends State<BubblePage>{
+  Bubble b1 = new Bubble.defaultBubble();
+  Bubble b2 = new Bubble("DOUG DIMMADOME", 
+                        "OWNER OF THE DIMSDALE DIMMADOME",
+                        Colors.red,
+                        200.0,
+                        true,
+                        0.2,
+                        0.2,
+                        1.0
+  );
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      color: Colors.white,
+      child: new Center(
+        child: new Stack(
           children: <Widget>[
-            Container(
-              width: bubble.getPriority(),
-              height: bubble.getPriority(),
-              child: new RawMaterialButton(
-                shape: new CircleBorder(),
-                fillColor: pressed ? Colors.blue[500] : Colors.red[100],
-                //        fillColor: Colors.red[500],
-                onPressed: () {
-                  setState(() {
-                    pressed = !pressed;
-                  });
-                },
-              ),
-
-            ),
-            Text(
-              bubble.getEntry(),
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.blue[700],
-              ),
-            ),
-          ]
-      );
-    }
-  }
-
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(t1),
+            //new Draggable(
+                new BubbleWidget (b1).build(context),
+                new BubbleWidget (b2).build(context),
+              //feedback: new Material(
+                //color: Colors.white,
+                //child: new CircleButton(size:150)
+              //),
+              //childWhenDragging: new Material(color: Colors.black),
+            //),
+          ],
+        ),
       ),
-      body: makeBubble(new Bubble('spaghetti', 500)),
-      backgroundColor: Colors.red[500],
     );
   }
-}
-
-class EntryPage extends StatefulWidget{
-  TextEntryBubble createState() => TextEntryBubble();
 }
