@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'bubbles.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,27 +27,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Widget> _myList;
-  TaskList _tList;
+  BubblesList _myList;
+  Bubble b0;
+  Bubble b1;
+  Bubble b2;
 
   _MyHomePageState(){
 
-    this._tList = new TaskList(4);
+    this._myList = new BubblesList();
     genList();
   }
 
 
   void genList(){
-    _tList.addElement(new Task("make bed","", 2, false));
-    _tList.addElement(new Task("do homework","PRV", 5, false));
-    _tList.addElement(new Task("look over notes","all clases", 4, true));
-    _tList.addElement(new Task("brush teeth","", 3, false));
+    b0 = new Bubble("Caeleb", "Nasoff", Colors.purple, 150.0, true, 50.0, 50.0, 0.8);
+    b1 = new Bubble.defaultBubble();
+    b2 = new Bubble("DOUG DIMMADOME",
+        "OWNER OF THE DIMSDALE DIMMADOME",
+        Colors.red,
+        200.0,
+        true,
+        0.2,
+        0.2,
+        1.0
+    );
+    _myList.addBubble(b1);
+    _myList.addBubble(b0);
+    _myList.addBubble(b2);
   }
 
   Widget _buildTasks() {
     return new ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemCount: _tList.getLength() * 2 - 1,
+        itemCount: _myList.getSize() * 2 - 1,
         itemBuilder: (BuildContext _context, int i) {
           // Add a one-pixel-high divider widget before each row
           // in the ListView.
@@ -54,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
             return new Divider();
           }
           final int index = i ~/ 2;
-          return _buildRow(_tList.getElement(index));
+          return _buildRow(_myList.getBubbleAt(index));
         }
     );
   }
@@ -78,29 +91,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 
-  Widget _buildRow(Task task) {
-    final bool alreadyCompleted = task.getCompleted();
+  Widget _buildRow(Bubble bubble) {
+    final bool alreadyCompleted = bubble.getPressed();
 
     return new ListTile(
       title: new Text(
-        task.getName(),
+        bubble.getEntry(),
       ),
       trailing: new Icon(
         alreadyCompleted ? Icons.check_box : Icons.check_box_outline_blank,
-        color: alreadyCompleted ? Colors.blue : Colors.black,
+        color: alreadyCompleted ? bubble.getColor() : Colors.black,
       ),
       onTap: () {
         setState(() {
-          task.changeCompleted();
+          bubble.changePressed();
         });
       },
       onLongPress: (){
-        _pushDetail(task);
+        _pushDetail(bubble);
       },
     );
   }
 
-  void _pushDetail(Task task){
+  void _pushDetail(Bubble bubble){
     final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
     Navigator.of(context).push(
       new MaterialPageRoute<void>(   // Add 20 lines from here...
@@ -117,10 +130,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Task Name: " + task.getName(), style: _biggerFont),
-                    Text("Description: " + task.getDescription(),  style: _biggerFont),
-                    Text("Priority: " + task.getPriority().toString(),  style: _biggerFont),
-                    Text("Completed: " + task.getCompleted().toString(),  style: _biggerFont),
+                    Text("Title: " + bubble.getEntry(), style: _biggerFont),
+                    Text("Description: " + bubble.getDescription(),  style: _biggerFont),
+                    Text("Size: " + bubble.getSize().toString(),  style: _biggerFont),
+                    Text("Completed: " + bubble.getPressed().toString(),  style: _biggerFont),
                   ]
               ),
             ),
@@ -134,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 
-
+/**
 class Task {
   String _name;
   String _description;
@@ -227,4 +240,5 @@ class TaskList{
   void changeList(List<Task> nList){
     _myList = nList;
   }
-}
+    }
+    */

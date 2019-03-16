@@ -302,4 +302,9 @@ class BubblesList {
 
     return fillers;
   }
+
+  //Sorts with the largest size first
+  void orderBubbles(){
+    _myList.sort((a, b) => b.getSize().compareTo(a.getSize()));
+  }
 }
