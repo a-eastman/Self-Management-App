@@ -15,6 +15,36 @@ class BubbleWidgetState extends State<BubbleWidget>{
     this._bubble = _bubble;
   }
 
+  void _pushDetail(){
+    final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
+    Navigator.of(context).push(
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context){
+          return new Scaffold(
+            appBar: new AppBar(
+              title: Text("Bubble: " + _bubble.getEntry()),
+              actions: <Widget>[
+                new IconButton(icon: const Icon(Icons.edit), onPressed: null),
+              ],
+            ),
+            body: new Center(
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text("Title: " + _bubble.getEntry(), style: _biggerFont),
+                  Text("Description: " + _bubble.getDescription(), style:_biggerFont),
+                  Text("Size: " + _bubble.getSize().toInt().toString(), style:_biggerFont),
+                  Text("Completed: " + _bubble.getNumPressed().toString(), style:_biggerFont),
+                ]
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget build(BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
     double _screenWidth =MediaQuery.of(context).size.width;
@@ -25,13 +55,16 @@ class BubbleWidgetState extends State<BubbleWidget>{
         width: _bubble.getSize(),
         height: _bubble.getSize(),
           child: new Opacity( 
-            opacity: _bubble.getPressed() ? 1.0 : 0.0,
+            opacity: _bubble.getPressed() ? _bubble.getOrgOpacity() : 0.0,
             child: new GestureDetector(
               onDoubleTap: () {
                 setState((){
                   _bubble.changePressed();
                   _bubble.setPopState();
                 });
+              },
+              onLongPress: (){
+                _pushDetail();
               },
               onPanUpdate: (DragUpdateDetails details) {
                 // print(details.focalPoint.distanceSquared);

@@ -11,17 +11,48 @@ class BubbleApp extends StatefulWidget{
 }
 
 class BubbleAppState extends State<BubbleApp>{
-  Bubble b1 = new Bubble.defaultBubble();
-  Bubble b2 = new Bubble("DOUG DIMMADOME", 
-                        "OWNER OF THE DIMSDALE DIMMADOME",
-                        Colors.red,
-                        200.0,
-                        true,
-                        0.2,
-                        0.2,
-                        1.0
-);
-  //Implement move bubble here
+  List<BubbleWidget> _myList;
+  Bubble b0;
+  Bubble b1;
+  Bubble b2;
+  
+  // BubbleAppState(){
+  //   _myList = new List();
+  //   b0 = new Bubble("Caeleb", "Nasoff", Colors.purple, 150.0, true, 50.0, 50.0, 0.8);
+  //   b1 = new Bubble.defaultBubble();
+  //   b2 = new Bubble("DOUG DIMMADOME", 
+  //                         "OWNER OF THE DIMSDALE DIMMADOME",
+  //                         Colors.red,
+  //                         200.0,
+  //                         true,
+  //                         0.2,
+  //                         0.2,
+  //                         1.0
+  //   );
+  //   _myList.add(BubbleWidget(bubble: b0));
+  //   _myList.add(BubbleWidget(bubble: b1));
+  //   _myList.add(BubbleWidget(bubble: b2));
+  // }
+
+  @override
+  void initState(){
+    super.initState();
+    _myList = new List();
+    b0 = new Bubble("Caeleb", "Nasoff", Colors.purple, 150.0, true, 50.0, 50.0, 0.8);
+    b1 = new Bubble.defaultBubble();
+    b2 = new Bubble("DOUG DIMMADOME", 
+                          "OWNER OF THE DIMSDALE DIMMADOME",
+                          Colors.red,
+                          200.0,
+                          true,
+                          0.2,
+                          0.2,
+                          1.0
+    );
+    _myList.add(BubbleWidget(bubble: b1));
+    _myList.add(BubbleWidget(bubble: b0));
+    _myList.add(BubbleWidget(bubble: b2));
+  }
 
   Widget build(BuildContext context){
     return Scaffold(
@@ -29,8 +60,7 @@ class BubbleAppState extends State<BubbleApp>{
         title: Text('BUBL'),
       ),
       body: new Stack(
-        children: [BubbleWidget(bubble: b1),
-                  BubbleWidget(bubble: b2)],
+        children: _myList,
       )
     );
   }

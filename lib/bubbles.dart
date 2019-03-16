@@ -36,7 +36,7 @@ class Bubble{
   static final int _defBehind = 0;
   static final int _defInfront = 0;
 
-  Bubble(String _entry, String _description, Color _color, double _size, bool _pressed, double _xPos, double _yPos, double _opacity){
+  Bubble(String _entry, String _description, Color _color, double _size, bool _pressed, double _xPos, double _yPos, double _orgOpacity){
     this._entry = _entry;
     this._description =_description;
     this._color = _color;
@@ -59,13 +59,14 @@ class Bubble{
     this._numInfront = _defInfront; //Will be checked and updated every build with the widgets
 
     //verify opacity is between 0.0 and 1.0
-    if (_opacity > _greatestOpacity){
-      _opacity = _greatestOpacity;
+    if (_orgOpacity > _greatestOpacity){
+      _orgOpacity = _greatestOpacity;
     }
-    else if (_opacity < _leastOpacity){
-      _opacity =_leastOpacity;
+    else if (_orgOpacity < _leastOpacity){
+      _orgOpacity =_leastOpacity;
     }
-    this._opacity = _opacity; //Will be updated based off of number of overlapping bubbles, set to 1.0 by default
+    this._orgOpacity = _orgOpacity;
+    this._opacity = _orgOpacity; //Will be updated based off of number of overlapping bubbles, set to 1.0 by default
   }
 
   //Default Bubble constructor, sets all values to default values
@@ -80,6 +81,7 @@ class Bubble{
     this._yPos = _defY;
     this._numBehind =_defBehind;
     this._numInfront =_defInfront;
+    this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
   }
 
@@ -141,6 +143,10 @@ class Bubble{
 
   double getOpacity(){
     return this._opacity;
+  }
+
+  double getOrgOpacity(){
+    return this._orgOpacity;
   }
 
   void setEntry(String newEntry){
