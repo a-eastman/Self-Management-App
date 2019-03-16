@@ -8,11 +8,12 @@ class Bubble{
   double _size; //Priority/size of the bubble (0.0 to 1.0)
   bool _pressed; //Keeps track if the bubble is in a pressed state
   int _numPressed; //How many times the bubble has been pressed
-  double _perX; //Percentage of screen of how far the bubble should appear on X axis
-  double _perY; //Percentage of screen of how far the bubble should appear on Y axis 
+  double _xPos; // x screen position
+  double _yPos; // y screen position
   int _numBehind; //How many bubbles are behind current bubble
   int _numInfront; //How many bubbles are in front of current bubble
-  double _opacity; //opacity of the bubble
+  double _opacity; //current opacity of the bubble
+  double _orgOpacity; //The original opacity of the bubble
 
   //STATIC VARS
   static final String _defEntry = "Entry";
@@ -21,9 +22,9 @@ class Bubble{
   static final bool _defPressed = true;
   static final double _defX = 0.5;
   static final double _defY = 0.5;
-  static final double _perXConstraintMax = 0.95; //TODO: Update Value
-  static final double _perYConstraintMax = 0.95; //TODO: Update Value
-  static final double _perXConstraintMin = 0.05; //TODO: Update Value
+  static final double _perXConstraintMax = 0.9; //TODO: Update Value
+  static final double _perYConstraintMax = 0.9; //TODO: Update Value
+  static final double _perXConstraintMin = 0.1; //TODO: Update Value
   static final double _perYConstraintMin = 0.05; //TODO: Update Value
   static final double _sizeConstraintMax = 200.0; //TODO: UPDATE VALUE
   static final double _sizeConstraintMin = 30.0; //TODO: UPDATE VALUE
@@ -35,7 +36,7 @@ class Bubble{
   static final int _defBehind = 0;
   static final int _defInfront = 0;
 
-  Bubble(String _entry, String _description, Color _color, double _size, bool _pressed, double _perX, double _perY, double _opacity){
+  Bubble(String _entry, String _description, Color _color, double _size, bool _pressed, double _xPos, double _yPos, double _opacity){
     this._entry = _entry;
     this._description =_description;
     this._color = _color;
@@ -51,21 +52,8 @@ class Bubble{
     this._pressed = _pressed;
     this._numPressed = _defNumPressed; //Initially 0
 
-    //sets the position constraint for x and y percent positions
-    if (_perX > _perXConstraintMax){
-      _perX = _perXConstraintMax;
-    }
-    else if (_perX < _perXConstraintMin){
-      _perX =_perXConstraintMin;
-    }
-    if (_perY > _perYConstraintMax){
-      _perY = _perYConstraintMax;
-    }
-    else if (_perY < _perYConstraintMin){
-      _perY =_perYConstraintMin;
-    }
-    this._perX =_perX;
-    this._perY = _perY;
+    this._xPos = _xPos;
+    this._yPos = _yPos;
 
     this._numBehind = _defBehind; //This will be checked and updated every build with the widgets
     this._numInfront = _defInfront; //Will be checked and updated every build with the widgets
@@ -88,8 +76,8 @@ class Bubble{
     this._size =_defSize;
     this._pressed =_defPressed;
     this._numPressed =_defNumPressed;
-    this._perX =_defX;
-    this._perY = _defY;
+    this._xPos = _defX;
+    this._yPos = _defY;
     this._numBehind =_defBehind;
     this._numInfront =_defInfront;
     this._opacity =_defOpacity;
@@ -103,6 +91,14 @@ class Bubble{
     increment();
   }
 
+  void setPopState(){
+    if (!_pressed){
+      _opacity = 0.0;
+    }
+    else{
+      _opacity =_orgOpacity;
+    }
+  }
   //Increments the value of _numPressed
   void increment(){
     if(_pressed == false){
@@ -135,12 +131,12 @@ class Bubble{
     return this._size;
   }
 
-  double getXPercent(){
-    return this._perX;
+  double getXPos(){
+    return this._xPos;
   }
 
-  double getYPercent(){
-    return this._perY;
+  double getYPos(){
+    return this._yPos;
   }
 
   double getOpacity(){
@@ -165,24 +161,12 @@ class Bubble{
   }
 
   //Changes the X position
-  void changeXPer(double newXPer){
-    if (newXPer > _perXConstraintMax){
-      newXPer = _perXConstraintMax;
-    }
-    else if (newXPer < _perXConstraintMin){
-      newXPer =_perXConstraintMin;
-    }
-    this._perX = newXPer;
+  void changeXPos(double newXPos){
+    this._xPos = newXPos;
   }
   //Changes the Y position
-  void changeYPer(double newYPer){
-    if (newYPer > _perYConstraintMax){
-      newYPer = _perYConstraintMax;
-    }
-    else if (newYPer < _perXConstraintMin){
-      newYPer =_perYConstraintMin;
-    }
-    this._perY = newYPer;
+  void changeYPos(double newYPos){
+    this._yPos = newYPos;
   }
   
   //Changes the opacity (0.0 to 1.0)
@@ -269,7 +253,7 @@ class BubblesList{
     List<List<double>> fillers;
     List<double> currPos;
     for (int i = 0; i < _numBubbles; i++){
-      currPos = [_myList[i].getXPercent(), _myList[i].getYPercent()];
+      currPos = [_myList[i].getXPos(), _myList[i].getYPos()];
       fillers.add(currPos);
     }
     return fillers;
