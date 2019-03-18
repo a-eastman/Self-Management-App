@@ -12,7 +12,7 @@ class BubbleApp extends StatefulWidget{
 }
 
 class BubbleAppState extends State<BubbleApp>{
-  //List<BubbleWidget> _myList;
+  List<BubbleWidget> _myList;
   ListWidget list;
   BubblesList myList;
   Bubble b0;
@@ -22,7 +22,7 @@ class BubbleAppState extends State<BubbleApp>{
   @override
   void initState(){
     super.initState();
-    //_myList = new List();
+    _myList = new List();
     myList = new BubblesList();
     b0 = new Bubble("Caeleb", "Nasoff", Colors.purple, 150.0, true, 50.0, 50.0, 0.8);
     b1 = new Bubble.defaultBubble();
@@ -35,19 +35,23 @@ class BubbleAppState extends State<BubbleApp>{
         0.2,
         1.0
     );
-    //_myList.add(BubbleWidget(bubble: b1));
-    //_myList.add(BubbleWidget(bubble: b0));
-    //_myList.add(BubbleWidget(bubble: b2));
+    _myList.add(BubbleWidget(bubble: b1));
+    _myList.add(BubbleWidget(bubble: b0));
+    _myList.add(BubbleWidget(bubble: b2));
     myList.addBubble(b1);
     myList.addBubble(b0);
     myList.addBubble(b2);
   }
 
   Widget build(BuildContext context){
+    return _buildPages();
+  }
 
-    return list = new ListWidget(myList);
+  Widget _buildListView(){
+    return list = new ListWidget(myList, _myList);
+  }
 
-    /**
+  Widget _buildBubbleView(){
     return Scaffold(
         appBar: AppBar(
           title: Text('BUBL'),
@@ -55,7 +59,14 @@ class BubbleAppState extends State<BubbleApp>{
         body: new Stack(
           children: _myList,
         )
-    );*/
+    );
+  }
+
+  Widget _buildPages(){
+    return PageView(children: <Widget>[
+      _buildBubbleView(),
+      _buildListView()
+    ],);
   }
 }
 
