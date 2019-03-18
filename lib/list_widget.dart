@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
+import 'bubble_widget.dart';
 import 'bubbles.dart';
 
 // ignore: must_be_immutable
 class ListWidget extends StatefulWidget {
-  //final String entr;
   BubblesList myList;
+  List<BubbleWidget> widList;
 
   //ListWidget({Key key, this.myList}) : super(key : key);
-  ListWidget(BubblesList myList) {
+  ListWidget(BubblesList myList, List<BubbleWidget> widList) {
     this.myList = myList;
+    this.widList = widList;
   }
 
-  ListWidgetState createState() => ListWidgetState(this.myList);
+  ListWidgetState createState() => ListWidgetState(this.myList, this.widList);
 }
 
 class ListWidgetState extends State<ListWidget> {
   BubblesList _myList;
+  List<BubbleWidget> _widList;
 
-  ListWidgetState(BubblesList myList) {
+  ListWidgetState(BubblesList myList, List<BubbleWidget> widList) {
     this._myList = myList;
+    this._widList = widList;
   }
 
   Widget _buildTasks() {
@@ -49,7 +53,6 @@ class ListWidgetState extends State<ListWidget> {
         onPressed: () {
           setState(() {
             _pushNewBubble();
-            //_myList.addBubble(_pushNewBubble()); **********Abigail, I changed this so that it makes the bubble on 'save bubble' instead of hitting the plus sign
           });
         },
         tooltip: 'Add Task',
@@ -69,6 +72,7 @@ class ListWidgetState extends State<ListWidget> {
         alreadyCompleted ? Icons.check_box : Icons.check_box_outline_blank,
         color: alreadyCompleted ? bubble.getColor() : Colors.black,
       ),
+      subtitle: new Text(bubble.getDescription()),
       onTap: () {
         setState(() {
           bubble.changePressed();
@@ -117,11 +121,10 @@ class ListWidgetState extends State<ListWidget> {
     final myController2 = TextEditingController();
     final myController3 = TextEditingController();
     Bubble newBubble = new Bubble.defaultBubble();
-    newBubble.changePressed();
-    //final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
     FocusNode fn;
     FocusNode fn2;
     fn = FocusNode();
+    fn2 = FocusNode();
 
     void initState() {
       super.initState();
@@ -131,6 +134,8 @@ class ListWidgetState extends State<ListWidget> {
       fn.dispose();
       fn2.dispose();
       myController.dispose();
+      myController2.dispose();
+      myController3.dispose();
       super.dispose();
     }
 
@@ -170,7 +175,6 @@ class ListWidgetState extends State<ListWidget> {
                   TextFormField(
                     autofocus: false,
                     focusNode: fn2,
-                    //enabled: fn.hasFocus,
                     controller: myController3,
                     decoration: const InputDecoration(
                       labelText: 'Priority ',
@@ -179,8 +183,8 @@ class ListWidgetState extends State<ListWidget> {
                   FlatButton(
                     onPressed: () {
                       _editBubble();
-                      _myList.addBubble(newBubble); //****  <-------- Change is here
-                      //getBubbleList().add(BubbleWidget: newBubble);
+                      _myList.addBubble(newBubble);
+                      _widList.add(BubbleWidget(bubble: newBubble));
                       Navigator.pop(context);
                     },
                     child: const Text('Save Bubble'),

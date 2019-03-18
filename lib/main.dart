@@ -48,26 +48,125 @@ class BubbleAppState extends State<BubbleApp>{
   }
 
   Widget _buildListView(){
-    return list = new ListWidget(myList);
+    return list = new ListWidget(myList, _myList);
   }
 
   Widget _buildBubbleView(){
     return Scaffold(
         appBar: AppBar(
           title: Text('BUBL'),
+          actions: <Widget>[
+            new IconButton(
+              icon: Icon(Icons.add_circle_outline),
+              onPressed: (){
+                setState(() {
+                  _addNewBubble();
+                });
+              },
+            )
+          ],
         ),
+        
         body: new Stack(
           children: _myList,
         )
     );
   }
 
+  
+
   Widget _buildPages(){
-    return PageView(children: <Widget>[
+    return PageView(
+      children: <Widget>[
       _buildBubbleView(),
-      _buildListView()
-    ],);
+      _buildListView(),
+      ],
+      pageSnapping: true,
+    );
   }
+
+  _addNewBubble(){
+    final myController = TextEditingController();
+    final myController2 = TextEditingController();
+    final myController3 = TextEditingController();
+    Bubble newBubble = new Bubble.defaultBubble();
+    newBubble.changePressed();
+    //final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
+    FocusNode fn;
+    FocusNode fn2;
+    fn = FocusNode();
+
+    void initState() {
+      super.initState();
+    }
+
+    void dispose(){
+      fn.dispose();
+      fn2.dispose();
+      myController.dispose();
+      super.dispose();
+    }
+
+    void _editBubble() {
+      newBubble.setEntry(myController.text);
+      newBubble.setDescription(myController2.text);
+      newBubble.setSize(double.parse(myController3.text));
+    }
+
+    Navigator.of(context).push(
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          //initState();
+          return new Scaffold(
+            appBar: new AppBar(
+              title: const Text('Create New Task'),
+            ),
+            body: new Center(
+                child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                  TextFormField(
+                    autofocus: true,
+                    controller: myController,
+                    decoration: const InputDecoration(
+                      labelText: 'Task Name',
+                    ),
+                  ),
+                  TextFormField(
+                    autofocus: false,
+                    focusNode: fn,
+                    controller: myController2,
+                    decoration: const InputDecoration(
+                      labelText: 'Description',
+                    ),
+                  ),
+                  TextFormField(
+                    autofocus: false,
+                    focusNode: fn2,
+                    //enabled: fn.hasFocus,
+                    controller: myController3,
+                    decoration: const InputDecoration(
+                      labelText: 'Priority ',
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      _editBubble();
+                      myList.addBubble(newBubble);
+                      _myList.add(BubbleWidget(bubble: newBubble)); 
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Save Bubble'),
+                  ),
+                ])),
+          );
+        },
+      ),
+    );
+
+    //return newBubble;
+  }
+  
 }
 
 class BubbleView extends StatelessWidget {
@@ -79,3 +178,4 @@ class BubbleView extends StatelessWidget {
     );
   }
 }
+
