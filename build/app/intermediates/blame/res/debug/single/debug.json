@@ -20,6 +20,10 @@
         "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
     },
     {
+        "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-mdpi_lone_bubble.png.flat",
+        "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-mdpi\\lone_bubble.png"
+    },
+    {
         "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
     }
