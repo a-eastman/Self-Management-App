@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 import 'bubble_widget.dart';
 import 'list_widget.dart';
 import 'bubbles.dart';
+import 'themeSelection.dart';
+import 'themes.dart';
 
 void main() => runApp(BubbleView());
 
 
 class BubbleApp extends StatefulWidget{
+  final BubbleTheme theme;
+
+  BubbleApp({Key key, this.theme});
   @override
-  BubbleAppState createState() => BubbleAppState();
+  BubbleAppState createState() => BubbleAppState(theme);
 }
 
 class BubbleAppState extends State<BubbleApp>{
+  BubbleTheme theme;
+  BubbleAppState(this.theme);
   List<BubbleWidget> _myList;
   // ListWidget _listWidget;
   BubblesList _bList;
@@ -22,6 +29,7 @@ class BubbleAppState extends State<BubbleApp>{
   @override
   void initState(){
     super.initState();
+    //ThemeBloc themeBloc = new ThemeBloc();
     _myList = new List();
     _bList = new BubblesList();
     b0 = new Bubble("Caeleb", "Nasoff", Colors.purple, 2, true, 50.0, 50.0, 0.8);
@@ -62,10 +70,20 @@ class BubbleAppState extends State<BubbleApp>{
   }
 
   Widget _buildBubbleView(){
+    //ThemeBloc themeBloc = new ThemeBloc();
     return Scaffold(
         appBar: AppBar(
           title: Text('BUBL'),
           actions: <Widget>[
+            new IconButton(
+              icon: Icon(Icons.brush),
+              onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ThemeSelectorPage(theme: theme, bublist: _bList,)
+                ));
+              },
+
+            ),
             new IconButton(
               icon: Icon(Icons.add_circle_outline),
               onPressed: (){
@@ -73,7 +91,8 @@ class BubbleAppState extends State<BubbleApp>{
                   _addNewBubble();
                 });
               },
-            )
+            ),
+
           ],
         ),
 
@@ -82,8 +101,6 @@ class BubbleAppState extends State<BubbleApp>{
         )
     );
   }
-
-
 
   Widget _buildPages(){
     makeWidgets(); //update widgetList
@@ -180,14 +197,28 @@ class BubbleAppState extends State<BubbleApp>{
     //return newBubble;
   }
 
+
 }
 
 class BubbleView extends StatelessWidget {
+
   @override
   Widget build(BuildContext context){
-    return MaterialApp(
-      title:'App3',
-      home: BubbleApp(),
+    final BubbleTheme theme =BubbleTheme();
+
+    return StreamBuilder<ThemeData>(
+      initialData: theme.initialTheme().data,
+      stream: theme.themeDataStream,
+      builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
+        return MaterialApp(
+          title: 'App3',
+          theme: snapshot.data,
+          home: BubbleApp(
+            theme: theme,
+          ),
+        );
+      },
     );
+
   }
 }

@@ -62,7 +62,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
                     RaisedButton(
                       color: Colors.red[100],
                       onPressed: (){
-                        this._bubble.setToDelete();
+                        _bubble.setToDelete();
                       },
                       child: Text("DELETE"),
                     )

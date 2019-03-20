@@ -17,9 +17,8 @@ class ListWidget extends StatefulWidget {
 }
 
 class ListWidgetState extends State<ListWidget> {
-  static final TextStyle _bubbleFont = const TextStyle(fontWeight: FontWeight.bold,
-      fontSize: 15.0,
-      fontFamily: 'SoulMarker');
+  static final TextStyle _bubbleFont = const TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 15.0, fontFamily: 'SoulMarker');
   BubblesList _myList;
   BubblesList _curList;
   List<BubbleWidget> _widList;
@@ -49,8 +48,8 @@ class ListWidgetState extends State<ListWidget> {
   Widget build(BuildContext context) {
     _myList.orderBubbles();
     _curList = new BubblesList();
-    for(int i = 0; i < _myList.getSize(); i++){
-      if(!_myList.getBubbleAt(i).getShouldDelete()){
+    for (int i = 0; i < _myList.getSize(); i++) {
+      if (!_myList.getBubbleAt(i).getShouldDelete()) {
         _curList.addBubble(_myList.getBubbleAt(i));
       }
     }
@@ -61,7 +60,7 @@ class ListWidgetState extends State<ListWidget> {
         actions: <Widget>[
           new IconButton(
             icon: Icon(Icons.add_circle_outline),
-            onPressed: (){
+            onPressed: () {
               setState(() {
                 _pushNewBubble();
               });
@@ -71,14 +70,14 @@ class ListWidgetState extends State<ListWidget> {
       ),
       body: _buildTasks(),
       /**floatingActionButton: FloatingActionButton(
-        onPressed: () {
+          onPressed: () {
           setState(() {
-            _pushNewBubble();
+          _pushNewBubble();
           });
-        },
-        tooltip: 'Add Bubble',
-        child: Icon(Icons.add),
-      ),*/
+          },
+          tooltip: 'Add Bubble',
+          child: Icon(Icons.add),
+          ),*/
     );
   }
 
@@ -106,11 +105,11 @@ class ListWidgetState extends State<ListWidget> {
     );
   }
 
-  void _pushDetail(Bubble _bubble){
+  void _pushDetail(Bubble _bubble) {
     final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return new Scaffold(
             appBar: new AppBar(
               title: Text("Bubble: " + _bubble.getEntry()),
@@ -124,31 +123,38 @@ class ListWidgetState extends State<ListWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     fakeBubble(_bubble),
-                    Text("Title: " + _bubble.getEntry(),
+                    Text(
+                      "Title: " + _bubble.getEntry(),
                       style: _biggerFont,
                       textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,),
-                    Text("Description: " + _bubble.getDescription(),
-                      style:_biggerFont,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      "Description: " + _bubble.getDescription(),
+                      style: _biggerFont,
                       textAlign: TextAlign.center,
-                      overflow: TextOverflow.clip,),
-                    Text("Size: " + _bubble.getSize().toInt().toString(),
-                      style:_biggerFont,
+                      overflow: TextOverflow.clip,
+                    ),
+                    Text(
+                      "Size: " + _bubble.getSize().toInt().toString(),
+                      style: _biggerFont,
                       textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,),
-                    Text("Completed: " + _bubble.getNumPressed().toString(),
-                      style:_biggerFont,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      "Completed: " + _bubble.getNumPressed().toString(),
+                      style: _biggerFont,
                       textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     RaisedButton(
                       color: Colors.red[100],
-                      onPressed: (){
+                      onPressed: () {
                         _bubble.setToDelete();
                       },
                       child: Text("DELETE"),
                     )
-                  ]
-              ),
+                  ]),
             ),
           );
         },
@@ -156,17 +162,17 @@ class ListWidgetState extends State<ListWidget> {
     );
   }
 
-  Widget fakeBubble(Bubble _bubble){
+  Widget fakeBubble(Bubble _bubble) {
     return new Container(
       width: _bubble.getSize(),
-      height:_bubble.getSize(),
+      height: _bubble.getSize(),
       child: new Container(
         decoration: new BoxDecoration(
           color: _bubble.getColor(),
-          shape:BoxShape.circle,
+          shape: BoxShape.circle,
         ),
         child: new Center(
-          child: Text(_bubble.getEntry(), style:_bubbleFont),
+          child: Text(_bubble.getEntry(), style: _bubbleFont),
         ),
       ),
     );
@@ -187,7 +193,7 @@ class ListWidgetState extends State<ListWidget> {
       super.initState();
     }
 
-    void dispose(){
+    void dispose() {
       fn.dispose();
       fn2.dispose();
       myController.dispose();
