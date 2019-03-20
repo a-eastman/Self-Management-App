@@ -54,7 +54,7 @@ class BubbleAppState extends State<BubbleApp>{
     // _myList.add(BubbleWidget(bubble: b2));
     //_bList.addBubble(b1);
     _bList.addBubble(b0);
-    //_bList.addBubble(b2);
+    //_bList.addBubble(b2); //Cleared screen initially
   }
 
   void makeWidgets(){
