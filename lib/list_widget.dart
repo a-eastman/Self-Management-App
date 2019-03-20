@@ -49,7 +49,7 @@ class ListWidgetState extends State<ListWidget> {
   Widget build(BuildContext context) {
     _myList.orderBubbles();
     _curList = new BubblesList();
-    for(int i = 0; i < _myList.getSize(); i++){
+    for(int i = 1; i < _myList.getSize(); i++){
       if(!_myList.getBubbleAt(i).getShouldDelete()){
         _curList.addBubble(_myList.getBubbleAt(i));
       }

@@ -6,7 +6,7 @@ class DemoTheme {
   final String name;
   final ThemeData data;
 
-  const DemoTheme(this.name, this.data);
+  const DemoTheme(this.name, this.data,);
 }
 
 class BubbleTheme {
@@ -18,10 +18,10 @@ class BubbleTheme {
     final themeDataStream = selectedTheme
         .distinct()
         .map((theme) => theme.data);
-    return BubbleTheme._(themeDataStream, selectedTheme);
+    return BubbleTheme._(themeDataStream, selectedTheme,);
   }
 
-  const BubbleTheme._(this.themeDataStream, this.selectedTheme);
+  const BubbleTheme._(this.themeDataStream, this.selectedTheme,);
 
   DemoTheme initialTheme() {
     return DemoTheme(
@@ -30,6 +30,7 @@ class BubbleTheme {
           brightness: Brightness.light,
           accentColor: Colors.blue,
           primaryColor: Colors.blue,
-        ));
+        )
+    );
   }
 }

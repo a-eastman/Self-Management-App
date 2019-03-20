@@ -10,15 +10,17 @@ void main() => runApp(BubbleView());
 
 class BubbleApp extends StatefulWidget{
   final BubbleTheme theme;
+  final Color globalBubbleColor;
 
-  BubbleApp({Key key, this.theme});
+  BubbleApp({Key key, this.theme, this.globalBubbleColor});
   @override
-  BubbleAppState createState() => BubbleAppState(theme);
+  BubbleAppState createState() => BubbleAppState(theme, globalBubbleColor);
 }
 
 class BubbleAppState extends State<BubbleApp>{
   BubbleTheme theme;
-  BubbleAppState(this.theme);
+  Color globalBubbleColor;
+  BubbleAppState(this.theme, this.globalBubbleColor);
   List<BubbleWidget> _myList;
   // ListWidget _listWidget;
   BubblesList _bList;
@@ -26,13 +28,17 @@ class BubbleAppState extends State<BubbleApp>{
   Bubble b1;
   Bubble b2;
 
+  void setBubbleColor(Color newBubbleColor){
+    this.globalBubbleColor = newBubbleColor;
+  }
+
   @override
   void initState(){
     super.initState();
     //ThemeBloc themeBloc = new ThemeBloc();
     _myList = new List();
     _bList = new BubblesList();
-    b0 = new Bubble("Caeleb", "Nasoff", Colors.purple, 2, true, 50.0, 50.0, 0.8);
+    b0 = new Bubble("Caeleb", "Nasoff", Colors.blue, 2, true, 50.0, 50.0, 0.8);
     b1 = new Bubble.defaultBubble();
     b2 = new Bubble("DOUG DIMMADOME",
         "OWNER OF THE DIMSDALE DIMMADOME",
@@ -46,14 +52,14 @@ class BubbleAppState extends State<BubbleApp>{
     // _myList.add(BubbleWidget(bubble: b1));
     // _myList.add(BubbleWidget(bubble: b0));
     // _myList.add(BubbleWidget(bubble: b2));
-    _bList.addBubble(b1);
+    //_bList.addBubble(b1);
     _bList.addBubble(b0);
-    _bList.addBubble(b2);
+    //_bList.addBubble(b2);
   }
 
   void makeWidgets(){
     _myList = new List();
-    for (int i = 0; i < _bList.getSize(); i++){
+    for (int i = 1; i < _bList.getSize(); i++){
       if (!_bList.getBubbleAt(i).getShouldDelete()){ //if the bubble is not 'deleted'
         _myList.add(BubbleWidget(bubble: _bList.getBubbleAt(i))); //add to widget list
       }
@@ -79,8 +85,9 @@ class BubbleAppState extends State<BubbleApp>{
               icon: Icon(Icons.brush),
               onPressed: (){
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ThemeSelectorPage(theme: theme, bublist: _bList,)
+                  builder: (context) => ThemeSelectorPage(theme: theme, bublist: _bList, bubbleColor: globalBubbleColor,)
                 ));
+                
               },
               
             ),
@@ -118,7 +125,9 @@ class BubbleAppState extends State<BubbleApp>{
     final myController2 = TextEditingController();
     final myController3 = TextEditingController();
     Bubble newBubble = new Bubble.defaultBubble();
-    newBubble.changePressed();
+    //newBubble.changePressed();
+   
+      
     //final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
     FocusNode fn;
     FocusNode fn2;
@@ -181,6 +190,7 @@ class BubbleAppState extends State<BubbleApp>{
                     onPressed: () {
                       setState ((){
                         _editBubble();
+                        newBubble.setColor(_bList.getBubbleAt(0).getColor());
                         _bList.addBubble(newBubble);
                         // _myList.add(BubbleWidget(bubble: newBubble)); 
                         Navigator.pop(context);
