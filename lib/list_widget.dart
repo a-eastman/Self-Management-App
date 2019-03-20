@@ -4,8 +4,8 @@ import 'bubbles.dart';
 
 // ignore: must_be_immutable
 class ListWidget extends StatefulWidget {
-  BubblesList myList;
-  List<BubbleWidget> widList;
+  BubblesList myList; //List of bubbles
+  List<BubbleWidget> widList; //List of bubble widgets
 
   //ListWidget({Key key, this.myList}) : super(key : key);
   ListWidget(BubblesList myList, List<BubbleWidget> widList) {
@@ -17,7 +17,11 @@ class ListWidget extends StatefulWidget {
 }
 
 class ListWidgetState extends State<ListWidget> {
+  static final TextStyle _bubbleFont = const TextStyle(fontWeight: FontWeight.bold,
+      fontSize: 15.0,
+      fontFamily: 'SoulMarker');
   BubblesList _myList;
+  BubblesList _curList;
   List<BubbleWidget> _widList;
 
   ListWidgetState(BubblesList myList, List<BubbleWidget> widList) {
@@ -25,11 +29,11 @@ class ListWidgetState extends State<ListWidget> {
     this._widList = widList;
   }
 
+  //Creates the list view with dividers based on number of bubbles
   Widget _buildTasks() {
-
     return new ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemCount: _myList.getSize() * 2 - 1,
+        itemCount: _curList.getSize() * 2 - 1,
         itemBuilder: (BuildContext _context, int i) {
           // Add a one-pixel-high divider widget before each row
           // in the ListView.
@@ -37,30 +41,48 @@ class ListWidgetState extends State<ListWidget> {
             return new Divider();
           }
           final int index = i ~/ 2;
-          return _buildRow(_myList.getBubbleAt(index));
+          return _buildRow(_curList.getBubbleAt(index));
         });
   }
 
   @override
   Widget build(BuildContext context) {
     _myList.orderBubbles();
+    _curList = new BubblesList();
+    for(int i = 0; i < _myList.getSize(); i++){
+      if(!_myList.getBubbleAt(i).getShouldDelete()){
+        _curList.addBubble(_myList.getBubbleAt(i));
+      }
+    }
+    _curList.orderBubbles();
     return Scaffold(
       appBar: AppBar(
         title: Text("BUBL List View"),
+        actions: <Widget>[
+          new IconButton(
+            icon: Icon(Icons.add_circle_outline),
+            onPressed: (){
+              setState(() {
+                _pushNewBubble();
+              });
+            },
+          )
+        ],
       ),
       body: _buildTasks(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _pushNewBubble();
-          });
-        },
-        tooltip: 'Add Task',
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     setState(() {
+      //       _pushNewBubble();
+      //     });
+      //   },
+      //   tooltip: 'Add Bubble',
+      //   child: Icon(Icons.add),
+      // ),
     );
   }
 
+  //Creates a list tile for a bubble
   Widget _buildRow(Bubble bubble) {
     final bool alreadyCompleted = bubble.getPressed();
 
@@ -84,14 +106,14 @@ class ListWidgetState extends State<ListWidget> {
     );
   }
 
-  void _pushDetail(Bubble bubble) {
+  void _pushDetail(Bubble _bubble){
     final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
-        builder: (BuildContext context) {
+        builder: (BuildContext context){
           return new Scaffold(
             appBar: new AppBar(
-              title: const Text('Task Details'),
+              title: Text("Bubble: " + _bubble.getEntry()),
               actions: <Widget>[
                 new IconButton(icon: const Icon(Icons.edit), onPressed: null),
               ],
@@ -99,16 +121,34 @@ class ListWidgetState extends State<ListWidget> {
             body: new Center(
               child: new Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text("Title: " + bubble.getEntry(), style: _biggerFont),
-                    Text("Description: " + bubble.getDescription(),
-                        style: _biggerFont),
-                    Text("Size: " + bubble.getSize().toString(),
-                        style: _biggerFont),
-                    Text("Completed: " + bubble.getPressed().toString(),
-                        style: _biggerFont),
-                  ]),
+                    fakeBubble(_bubble),
+                    Text("Title: " + _bubble.getEntry(),
+                      style: _biggerFont,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,),
+                    Text("Description: " + _bubble.getDescription(),
+                      style:_biggerFont,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.clip,),
+                    Text("Size: " + _bubble.getSize().toInt().toString(),
+                      style:_biggerFont,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,),
+                    Text("Completed: " + _bubble.getNumPressed().toString(),
+                      style:_biggerFont,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,),
+                    RaisedButton(
+                      color: Colors.red[100],
+                      onPressed: (){
+                        _bubble.setToDelete();
+                      },
+                      child: Text("DELETE"),
+                    )
+                  ]
+              ),
             ),
           );
         },
@@ -116,6 +156,23 @@ class ListWidgetState extends State<ListWidget> {
     );
   }
 
+  Widget fakeBubble(Bubble _bubble){
+    return new Container(
+      width: _bubble.getSize(),
+      height:_bubble.getSize(),
+      child: new Container(
+        decoration: new BoxDecoration(
+          color: _bubble.getColor(),
+          shape:BoxShape.circle,
+        ),
+        child: new Center(
+          child: Text(_bubble.getEntry(), style:_bubbleFont),
+        ),
+      ),
+    );
+  }
+
+  // Creates a new bubble
   Bubble _pushNewBubble() {
     final myController = TextEditingController();
     final myController2 = TextEditingController();
@@ -142,7 +199,7 @@ class ListWidgetState extends State<ListWidget> {
     void _editBubble() {
       newBubble.setEntry(myController.text);
       newBubble.setDescription(myController2.text);
-      newBubble.setSize(double.parse(myController3.text));
+      newBubble.setSize(int.parse(myController3.text));
     }
 
     Navigator.of(context).push(
@@ -151,7 +208,7 @@ class ListWidgetState extends State<ListWidget> {
           //initState();
           return new Scaffold(
             appBar: new AppBar(
-              title: const Text('Create New Task'),
+              title: const Text('Create New Bubble'),
             ),
             body: new Center(
                 child: new Column(
@@ -177,7 +234,7 @@ class ListWidgetState extends State<ListWidget> {
                     focusNode: fn2,
                     controller: myController3,
                     decoration: const InputDecoration(
-                      labelText: 'Priority ',
+                      labelText: 'Priority (0 to 3)',
                     ),
                   ),
                   FlatButton(
