@@ -272,6 +272,11 @@ class BubblesList {
   //Adds a bubble to the end of _myList
 
   void addBubble(Bubble b) {
+<<<<<<< HEAD
+=======
+    _myList.add(b);
+
+>>>>>>> 85eaf95df3ad23ae04a9302e3a0ca2d4badc787c
     _numBubbles++;
     _myList.add(b);
   }
@@ -318,4 +323,8 @@ class BubblesList {
   void orderBubbles(){
     _myList.sort((a, b) => b.getSize().compareTo(a.getSize()));
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 85eaf95df3ad23ae04a9302e3a0ca2d4badc787c

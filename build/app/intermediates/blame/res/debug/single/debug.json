@@ -20,7 +20,16 @@
         "source": "C:\\Users\\Caeleb\\vsCodeProjects\\realBubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
     },
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\Caeleb\\vsCodeProjects\\realBubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\drawable_launch_background.xml.flat",
         "source": "C:\\Users\\Caeleb\\vsCodeProjects\\realBubble\\HARTProject\\android\\app\\src\\main\\res\\drawable\\launch_background.xml"
+=======
+        "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-mdpi_lone_bubble.png.flat",
+        "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-mdpi\\lone_bubble.png"
+    },
+    {
+        "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+>>>>>>> 85eaf95df3ad23ae04a9302e3a0ca2d4badc787c
     }
 ]

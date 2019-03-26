@@ -1,5 +1,6 @@
 -- Merging decision tree log ---
 manifest
+<<<<<<< HEAD
 ADDED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
@@ -8,6 +9,16 @@ MERGED from [:audioplayer] C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
+=======
+ADDED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
+MERGED from [:audioplayer] C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\build\audioplayer\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:2:1-11:12
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml:1:1-39:12
+>>>>>>> 85eaf95df3ad23ae04a9302e3a0ca2d4badc787c
 	package
 		ADDED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml:2:5-34
 		INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml
@@ -65,6 +76,7 @@ ADDED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src
 	android:name
 		ADDED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml:35:27-74
 uses-sdk
+<<<<<<< HEAD
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml
@@ -72,6 +84,15 @@ MERGED from [:audioplayer] C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject
 MERGED from [:audioplayer] C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\build\audioplayer\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:7:5-9:41
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml
 INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml
+=======
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml
+MERGED from [:audioplayer] C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\build\audioplayer\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:7:5-9:41
+MERGED from [:audioplayer] C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\build\audioplayer\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:7:5-9:41
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\caeleb\Documents\Flutter\Projects\bubble\HARTProject\android\app\src\main\AndroidManifest.xml
+>>>>>>> 85eaf95df3ad23ae04a9302e3a0ca2d4badc787c
 	android:targetSdkVersion
 		INJECTED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml
 		ADDED from C:\Users\Caeleb\vsCodeProjects\realBubble\HARTProject\android\app\src\main\AndroidManifest.xml
