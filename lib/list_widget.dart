@@ -31,12 +31,14 @@ class ListWidgetState extends State<ListWidget> {
   BubblesList _curList;
   List<BubbleWidget> _widList;
   BubbleTheme _theme;
+  //int dropdownValue;
 
   ListWidgetState(BubblesList myList, List<BubbleWidget> widList,
       BubbleTheme _theme) {
     this._myList = myList;
     this._widList = widList;
     this._theme = _theme;
+    //this.dropdownValue = 0;
   }
 
   //Creates the list view with dividers based on number of bubbles
@@ -124,7 +126,11 @@ class ListWidgetState extends State<ListWidget> {
             appBar: new AppBar(
               title: Text("Bubble: " + _bubble.getEntry()),
               actions: <Widget>[
-                new IconButton(icon: const Icon(Icons.edit), onPressed: null),
+                new IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: (){
+                      _pushEditBubble(_bubble);
+                    }),
               ],
             ),
             body: new Center(
@@ -186,6 +192,7 @@ class ListWidgetState extends State<ListWidget> {
     final myController = TextEditingController();
     final myController2 = TextEditingController();
     final myController3 = TextEditingController();
+    //int dropdownValue = 0;
     Bubble newBubble = new Bubble.defaultBubble();
     FocusNode fn;
     FocusNode fn2;
@@ -194,6 +201,7 @@ class ListWidgetState extends State<ListWidget> {
 
     void initState() {
       super.initState();
+      //setState((){});
     }
 
     void dispose(){
@@ -202,6 +210,7 @@ class ListWidgetState extends State<ListWidget> {
       myController.dispose();
       myController2.dispose();
       myController3.dispose();
+      //myController4.dispose();
       super.dispose();
     }
 
@@ -209,7 +218,14 @@ class ListWidgetState extends State<ListWidget> {
       newBubble.setEntry(myController.text);
       newBubble.setDescription(myController2.text);
       newBubble.setSize(int.parse(myController3.text));
+      //newBubble.setSize(dropdownValue);
     }
+
+    /**void _onDropDownChanged(int val) {
+      setState(() {
+        dropdownValue = val;
+      });
+    }*/
 
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
@@ -225,6 +241,7 @@ class ListWidgetState extends State<ListWidget> {
                     children: <Widget>[
                       TextFormField(
                         autofocus: true,
+                        //focusNode: fn2,
                         controller: myController,
                         decoration: const InputDecoration(
                           labelText: 'Task Name',
@@ -246,13 +263,48 @@ class ListWidgetState extends State<ListWidget> {
                           labelText: 'Priority (0 to 3)',
                         ),
                       ),
-                      FlatButton(
+                      /**DropdownButton<int>(
+                        value: dropdownValue,
+                        isExpanded: true,
+                        isDense: false,
+                        hint: new Text("Bubble Size"),
+                        onChanged: (int newValue){
+                          setState((){
+                            dropdownValue = newValue;
+                          });
+                        },
+                        items: <int>[0, 1, 2, 3].map<DropdownMenuItem<int>>((int value) {
+                        return DropdownMenuItem<int>(
+                        value: value,
+                        child: Text(value.toString()),
+                        );}).toList(),
+                      ),*/
+                      /**DropdownButtonFormField<int>(
+                        //hint: new Text("Bubble Size"),
+                        decoration: const InputDecoration(
+                          labelText: 'Size',
+                        ),
+                        onChanged: (value){
+                          print("changed - value: " + value.toString()
+                              + " dropdownValue: " + dropdownValue.toString());
+                          _onDropDownChanged(value);
+                          print("changed - value: " + value.toString()
+                              + " dropdownValue: " + dropdownValue.toString());
+                        },
+                        value: dropdownValue,
+                        items: <int>[0, 1, 2, 3].map<DropdownMenuItem<int>>((int value) {
+                          return DropdownMenuItem<int>(
+                            value: value,
+                            child: Text(value.toString()),
+                          );}).toList(),
+                      ),*/
+                      RaisedButton(
                         onPressed: () {
                           _editBubble();
                           _myList.addBubble(newBubble);
                           _widList.add(BubbleWidget(_curList, _theme));
                           newBubble.setColor(
-                              _curList.getBubbleAt(0).getColor());
+                              _myList.getBubbleAt(0).getColor());
                           Navigator.pop(context);
                         },
                         child: const Text('Save Bubble'),
@@ -265,5 +317,94 @@ class ListWidgetState extends State<ListWidget> {
       ),
     );
     return newBubble;
+  }
+
+  // Edit bubble
+  void _pushEditBubble(Bubble bubble) {
+    final myController =
+      TextEditingController(text: bubble.getEntry());
+    final myController2 =
+      TextEditingController(text: bubble.getDescription());
+    final myController3 =
+      TextEditingController(text: bubble.getSize().toString());
+
+    FocusNode fn;
+    FocusNode fn2;
+    fn = FocusNode();
+    fn2 = FocusNode();
+
+    void initState() {
+      super.initState();
+      //setState((){});
+
+    }
+
+    void dispose(){
+      fn.dispose();
+      fn2.dispose();
+      myController.dispose();
+      myController2.dispose();
+      myController3.dispose();
+      //myController4.dispose();
+      super.dispose();
+    }
+
+    void _editBubble() {
+      bubble.setEntry(myController.text);
+      bubble.setDescription(myController2.text);
+      bubble.setSize(int.parse(myController3.text));
+      //newBubble.setSize(dropdownValue);
+    }
+
+    Navigator.of(context).push(
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          //initState();
+          return new Scaffold(
+            appBar: new AppBar(
+              title: const Text('Edit Bubble'),
+            ),
+            body: new Center(
+                child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      TextFormField(
+                        autofocus: true,
+                        controller: myController,
+                        decoration: const InputDecoration(
+                          labelText: 'Task Name',
+                        ),
+                      ),
+                      TextFormField(
+                        autofocus: false,
+                        //initialValue: bubble.getDescription(),
+                        focusNode: fn,
+                        controller: myController2,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                        ),
+                      ),
+                      TextFormField(
+                        autofocus: false,
+                        focusNode: fn2,
+                        controller: myController3,
+                        decoration: const InputDecoration(
+                          labelText: 'Priority (0 to 3)',
+                        ),
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          _editBubble();
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Edit Bubble'),
+                      ),
+                    ]
+                )
+            ),
+          );
+        },
+      ),
+    );
   }
 }

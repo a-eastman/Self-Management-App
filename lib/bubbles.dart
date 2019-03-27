@@ -33,7 +33,8 @@ class Bubble{
   static final int _defInfront = 0;
   static final List<double> _sizes = [50.0, 100.0, 150.0, 225.0];
 
-  Bubble(String _entry, String _description, Color _color, int _sizeIndex, bool _pressed, double _xPos, double _yPos, double _orgOpacity){
+  Bubble(String _entry, String _description, Color _color, int _sizeIndex,
+      bool _pressed, double _xPos, double _yPos, double _orgOpacity){
     this._entry = _entry;
     this._description =_description;
     this._color = _color;
@@ -46,8 +47,10 @@ class Bubble{
     this._xPos = _xPos;
     this._yPos = _yPos;
 
-    this._numBehind = _defBehind; //This will be checked and updated every build with the widgets
-    this._numInfront = _defInfront; //Will be checked and updated every build with the widgets
+    this._numBehind = _defBehind; //This will be checked and updated every
+                                  // build with the widgets
+    this._numInfront = _defInfront; //Will be checked and updated every
+                                    // build with the widgets
 
     //verify opacity is between 0.0 and 1.0
     if (_orgOpacity > _greatestOpacity){
@@ -57,7 +60,8 @@ class Bubble{
       _orgOpacity =_leastOpacity;
     }
     this._orgOpacity = _orgOpacity;
-    this._opacity = _orgOpacity; //Will be updated based off of number of overlapping bubbles, set to 1.0 by default
+    this._opacity = _orgOpacity; //Will be updated based off of number of
+                                 // overlapping bubbles, set to 1.0 by default
     this._shouldDelete = false;
   }
 
@@ -245,7 +249,8 @@ class Bubble{
   }
 }
 
-//A BubblesList class, used to wrap the Bubbles in so that pass by reference can be simulated
+//A BubblesList class, used to wrap the Bubbles in so that
+// pass by reference can be simulated
 class BubblesList {
   List<Bubble> _myList; //List of bubbles
 

@@ -16,7 +16,8 @@ class BubbleApp extends StatefulWidget{
 
   BubbleApp({Key key, this.theme, this.globalBubbleColor,});
   @override
-  BubbleAppState createState() => BubbleAppState(_bList, _widList, theme, globalBubbleColor);
+  BubbleAppState createState() =>
+      BubbleAppState(_bList, _widList, theme, globalBubbleColor);
 }
 
 class BubbleAppState extends State<BubbleApp>{
@@ -24,7 +25,8 @@ class BubbleAppState extends State<BubbleApp>{
   Color globalBubbleColor;
   List<BubbleWidget> _myList;
   BubblesList _bList;
-  BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList, this._theme, this.globalBubbleColor){
+  BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList,
+      this._theme, this.globalBubbleColor){
     this._bList =_bList;
     this._myList = _widList;
   }
@@ -42,7 +44,8 @@ class BubbleAppState extends State<BubbleApp>{
     //ThemeBloc themeBloc = new ThemeBloc();
     _myList = [];
     _bList = new BubblesList();
-    // b0 = new Bubble("Caeleb", "Nasoff", Colors.blue, 2, true, 50.0, 50.0, 0.8);
+    // b0 = new Bubble("Caeleb", "Nasoff", Colors.blue, 2,
+    //                  true, 50.0, 50.0, 0.8);
     // b1 = new Bubble.defaultBubble();
     // b2 = new Bubble("DOUG DIMMADOME",
     //     "OWNER OF THE DIMSDALE DIMMADOME",

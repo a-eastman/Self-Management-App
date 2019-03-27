@@ -7,9 +7,11 @@ class ThemeSelectorPage extends StatefulWidget {
   final BubblesList bublist;
   final Color bubbleColor;
 
-  ThemeSelectorPage({Key key, this.theme, this.bublist, this.bubbleColor}) : super(key: key);
+  ThemeSelectorPage({Key key, this.theme, this.bublist,
+    this.bubbleColor}) : super(key: key);
 
-  ThemeSelectorPageState createState() => ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
+  ThemeSelectorPageState createState() =>
+      ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 }
 
 class ThemeSelectorPageState extends State<ThemeSelectorPage>{
@@ -154,33 +156,27 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             new Center(child: _previewBubble(),),
-
             RaisedButton(
                 onPressed:() => theme.selectedTheme.add(_buildBubbleTheme()),
                 child: Text("Bubble")
             ),
-
             RaisedButton(
               onPressed: () => theme.selectedTheme.add(_buildSunsetTheme()),
               child: Text("Sunset"),
             ),
-
             RaisedButton(
               onPressed: () => theme.selectedTheme.add(_buildSunnyTheme()),
               child: Text("Sunny"),
             ),
-
             RaisedButton(
               onPressed: () => theme.selectedTheme.add(_buildDuskTheme()),
               child: Text("Dusk"),
             ),
-
             RaisedButton(
               onPressed: () => theme.selectedTheme.add(_buildOceanTheme()),
               child: Text("Ocean"),
             ),
           ]
-
       ),
     );
   }

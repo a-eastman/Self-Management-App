@@ -24,14 +24,16 @@ class BubbleWidget extends StatefulWidget{
     return _bList;
   }
 
-  BubbleWidgetState createState() => BubbleWidgetState(this._bList, this._theme);
+  BubbleWidgetState createState() =>
+      BubbleWidgetState(this._bList, this._theme);
 }
 
 //Bubble class
 class BubbleWidgetState extends State<BubbleWidget>{
   BubblesList _bList;
   BubbleTheme _theme;
-  static final TextStyle _bubbleFont = const TextStyle(fontWeight: FontWeight.bold,
+  static final TextStyle _bubbleFont = const TextStyle(
+      fontWeight: FontWeight.bold,
       fontSize: 15.0,
       fontFamily: 'SoulMarker');
   // AudioPlayer ap = new AudioPlayer();
@@ -66,7 +68,11 @@ class BubbleWidgetState extends State<BubbleWidget>{
             appBar: new AppBar(
               title: Text("Bubble: " + _bubble.getEntry()),
               actions: <Widget>[
-                new IconButton(icon: const Icon(Icons.edit), onPressed: null),
+                new IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: (){
+                      _pushEditBubble(_bubble);
+                    }),
               ],
             ),
             body: new Center(
@@ -121,7 +127,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
           onDraggableCanceled: (Velocity velocity, Offset offset){
             setState((){
               _bubble.changeXPos(offset.dx, _screenWidth);
-              _bubble.changeYPos(offset.dy - _bubble.getSize()/2.0, _screenHeight);
+              _bubble.changeYPos(
+                  offset.dy - _bubble.getSize()/2.0, _screenHeight);
             });
           },
           child: new InkResponse(
@@ -268,12 +275,13 @@ class BubbleWidgetState extends State<BubbleWidget>{
                           labelText: 'Priority (0 to 3)',
                         ),
                       ),
-                      FlatButton(
+                      RaisedButton(
                         onPressed: () {
                           setState ((){
                             _editBubble();
                             _bList.addBubble(newBubble);
-                            newBubble.setColor(_bList.getBubbleAt(0).getColor());
+                            newBubble.setColor(
+                                _bList.getBubbleAt(0).getColor());
                             // _myList.add(BubbleWidget(newBubble);
                             Navigator.pop(context);
                           });
@@ -289,6 +297,92 @@ class BubbleWidgetState extends State<BubbleWidget>{
     );
 
     //return newBubble;
+  }
+
+  // Edit bubble
+  void _pushEditBubble(Bubble bubble) {
+    final myController = TextEditingController(text: bubble.getEntry());
+    final myController2 = TextEditingController(text: bubble.getDescription());
+    final myController3 = TextEditingController(text: bubble.getSize().toString());
+    //int dropdownValue = 0;
+    //Bubble newBubble = new Bubble.defaultBubble();
+    FocusNode fn;
+    FocusNode fn2;
+    fn = FocusNode();
+    fn2 = FocusNode();
+
+    void initState() {
+      super.initState();
+      //setState((){});
+
+    }
+
+    void dispose(){
+      fn.dispose();
+      fn2.dispose();
+      myController.dispose();
+      myController2.dispose();
+      myController3.dispose();
+      //myController4.dispose();
+      super.dispose();
+    }
+
+    void _editBubble() {
+      bubble.setEntry(myController.text);
+      bubble.setDescription(myController2.text);
+      bubble.setSize(int.parse(myController3.text));
+      //newBubble.setSize(dropdownValue);
+    }
+
+    Navigator.of(context).push(
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          //initState();
+          return new Scaffold(
+            appBar: new AppBar(
+              title: const Text('Edit Bubble'),
+            ),
+            body: new Center(
+                child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      TextFormField(
+                        autofocus: true,
+                        controller: myController,
+                        decoration: const InputDecoration(
+                          labelText: 'Task Name',
+                        ),
+                      ),
+                      TextFormField(
+                        autofocus: false,
+                        focusNode: fn,
+                        controller: myController2,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                        ),
+                      ),
+                      TextFormField(
+                        autofocus: false,
+                        focusNode: fn2,
+                        controller: myController3,
+                        decoration: const InputDecoration(
+                          labelText: 'Priority (0 to 3)',
+                        ),
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          _editBubble();
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Edit Bubble'),
+                      ),
+                    ]
+                )
+            ),
+          );
+        },
+      ),
+    );
   }
 
   List<Widget> _makeWidList(BuildContext context){
@@ -311,7 +405,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
             icon: Icon(Icons.brush),
             onPressed: (){
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ThemeSelectorPage(theme: _theme, bublist: _bList),
+                builder: (context) =>
+                    ThemeSelectorPage(theme: _theme, bublist: _bList),
               ));
             },
           ),
