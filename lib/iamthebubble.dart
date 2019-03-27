@@ -245,7 +245,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
           //initState();
           return new Scaffold(
             appBar: new AppBar(
-              title: const Text('Create New Task'),
+              title: const Text('Create New Bubble'),
             ),
             body: new Center(
                 child: new Column(
@@ -286,7 +286,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
                             Navigator.pop(context);
                           });
                         },
-                        child: const Text('Save Bubble'),
+                        child: const Text('ADD'),
                       ),
                     ]
                 )
@@ -374,7 +374,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
                           _editBubble();
                           Navigator.pop(context);
                         },
-                        child: const Text('Edit Bubble'),
+                        child: const Text('EDIT'),
                       ),
                     ]
                 )

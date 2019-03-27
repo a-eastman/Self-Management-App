@@ -210,7 +210,6 @@ class ListWidgetState extends State<ListWidget> {
       myController.dispose();
       myController2.dispose();
       myController3.dispose();
-      //myController4.dispose();
       super.dispose();
     }
 
@@ -307,7 +306,7 @@ class ListWidgetState extends State<ListWidget> {
                               _myList.getBubbleAt(0).getColor());
                           Navigator.pop(context);
                         },
-                        child: const Text('Save Bubble'),
+                        child: const Text('ADD'),
                       ),
                     ]
                 )
@@ -353,13 +352,11 @@ class ListWidgetState extends State<ListWidget> {
       bubble.setEntry(myController.text);
       bubble.setDescription(myController2.text);
       bubble.setSize(int.parse(myController3.text));
-      //newBubble.setSize(dropdownValue);
     }
 
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          //initState();
           return new Scaffold(
             appBar: new AppBar(
               title: const Text('Edit Bubble'),
@@ -377,7 +374,6 @@ class ListWidgetState extends State<ListWidget> {
                       ),
                       TextFormField(
                         autofocus: false,
-                        //initialValue: bubble.getDescription(),
                         focusNode: fn,
                         controller: myController2,
                         decoration: const InputDecoration(
@@ -397,7 +393,7 @@ class ListWidgetState extends State<ListWidget> {
                           _editBubble();
                           Navigator.pop(context);
                         },
-                        child: const Text('Edit Bubble'),
+                        child: const Text('EDIT'),
                       ),
                     ]
                 )
