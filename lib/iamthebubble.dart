@@ -1,31 +1,63 @@
+import 'themeSelection.dart';
 import 'package:flutter/material.dart';
+// import 'themeSelection.dart';
+import 'themes.dart';
 import 'bubbles.dart';
 //import 'package:audioplayer/audioplayer.dart';
 
+// ignore: must_be_immutable
 class BubbleWidget extends StatefulWidget{
   //final String entr;
-  final Bubble bubble;
-  const BubbleWidget({Key key, this.bubble}) : super(key : key);
-
-  Bubble getBubble(){
-    return bubble;
+  BubbleTheme _theme;
+  BubblesList _bList;
+  // const BubbleWidget({Key key, this.bubble}) : super(key : key);
+  BubbleWidget(BubblesList _bList, BubbleTheme _theme){
+    // this._bubble = _bubble;
+    this._bList =_bList;
+    this._theme = _theme;
   }
 
-  BubbleWidgetState createState() => BubbleWidgetState(this.bubble);
+  // Bubble getBubble(){
+  //   return _bubble;
+  // }
+  BubblesList getBList(){
+    return _bList;
+  }
+
+  BubbleWidgetState createState() => BubbleWidgetState(this._bList, this._theme);
 }
 
 //Bubble class
 class BubbleWidgetState extends State<BubbleWidget>{
-  Bubble _bubble;
+  BubblesList _bList;
+  BubbleTheme _theme;
   static final TextStyle _bubbleFont = const TextStyle(fontWeight: FontWeight.bold,
       fontSize: 15.0,
       fontFamily: 'SoulMarker');
   // AudioPlayer ap = new AudioPlayer();
-  BubbleWidgetState(Bubble _bubble){
-    this._bubble = _bubble;
+  BubbleWidgetState(BubblesList _bList, BubbleTheme _theme){
+    // this._bubble = _bubble;
+    this._bList = _bList;
+    this._theme = _theme;
   }
 
-  void _pushDetail(){
+  Widget fakeBubble(Bubble _bubble){
+    return new Container(
+      width: _bubble.getSize(),
+      height:_bubble.getSize(),
+      child: new Container(
+        decoration: new BoxDecoration(
+          color: _bubble.getColor(),
+          shape:BoxShape.circle,
+        ),
+        child: new Center(
+          child: Text(_bubble.getEntry(), style:_bubbleFont),
+        ),
+      ),
+    );
+  }
+
+  void _pushDetail(Bubble _bubble, TextStyle _bubbleFont){
     final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
@@ -42,7 +74,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    fakeBubble(),
+                    fakeBubble(_bubble),
                     Text("Title: " + _bubble.getEntry(),
                       style: _biggerFont,
                       textAlign: TextAlign.center,
@@ -75,23 +107,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
     );
   }
 
-  Widget fakeBubble(){
-    return new Container(
-      width: _bubble.getSize(),
-      height:_bubble.getSize(),
-      child: new Container(
-        decoration: new BoxDecoration(
-          color: _bubble.getColor(),
-          shape:BoxShape.circle,
-        ),
-        child: new Center(
-          child: Text(_bubble.getEntry(), style:_bubbleFont),
-        ),
-      ),
-    );
-  }
-
-  Widget build(BuildContext context) {
+  Widget makeBubble(Bubble _bubble, BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
     double _screenWidth =MediaQuery.of(context).size.width;
     print(_screenHeight.toString());
@@ -154,7 +170,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
               });
             },
             onLongPress: (){
-              _pushDetail();
+              _pushDetail(_bubble, _bubbleFont);
             },
           ),
           feedback: new Material(
@@ -182,6 +198,137 @@ class BubbleWidgetState extends State<BubbleWidget>{
       ),
       top: _bubble.getYPos(),
       left: _bubble.getXPos(),
+    );
+  }
+
+
+  _addNewBubble(){
+    final myController = TextEditingController();
+    final myController2 = TextEditingController();
+    final myController3 = TextEditingController();
+    Bubble newBubble = new Bubble.defaultBubble();
+    //newBubble.changePressed();
+
+
+    //final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
+    FocusNode fn;
+    FocusNode fn2;
+    fn = FocusNode();
+
+    void initState() {
+      super.initState();
+    }
+
+    void dispose(){
+      fn.dispose();
+      fn2.dispose();
+      myController.dispose();
+      super.dispose();
+    }
+
+    void _editBubble() {
+      newBubble.setEntry(myController.text);
+      newBubble.setDescription(myController2.text);
+      newBubble.setSize(int.parse(myController3.text));
+    }
+
+    Navigator.of(context).push(
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          //initState();
+          return new Scaffold(
+            appBar: new AppBar(
+              title: const Text('Create New Task'),
+            ),
+            body: new Center(
+                child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      TextFormField(
+                        autofocus: true,
+                        controller: myController,
+                        decoration: const InputDecoration(
+                          labelText: 'Task Name',
+                        ),
+                      ),
+                      TextFormField(
+                        autofocus: false,
+                        focusNode: fn,
+                        controller: myController2,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                        ),
+                      ),
+                      TextFormField(
+                        autofocus: false,
+                        focusNode: fn2,
+                        //enabled: fn.hasFocus,
+                        controller: myController3,
+                        decoration: const InputDecoration(
+                          labelText: 'Priority (0 to 3)',
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          setState ((){
+                            _editBubble();
+                            _bList.addBubble(newBubble);
+                            newBubble.setColor(_bList.getBubbleAt(0).getColor());
+                            // _myList.add(BubbleWidget(newBubble);
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: const Text('Save Bubble'),
+                      ),
+                    ]
+                )
+            ),
+          );
+        },
+      ),
+    );
+
+    //return newBubble;
+  }
+
+  List<Widget> _makeWidList(BuildContext context){
+    List<Widget> _widList = [];
+    // _widList.clear();
+    for (int i = 0; i < _bList.getSize(); i++){
+      if (!_bList.getBubbleAt(i).getShouldDelete()){
+        _widList.add(makeBubble(_bList.getBubbleAt(i), context));
+      }
+    }
+    return _widList;
+  }
+  Widget build(BuildContext context){
+    //ThemeBloc themeBloc = new ThemeBloc();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('BUBL'),
+        actions: <Widget>[
+          new IconButton(
+            icon: Icon(Icons.brush),
+            onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ThemeSelectorPage(theme: _theme, bublist: _bList),
+              ));
+            },
+          ),
+          new IconButton(
+            icon: Icon(Icons.add_circle_outline),
+            onPressed: (){
+              setState(() {
+                _addNewBubble();
+              });
+            },
+          ),
+        ],
+      ),
+
+      body: new Stack(
+        children: _makeWidList(context),
+      ),
     );
   }
 }
