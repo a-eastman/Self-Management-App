@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Caeleb\\vsCodeProjects\\realBubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\values_values.arsc.flat",
+            "outputFile": "C:\\Users\\Christopher\\Documents\\SeniorProjectSpring2019\\HARTProject-6\\build\\app\\intermediates\\res\\merged\\debug\\values_values.arsc.flat",
             "map": [
                 {
-                    "source": "C:\\Users\\Caeleb\\vsCodeProjects\\realBubble\\HARTProject\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "C:\\Users\\Christopher\\Documents\\SeniorProjectSpring2019\\HARTProject-6\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

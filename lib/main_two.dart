@@ -14,7 +14,7 @@ class BubbleApp extends StatefulWidget{
   BubblesList _bList = new BubblesList();
   List<BubbleWidget> _widList = [];
 
-  BubbleApp({Key key, this.theme, this.globalBubbleColor});
+  BubbleApp({Key key, this.theme, this.globalBubbleColor,});
   @override
   BubbleAppState createState() => BubbleAppState(_bList, _widList, theme, globalBubbleColor);
 }

@@ -89,7 +89,11 @@ class ListWidgetState extends State<ListWidget> {
 
   //Creates a list tile for a bubble
   Widget _buildRow(Bubble bubble) {
-    final bool alreadyCompleted = bubble.getPressed();
+    /*
+    Change made here so that the box is highlighted when the task is completed 
+    and not highlighted when the task has yet to be completed
+    */
+    final bool alreadyCompleted = !(bubble.getPressed());
 
     return new ListTile(
       title: new Text(
@@ -261,5 +265,3 @@ class ListWidgetState extends State<ListWidget> {
     return newBubble;
   }
 }
-
-
