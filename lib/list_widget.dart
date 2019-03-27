@@ -66,7 +66,7 @@ class ListWidgetState extends State<ListWidget> {
         _curList.addBubble(_myList.getBubbleAt(i));
       }
     }
-    //_curList.orderBubbles();
+    _curList.orderBubbles();
     return Scaffold(
       appBar: AppBar(
         title: Text("BUBL List View"),
@@ -325,7 +325,7 @@ class ListWidgetState extends State<ListWidget> {
     final myController2 =
       TextEditingController(text: bubble.getDescription());
     final myController3 =
-      TextEditingController(text: bubble.getSize().toString());
+      TextEditingController(text: bubble.getSizeIndex().toString());
 
     FocusNode fn;
     FocusNode fn2;

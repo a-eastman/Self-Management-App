@@ -301,9 +301,12 @@ class BubbleWidgetState extends State<BubbleWidget>{
 
   // Edit bubble
   void _pushEditBubble(Bubble bubble) {
-    final myController = TextEditingController(text: bubble.getEntry());
-    final myController2 = TextEditingController(text: bubble.getDescription());
-    final myController3 = TextEditingController(text: bubble.getSize().toString());
+    final myController =
+      TextEditingController(text: bubble.getEntry());
+    final myController2 =
+      TextEditingController(text: bubble.getDescription());
+    final myController3 =
+      TextEditingController(text: bubble.getSizeIndex().toString());
     //int dropdownValue = 0;
     //Bubble newBubble = new Bubble.defaultBubble();
     FocusNode fn;
