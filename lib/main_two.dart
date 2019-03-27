@@ -7,6 +7,7 @@ import 'themes.dart';
 
 void main() => runApp(BubbleView());
 
+
 class BubbleApp extends StatefulWidget{
   final BubbleTheme theme;
   final Color globalBubbleColor;
@@ -104,4 +105,3 @@ class BubbleView extends StatelessWidget {
 
   }
 }
-

@@ -1,6 +1,7 @@
+import 'themeSelection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/themeSelection.dart';
-import 'package:flutter_app/themes.dart';
+// import 'themeSelection.dart';
+import 'themes.dart';
 import 'bubbles.dart';
 //import 'package:audioplayer/audioplayer.dart';
 
@@ -200,6 +201,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
     );
   }
 
+
   _addNewBubble(){
     final myController = TextEditingController();
     final myController2 = TextEditingController();
@@ -331,5 +333,3 @@ class BubbleWidgetState extends State<BubbleWidget>{
     );
   }
 }
-
-

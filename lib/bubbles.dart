@@ -275,7 +275,7 @@ class BubblesList {
     _myList.add(b);
 
     _numBubbles++;
-    _myList.add(b);
+    // _myList.add(b);
   }
 
   //Deletes a bubble at index i
