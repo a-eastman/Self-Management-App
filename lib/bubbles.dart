@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bubl/database.dart';
 
 //Bubble class
 class Bubble{
@@ -16,8 +15,8 @@ class Bubble{
   int _numInfront; //How many bubbles are in front of current bubble
   double _opacity; //current opacity of the bubble
   double _orgOpacity; //The original opacity of the bubble
+
   bool _shouldDelete; //If the bubble is set to delete or not
-  int _bubbleID;
 
   //STATIC VARS
   static final String _defEntry = "Entry";
@@ -34,22 +33,24 @@ class Bubble{
   static final int _defInfront = 0;
   static final List<double> _sizes = [50.0, 100.0, 150.0, 225.0];
 
-  static final int _newBubbleID = 0;
-  //Database variable
-  final db = DB.instance;
-
-  Bubble(String _entry, String _description, Color _color, int _sizeIndex, bool _pressed, double _xPos, double _yPos, double _orgOpacity){
+  Bubble(String _entry, String _description, Color _color, int _sizeIndex,
+      bool _pressed, double _xPos, double _yPos, double _orgOpacity){
     this._entry = _entry;
     this._description =_description;
     this._color = _color;
+
     this._sizeIndex = _sizeIndex;
     this._size = _sizes[_sizeIndex];
-    this._pressed = true;
+    this._pressed = _pressed;
     this._numPressed = _defNumPressed; //Initially 0
+
     this._xPos = _xPos;
     this._yPos = _yPos;
-    this._numBehind = _defBehind; //This will be checked and updated every build with the widgets
-    this._numInfront = _defInfront; //Will be checked and updated every build with the widgets
+
+    this._numBehind = _defBehind; //This will be checked and updated every
+                                  // build with the widgets
+    this._numInfront = _defInfront; //Will be checked and updated every
+                                    // build with the widgets
 
     //verify opacity is between 0.0 and 1.0
     if (_orgOpacity > _greatestOpacity){
@@ -62,15 +63,10 @@ class Bubble{
     this._opacity = _orgOpacity; //Will be updated based off of number of
                                  // overlapping bubbles, set to 1.0 by default
     this._shouldDelete = false;
-
-    //when this bubble is created, inserts new values into the database
-    db.insertBubble(_entry, _description, _color.red, _color.green, _color.blue,
-        _opacity, _sizeIndex, _xPos, _yPos);
-    setBubbleID();
   }
 
   //Default Bubble constructor, sets all values to default values
-  Bubble.defaultBubble() {
+  Bubble.defaultBubble(){
     this._entry = _defEntry;
     this._description =_defDesc;
     this._color =_defColor;
@@ -85,68 +81,14 @@ class Bubble{
     this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
     this._shouldDelete = false;
-
-    //when this bubble is created, inserts new values into the database
-    db.insertBubble(_entry, _description, _color.red, _color.green, _color.blue,
-        _opacity, _sizeIndex, _xPos, _yPos);
-    setBubbleID();
   }
-
-  ///@author Martin Price
-  ///This constructor is used for reading in pre-created bubbles for
-  ///re-population from the database
-  ///@version 1.1
-  Bubble.BubbleFromDatabase(int _bID, String _entry, String _description,
-      Color _color, int _sizeIndex, double _xPos, double _yPos,
-      double _orgOpacity, int times_popped)
-  {
-    this._bubbleID = _bID;
-    this._entry = _entry;
-    this._description = _description;
-    this._color = _color;
-    this._sizeIndex = _sizeIndex;
-    this._size = _sizes[_sizeIndex];
-    this._pressed = true;
-    this._numPressed = times_popped; //Initially 0
-    this._xPos = _xPos;
-    this._yPos = _yPos;
-    this._numBehind =
-        _defBehind; //This will be checked and updated every build with the widgets
-    this._numInfront =
-        _defInfront; //Will be checked and updated every build with the widgets
-    //verify opacity is between 0.0 and 1.0
-    if (_orgOpacity > _greatestOpacity) {
-      _orgOpacity = _greatestOpacity;
-    }
-    else if (_orgOpacity < _leastOpacity) {
-      _orgOpacity = _leastOpacity;
-    }
-    this._orgOpacity = _orgOpacity;
-    this._opacity =
-        _orgOpacity; //Will be updated based off of number of overlapping bubbles, set to 1.0 by default
-    this._shouldDelete = false;
-  }
-
-  ///calls and finds the last created bubble for its bubble id
-  ///@author Martin Price
-  void setBubbleID() async
-  { this._bubbleID = await db.queryLastCreatedBubbleID(); }
-
-  int getBubbleID()
-  { return _bubbleID; }
 
   bool getPressed(){
     return this._pressed;
   }
-
-  ///Last Edit Martin
-  ///If after changed, _pressed is false -> bubble was popped
   void changePressed(){
     _pressed = !_pressed;
     increment();
-    if(!_pressed)
-      db.insertPop(this._bubbleID);
-    _queryDBs();
   }
 
   void setPopState(){
@@ -216,17 +158,14 @@ class Bubble{
 
   void setEntry(String newEntry){
     this._entry = newEntry;
-    updateTitle(_bubbleID, newEntry);
   }
 
   void setDescription(String nDesc){
     this._description = nDesc;
-    updateDesc(_bubbleID, nDesc);
   }
 
   void setColor(Color nColor){
     this._color = nColor;
-    updateColor(_bubbleID, nColor);
   }
 
   //Changes the size of the bubble
@@ -237,7 +176,7 @@ class Bubble{
     if(_sizeIndex >= _sizes.length){
       this._sizeIndex = 0;
     }
-    //print("INDEX" + _sizeIndex.toString());
+    print("INDEX" + _sizeIndex.toString());
     this._size = _sizes[_sizeIndex];
   }
   void setSize(int nIndex){
@@ -249,7 +188,6 @@ class Bubble{
     }
     this._sizeIndex = nIndex;
     this._size = _sizes[_sizeIndex];
-    updateSize(_bubbleID, nIndex);
   }
 
   //Changes the X position
@@ -261,7 +199,6 @@ class Bubble{
       newXPos = 3.0;
     }
     this._xPos = newXPos;
-    updateXPos(_bubbleID, newXPos);
   }
   //Changes the Y position
   void changeYPos(double newYPos, double screenHeight){
@@ -272,7 +209,6 @@ class Bubble{
       newYPos = 3.0;
     }
     this._yPos = newYPos;
-    updateYPos(_bubbleID, newYPos);
   }
 
   //Changes the opacity (0.0 to 1.0)
@@ -310,144 +246,20 @@ class Bubble{
 
   void setToDelete(){
     this._shouldDelete = true;
-    updateDeleted(_bubbleID, 1);
-  }
-
-  bool equals(Bubble b)
-  { return b.getBubbleID() == this._bubbleID; }
-
-  ///Database getters
-  ///@author Martin Price
-  ///@date March 2019
-
-  ///Queries the enitre bubble data table
-  ///@param bID : the bubble ID that is being looked for
-  ///@param columnID : the column or attribute to return
-  ///@return the attribute
-  Future<dynamic> queryBubble(int bID, List<String> columnID) async
-  {
-    Map<String, dynamic> result = await db.queryBubbleByID(bID, columnID);
-    return result[columnID[0]];
-  }
-  dynamic queryTitle(int bID)
-  { return queryBubble(bID, ['title']); }
-  dynamic queryDesc(int bID)
-  { return queryBubble(bID, ["description"]); }
-  dynamic querySize(int bID)
-  { return queryBubble(bID, ["size"]); }
-  dynamic queryXPos(int bID)
-  { return queryBubble(bID, ["posX"]); }
-  dynamic queryYPos(int bID)
-  { return queryBubble(bID, ["posY"]); }
-  dynamic queryTimeCreated(int bID)
-  { return queryBubble(bID, ["time_created"]); }
-  bool queryDeleted(int bID)
-  // ignore: unrelated_type_equality_checks
-  { return queryBubble(bID, ["deleted"]) == 0; }
-  dynamic queryFrequency(int bID)
-  { return queryBubble(bID, ["frequency"]); }
-  Future<Color> queryColor(int bID) async
-  {
-    final colors = await db.queryBubbleByID(bID, ["color_red", "color_green",
-    "color_blue", "opacity"]);
-    return new Color.fromRGBO(colors["color_red"],colors["color_green"],
-        colors["color_blue"], colors["opacity"]);
-  }
-
-  ///Queries pop_record
-  ///@param bID: bubble to grab
-  Future<dynamic> queryPop(int bID, List<String> columns) async
-  {
-    return db.queryPop();
-  }
-
-  ///Database Setters
-  ///@author Martin Price
-  ///@date March 2019
-
-  ///Updates the bubble table
-  ///@param bID: bubble to update
-  ///@param columnID : bubble attribute to update
-  ///@param value: new value
-  Future<int> updateBubble(int bID, Map<String, dynamic> row) async
-  { return await db.updateBubbleByID(bID, row); }
-
-  void updateTitle(int bID, String value)
-  { updateBubble(bID, {"title":value}); }
-  void updateDesc(int bID, String value)
-  { updateBubble(bID, {"description":value}); }
-  void updateSize(int bID, int value)
-  { updateBubble(bID, {'size':value}); }
-  void updateXPos(int bID, double value)
-  { updateBubble(bID, {"posX":value}); }
-  void updateYPos(int bID, double value)
-  { updateBubble(bID, {"posY":value}); }
-  void updateDeleted(int bID, int value)
-  { updateBubble(bID, {"deleted":value}); }
-  updateFrequency(int bID, int value)
-  { updateBubble(bID, {"frequency":value});}
-  updateColor(int bID, Color value)
-  { updateBubble(bID, { "color_red": value.red,
-    "color_green": value.green,
-    "color_blue": value.blue,
-    "opacity": value.opacity });
-  }
-
-  String toString()
-  { return "$_bubbleID $_entry $_description"; }
-
-  ///DEV Testing Only
-  ///Used by Martin for DB testing
-  void _queryDBs() async
-  {
-    print('Printing out bubl table:');
-    final bubl = await db.queryBubble();
-    try{ bubl.forEach((row) => print(row)); }
-    catch(e) {print(e); }
-
-    print('Printing out pop_record table:');
-    final pop = await db.queryPop();
-    try{ pop.forEach((row) => print(row)); }
-    catch(e) {print(e); }
   }
 }
 
 //A BubblesList class, used to wrap the Bubbles in so that
 // pass by reference can be simulated
 class BubblesList {
-  final db = DB.instance;
   List<Bubble> _myList; //List of bubbles
+
   int _numBubbles; //Number of bubbles in list
 
-  BubblesList.newEmptyBubbleList() {
+  BubblesList() {
     _myList = []; //Sets an empty list
+
     this._numBubbles = 0; //Initial size is 0
-  }
-
-  ///Default Contrustor that calls the database for populating bubbles
-  ///@author Martin Price
-  BubblesList()
-  {
-    try{ populateBubbles();}
-    catch(e) {BubblesList.newEmptyBubbleList();}
-  }
-
-  ///Queries the database for bubbles to be repopulated
-  ///@return bubbles : a populated list of bubbles
-  ///@return [] : error or no bubbles
-  ///@author Martin Price
-  Future<List<Bubble>> populateBubbles() async
-  {
-    this._numBubbles = 0;
-    this._myList = [];
-    final results = await db.queryBubblesForRePop();
-    results.forEach((y) => {
-      addBubble(new Bubble.BubbleFromDatabase(y['bID'],y['title'],y['description'],
-          new Color.fromRGBO(y['color_red'],y['color_green'],
-              y['color_blue'],y['opacity']),
-          y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped'])),
-      });
-    print('# of bubbles on Start-up $_numBubbles');
   }
 
   List<Bubble> getList() {
@@ -512,18 +324,5 @@ class BubblesList {
   //Sorts with the largest size first
   void orderBubbles(){
     _myList.sort((a, b) => b.getSize().compareTo(a.getSize()));
-  }
-
-  ///Removes the bubble that was popped
-  ///First finds the bubbles position in the list
-  ///then calls removeBubbleAt
-  void removePoppedBubble(Bubble b)
-  {
-    for(int i = 0; i < _numBubbles; i++) {
-      if (getBubbleAt(i).equals(b)) {
-        removeBubbleAt(i);
-        return;
-      }
-    }
   }
 }
