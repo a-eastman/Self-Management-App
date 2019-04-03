@@ -18,6 +18,8 @@ class Bubble{
 
   bool _shouldDelete; //If the bubble is set to delete or not
 
+  int _repeat; //If the bubble should repeat or not
+
   //STATIC VARS
   static final String _defEntry = "Entry";
   static final String _defDesc = "Description";
@@ -81,6 +83,15 @@ class Bubble{
     this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
     this._shouldDelete = false;
+    this._repeat = 0;
+  }
+
+  int getRepeat(){
+    return this._repeat;
+  }
+
+  void setRepeat(int _repeat){
+    this._repeat = _repeat;
   }
 
   bool getPressed(){

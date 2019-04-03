@@ -10,6 +10,7 @@ class ListWidget extends StatefulWidget {
   List<BubbleWidget> widList; //List of bubble widgets
   BubbleTheme _theme;
 
+
   //ListWidget({Key key, this.myList}) : super(key : key);
   ListWidget(BubblesList myList, List<BubbleWidget> widList, BubbleTheme _theme)
   {
@@ -32,12 +33,14 @@ class ListWidgetState extends State<ListWidget> {
   List<BubbleWidget> _widList;
   BubbleTheme _theme;
   //int dropdownValue;
+   //bool checkBox;
 
   ListWidgetState(BubblesList myList, List<BubbleWidget> widList,
       BubbleTheme _theme) {
     this._myList = myList;
     this._widList = widList;
     this._theme = _theme;
+    //this.checkBox = false;
     //this.dropdownValue = 0;
   }
 
@@ -198,6 +201,8 @@ class ListWidgetState extends State<ListWidget> {
     FocusNode fn2;
     fn = FocusNode();
     fn2 = FocusNode();
+    int repeat = 0;
+    bool checkBoxValue=false;
 
     void initState() {
       super.initState();
@@ -218,11 +223,27 @@ class ListWidgetState extends State<ListWidget> {
       newBubble.setDescription(myController2.text);
       newBubble.setSize(int.parse(myController3.text));
       //newBubble.setSize(dropdownValue);
+      if(checkBoxValue) {
+        newBubble.setRepeat(1);
+      }
+      else{
+        newBubble.setRepeat(0);
+      }
     }
 
     /**void _onDropDownChanged(int val) {
       setState(() {
         dropdownValue = val;
+      });
+    }*/
+
+    /**void checkBoxState(){
+      setState((){
+        if(checkBoxValue){
+          checkBoxValue = !checkBoxValue;
+        } else {
+            checkBoxValue = !checkBoxValue;
+          }
       });
     }*/
 
@@ -297,6 +318,15 @@ class ListWidgetState extends State<ListWidget> {
                             child: Text(value.toString()),
                           );}).toList(),
                       ),*/
+                      CheckboxListTile(
+                        title: const Text('Repeat'),
+                        value: checkBoxValue,
+                        onChanged: (bool newValue) {
+                          setState((){
+                            checkBoxValue = !checkBoxValue;
+                          });
+                        },
+                      ),
                       RaisedButton(
                         onPressed: () {
                           _editBubble();
