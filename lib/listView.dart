@@ -166,6 +166,7 @@ class ListWidgetState extends State<ListWidget> {
                       color: Colors.red[100],
                       onPressed: (){
                         _bubble.setToDelete();
+                        Navigator.pop(context);
                       },
                       child: Text("DELETE"),
                     )
