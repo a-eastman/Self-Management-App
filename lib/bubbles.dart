@@ -18,6 +18,8 @@ class Bubble{
 
   bool _shouldDelete; //If the bubble is set to delete or not
 
+  bool _repeat; //If the bubble should repeat or not
+
   //STATIC VARS
   static final String _defEntry = "Entry";
   static final String _defDesc = "Description";
@@ -33,11 +35,12 @@ class Bubble{
   static final int _defInfront = 0;
   static final List<double> _sizes = [50.0, 100.0, 150.0, 225.0];
 
-  Bubble(String _entry, String _description, Color _color, int _sizeIndex, bool _pressed, double _xPos, double _yPos, double _orgOpacity){
+  Bubble(String _entry, String _description, Color _color, int _sizeIndex,
+      bool _pressed, double _xPos, double _yPos, double _orgOpacity){
     this._entry = _entry;
     this._description =_description;
     this._color = _color;
-    
+
     this._sizeIndex = _sizeIndex;
     this._size = _sizes[_sizeIndex];
     this._pressed = _pressed;
@@ -46,8 +49,10 @@ class Bubble{
     this._xPos = _xPos;
     this._yPos = _yPos;
 
-    this._numBehind = _defBehind; //This will be checked and updated every build with the widgets
-    this._numInfront = _defInfront; //Will be checked and updated every build with the widgets
+    this._numBehind = _defBehind; //This will be checked and updated every
+                                  // build with the widgets
+    this._numInfront = _defInfront; //Will be checked and updated every
+                                    // build with the widgets
 
     //verify opacity is between 0.0 and 1.0
     if (_orgOpacity > _greatestOpacity){
@@ -57,7 +62,8 @@ class Bubble{
       _orgOpacity =_leastOpacity;
     }
     this._orgOpacity = _orgOpacity;
-    this._opacity = _orgOpacity; //Will be updated based off of number of overlapping bubbles, set to 1.0 by default
+    this._opacity = _orgOpacity; //Will be updated based off of number of
+                                 // overlapping bubbles, set to 1.0 by default
     this._shouldDelete = false;
   }
 
@@ -77,6 +83,19 @@ class Bubble{
     this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
     this._shouldDelete = false;
+    this._repeat = false;
+  }
+
+  bool getRepeat(){
+    return this._repeat;
+  }
+
+  void setRepeat(bool _repeat){
+    this._repeat = _repeat;
+  }
+
+  void changeRepeat(){
+    _repeat = !_repeat;
   }
 
   bool getPressed(){
@@ -103,7 +122,7 @@ class Bubble{
   //Increments the value of _numPressed
   void increment(){
     if(_pressed == false){
-     _numPressed++;
+      _numPressed++;
     }
   }
 
@@ -163,7 +182,7 @@ class Bubble{
   void setColor(Color nColor){
     this._color = nColor;
   }
-  
+
   //Changes the size of the bubble
   void nextSize(){
     print("nextSize");
@@ -206,7 +225,7 @@ class Bubble{
     }
     this._yPos = newYPos;
   }
-  
+
   //Changes the opacity (0.0 to 1.0)
   void changeOpacity(double newOp){
     if (newOp > _greatestOpacity){
@@ -245,7 +264,8 @@ class Bubble{
   }
 }
 
-//A BubblesList class, used to wrap the Bubbles in so that pass by reference can be simulated 
+//A BubblesList class, used to wrap the Bubbles in so that
+// pass by reference can be simulated
 class BubblesList {
   List<Bubble> _myList; //List of bubbles
 
@@ -275,6 +295,7 @@ class BubblesList {
     _myList.add(b);
 
     _numBubbles++;
+    // _myList.add(b);
   }
 
   //Deletes a bubble at index i
