@@ -1,53 +1,56 @@
 import 'package:flutter/material.dart';
+import 'themeSelection.dart';
+import 'themes.dart';
 import 'bubbles.dart';
 
-void main() => runApp(MyApp());
+// ignore: must_be_immutable
+class EditWidget extends StatefulWidget {
+  BubblesList myList; //List of bubbles
+  BubbleTheme _theme;
+  Bubble bubble;
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Repeat Test Application'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  BubblesList bubbles;
-
-  _MyHomePageState() {
-    Bubble test1 = new Bubble(
-        "Test1", "Description1", Colors.blue, 1, false, 0.5, 0.5, 1.0);
-    bubbles = new BubblesList();
-    bubbles.addBubble(test1);
+  //ListWidget({Key key, this.myList}) : super(key : key);
+  EditWidget(
+      BubblesList myList, BubbleTheme _theme,
+      Bubble bubble) {
+    this.myList = myList;
+    this._theme = _theme;
+    this.bubble = bubble;
   }
 
-  final myController = TextEditingController();
-  final myController2 = TextEditingController();
-  final myController3 = TextEditingController();
+  EditWidgetState createState() =>
+      EditWidgetState(this.myList, this._theme, this.bubble);
+}
 
-  //int dropdownValue = 0;
-  Bubble newBubble = new Bubble.defaultBubble();
+class EditWidgetState extends State<EditWidget> {
+  static final TextStyle _bubbleFont = const TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 15.0, fontFamily: 'SoulMarker');
+  BubblesList _myList;
+  BubbleTheme _theme;
+  Bubble _bubble;
+
+  EditWidgetState(
+      BubblesList myList,
+      BubbleTheme _theme, Bubble bubble) {
+    this._myList = myList;
+    this._theme = _theme;
+    this._bubble = bubble;
+  }
+
+  var myController;
+  var myController2;
+  var myController3;
   FocusNode fn = FocusNode();
   FocusNode fn2 = FocusNode();
 
   void initState() {
     super.initState();
-    //setState((){});
+    myController =
+        TextEditingController(text: _bubble.getEntry());
+    myController2 =
+        TextEditingController(text: _bubble.getDescription());
+    myController3 =
+        TextEditingController(text: _bubble.getSizeIndex().toString());
   }
 
   void dispose() {
@@ -60,29 +63,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _editBubble() {
-    newBubble.setEntry(myController.text);
-    newBubble.setDescription(myController2.text);
-    newBubble.setSize(int.parse(myController3.text));
+    _bubble.setEntry(myController.text);
+    _bubble.setDescription(myController2.text);
+    _bubble.setSize(int.parse(myController3.text));
   }
 
   Widget _buildRepeat() {
-    final bool repeat = newBubble.getRepeat();
+    final bool repeat = _bubble.getRepeat();
     return new ListTile(
       title: new Text("Repeat"),
       trailing: new Icon(
         repeat ? Icons.check_box : Icons.check_box_outline_blank,
-        color: repeat ? Colors.blue : Colors.black,
+        color: repeat ? getBubbleColor(_myList) : Colors.black,
       ),
       onTap: () {
         setState(() {
-          newBubble.changeRepeat();
+          _bubble.changeRepeat();
         });
       },
     );
   }
 
   Widget _buildDay(String day) {
-    final bool repeat = newBubble.getRepeatDay(day);
+    final bool repeat = _bubble.getRepeatDay(day);
     return new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -92,11 +95,11 @@ class _MyHomePageState extends State<MyHomePage> {
             child: new FlatButton(
                 child: new Icon(
                   repeat ? Icons.check_box : Icons.check_box_outline_blank,
-                  color: repeat ? Colors.blue : Colors.black,
+                  color: repeat ? getBubbleColor(_myList) : Colors.black,
                 ),
                 onPressed: () {
                   setState(() {
-                    newBubble.changeRepeatDay(day);
+                    _bubble.changeRepeatDay(day);
                   });
                 }),
           ),
@@ -105,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildWeek() {
-    if (newBubble.getRepeat()) {
+    if (_bubble.getRepeat()) {
       return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         _buildDay("Sun"),
         _buildDay("Mon"),
@@ -124,17 +127,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text("Edit Bubble"),
         ),
         body: ListView(children: <Widget>[
-
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               TextFormField(
                 autofocus: true,
-                //focusNode: fn2,
                 controller: myController,
                 decoration: const InputDecoration(
                   labelText: 'Task Name',
@@ -158,24 +159,25 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               _buildRepeat(),
               _buildWeek(),
-              Container(
-                  height: 20
-              ),
+              Container(height: 20),
               RaisedButton(
-                color: Colors.blue,
+                color: getBubbleColor(_myList),
                 onPressed: () {
                   _editBubble();
-                  bubbles.addBubble(newBubble);
-                  //_myList.addBubble(newBubble);
-                  //_widList.add(BubbleWidget(_curList, _theme));
-                  //newBubble.setColor(
-                  //    _myList.getBubbleAt(0).getColor());
-                  //Navigator.pop(context);
+                  Navigator.pop(context);
                 },
-                child: const Text('ADD'),
+                child: const Text('EDIT'),
               ),
             ],
           ),
         ]));
+  }
+
+  Color getBubbleColor(BubblesList _myList) {
+    if (_myList.getSize() == 0) {
+      return Colors.blue;
+    } else {
+      return _myList.getBubbleAt(0).getColor();
+    }
   }
 }
