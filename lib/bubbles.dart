@@ -118,6 +118,10 @@ class Bubble{
     repeat = !repeat;
   }
 
+  void setRepeat(bool r){
+    repeat = r;
+  }
+
   bool getRepeatDay(String day){
     bool result = true;
     switch(day) {
@@ -154,6 +158,25 @@ class Bubble{
       case "Sat": {repeatSaturday = !repeatSaturday;}
       break;
       case "Sun": {repeatSunday = !repeatSunday;}
+      break;
+    }
+  }
+
+  void setRepeatDay(String day, bool repeat){
+    switch(day) {
+      case "Mon": {repeatMonday = repeat;}
+      break;
+      case "Tue": {repeatTuesday = repeat;}
+      break;
+      case "Wed": {repeatWednesday = repeat;}
+      break;
+      case "Thu": {repeatThursday = repeat;}
+      break;
+      case "Fri": {repeatFriday = repeat;}
+      break;
+      case "Sat": {repeatSaturday = repeat;}
+      break;
+      case "Sun": {repeatSunday = repeat;}
       break;
     }
   }

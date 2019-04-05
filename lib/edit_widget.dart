@@ -10,9 +10,7 @@ class EditWidget extends StatefulWidget {
   Bubble bubble;
 
   //ListWidget({Key key, this.myList}) : super(key : key);
-  EditWidget(
-      BubblesList myList, BubbleTheme _theme,
-      Bubble bubble) {
+  EditWidget(BubblesList myList, BubbleTheme _theme, Bubble bubble) {
     this.myList = myList;
     this._theme = _theme;
     this.bubble = bubble;
@@ -29,9 +27,7 @@ class EditWidgetState extends State<EditWidget> {
   BubbleTheme _theme;
   Bubble _bubble;
 
-  EditWidgetState(
-      BubblesList myList,
-      BubbleTheme _theme, Bubble bubble) {
+  EditWidgetState(BubblesList myList, BubbleTheme _theme, Bubble bubble) {
     this._myList = myList;
     this._theme = _theme;
     this._bubble = bubble;
@@ -43,16 +39,16 @@ class EditWidgetState extends State<EditWidget> {
   FocusNode fn = FocusNode();
   FocusNode fn2 = FocusNode();
 
+  /// Set the initial values
   void initState() {
     super.initState();
-    myController =
-        TextEditingController(text: _bubble.getEntry());
-    myController2 =
-        TextEditingController(text: _bubble.getDescription());
+    myController = TextEditingController(text: _bubble.getEntry());
+    myController2 = TextEditingController(text: _bubble.getDescription());
     myController3 =
         TextEditingController(text: _bubble.getSizeIndex().toString());
   }
 
+  /// Get rid of memory used when closing the screen
   void dispose() {
     fn.dispose();
     fn2.dispose();
@@ -62,12 +58,14 @@ class EditWidgetState extends State<EditWidget> {
     super.dispose();
   }
 
+  /// Change the values entered in to the bubble
   void _editBubble() {
     _bubble.setEntry(myController.text);
     _bubble.setDescription(myController2.text);
     _bubble.setSize(int.parse(myController3.text));
   }
 
+  /// Creates the repeat chechbox
   Widget _buildRepeat() {
     final bool repeat = _bubble.getRepeat();
     return new ListTile(
@@ -84,6 +82,7 @@ class EditWidgetState extends State<EditWidget> {
     );
   }
 
+  /// Creates a day checkbox with label
   Widget _buildDay(String day) {
     final bool repeat = _bubble.getRepeatDay(day);
     return new Column(
@@ -107,6 +106,7 @@ class EditWidgetState extends State<EditWidget> {
         ]);
   }
 
+  /// Makes the row for the day of the week selection
   Widget _buildWeek() {
     if (_bubble.getRepeat()) {
       return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -173,6 +173,7 @@ class EditWidgetState extends State<EditWidget> {
         ]));
   }
 
+  /// Determines what color to make the bubble
   Color getBubbleColor(BubblesList _myList) {
     if (_myList.getSize() == 0) {
       return Colors.blue;

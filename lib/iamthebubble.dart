@@ -5,6 +5,7 @@ import 'themes.dart';
 import 'bubbles.dart';
 import 'add_widget.dart';
 import 'edit_widget.dart';
+import 'detail_widget.dart';
 //import 'package:audioplayer/audioplayer.dart';
 
 // ignore: must_be_immutable
@@ -43,133 +44,6 @@ class BubbleWidgetState extends State<BubbleWidget>{
     // this._bubble = _bubble;
     this._bList = _bList;
     this._theme = _theme;
-  }
-
-  Widget fakeBubble(Bubble _bubble){
-    return new Container(
-      width: _bubble.getSize(),
-      height:_bubble.getSize(),
-      child: new Container(
-        decoration: new BoxDecoration(
-          color: _bubble.getColor(),
-          shape:BoxShape.circle,
-        ),
-        child: new Center(
-          child: Text(_bubble.getEntry(), style:_bubbleFont),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRepeat(Bubble _bubble) {
-    final bool repeat = _bubble.getRepeat();
-    return new Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        new Text(
-          "Repeat      ",
-          textScaleFactor: 1.25,
-        ),
-        new Icon(
-          repeat ? Icons.check_box : Icons.check_box_outline_blank,
-          color: repeat ? _bubble.getColor() : Colors.black,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDay(String day, Bubble _bubble) {
-    final bool repeat = _bubble.getRepeatDay(day);
-    return new Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          new Container(
-            width: 55,
-            child: new FlatButton(
-              child: new Icon(
-                repeat ? Icons.check_box : Icons.check_box_outline_blank,
-                color: repeat ? _bubble.getColor() : Colors.black,
-              ),
-            ),
-          ),
-          new Text(day),
-        ]);
-  }
-
-  Widget _buildWeek(Bubble _bubble) {
-    if (_bubble.getRepeat()) {
-      return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        _buildDay("Sun", _bubble),
-        _buildDay("Mon", _bubble),
-        _buildDay("Tue", _bubble),
-        _buildDay("Wed", _bubble),
-        _buildDay("Thu", _bubble),
-        _buildDay("Fri", _bubble),
-        _buildDay("Sat", _bubble),
-      ]);
-    }
-    else {
-      return new Row();
-    }
-  }
-
-  void _pushDetail(Bubble _bubble, TextStyle _bubbleFont){
-    final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
-    Navigator.of(context).push(
-      new MaterialPageRoute<void>(
-        builder: (BuildContext context){
-          return new Scaffold(
-            appBar: new AppBar(
-              title: Text("Bubble: " + _bubble.getEntry()),
-              actions: <Widget>[
-                new IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: (){
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            EditWidget(this._bList, _theme, _bubble),
-                      ));
-                    }),
-              ],
-            ),
-            body: new Center(
-              child: new Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    fakeBubble(_bubble),
-                    Text("Title: " + _bubble.getEntry(),
-                      style: _biggerFont,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,),
-                    Text("Description: " + _bubble.getDescription(),
-                      style:_biggerFont,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.clip,),
-                    Text("Size: " + _bubble.getSize().toInt().toString(),
-                      style:_biggerFont,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,),
-                    Text("Completed: " + _bubble.getNumPressed().toString(),
-                      style:_biggerFont,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,),
-                    _buildRepeat(_bubble),
-                    _buildWeek(_bubble),
-                    RaisedButton(
-                      color: Colors.red[100],
-                      onPressed: (){
-                        _bubble.setToDelete();
-                      },
-                      child: Text("DELETE"),
-                    )
-                  ]
-              ),
-            ),
-          );
-        },
-      ),
-    );
   }
 
   Widget makeBubble(Bubble _bubble, BuildContext context) {
@@ -236,7 +110,11 @@ class BubbleWidgetState extends State<BubbleWidget>{
               });
             },
             onLongPress: (){
-              _pushDetail(_bubble, _bubbleFont);
+              //_pushDetail(_bubble, _bubbleFont);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    DetailWidget(_bList, _theme, _bubble),
+              ));
             },
           ),
           feedback: new Material(
@@ -306,7 +184,6 @@ class BubbleWidgetState extends State<BubbleWidget>{
           ),
         ],
       ),
-
       body: new Stack(
         children: _makeWidList(context),
       ),

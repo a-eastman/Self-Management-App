@@ -50,12 +50,14 @@ class AddWidgetState extends State<AddWidget> {
     super.dispose();
   }
 
+  /// Edits the bubble with the information entered
   void _editBubble() {
     newBubble.setEntry(myController.text);
     newBubble.setDescription(myController2.text);
     newBubble.setSize(int.parse(myController3.text));
   }
 
+  /// Creates the checkbox for repeating
   Widget _buildRepeat() {
     final bool repeat = newBubble.getRepeat();
     return new ListTile(
@@ -72,6 +74,7 @@ class AddWidgetState extends State<AddWidget> {
     );
   }
 
+  /// Makes the day checkbox and label
   Widget _buildDay(String day) {
     final bool repeat = newBubble.getRepeatDay(day);
     return new Column(
@@ -94,6 +97,7 @@ class AddWidgetState extends State<AddWidget> {
         ]);
   }
 
+  /// Creates the row of days of the week
   Widget _buildWeek() {
     if (newBubble.getRepeat()) {
       return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -162,6 +166,7 @@ class AddWidgetState extends State<AddWidget> {
         ]));
   }
 
+  /// Determines what color to make the new bubble
   Color getBubbleColor(BubblesList _myList) {
     if (_myList.getSize() == 0) {
       return Colors.blue;
