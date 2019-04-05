@@ -146,7 +146,6 @@ class Bubble{
     increment();
     if(!_pressed)
       db.insertPop(this._bubbleID);
-    _queryDBs();
   }
 
   void setPopState(){
@@ -316,10 +315,9 @@ class Bubble{
   bool equals(Bubble b)
   { return b.getBubbleID() == this._bubbleID; }
 
-  ///Database getters
-  ///@author Martin Price
-  ///@date March 2019
-
+///Database getters
+///@author Martin Price
+///@date March 2019
   ///Queries the enitre bubble data table
   ///@param bID : the bubble ID that is being looked for
   ///@param columnID : the column or attribute to return
@@ -361,10 +359,9 @@ class Bubble{
     return db.queryPop();
   }
 
-  ///Database Setters
-  ///@author Martin Price
-  ///@date March 2019
-
+///Database Setters
+///@author Martin Price
+///@date March 2019
   ///Updates the bubble table
   ///@param bID: bubble to update
   ///@param columnID : bubble attribute to update
@@ -448,6 +445,34 @@ class BubblesList {
           y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped'])),
       });
     print('# of bubbles on Start-up $_numBubbles');
+  }
+
+  ///Contructor used to gather bubbles that have not been popped yet today
+  BubblesList.unpoppedBubbles()
+  {
+    try{ unpoppedBubbles(); }
+    catch (e) {BubblesList.newEmptyBubbleList(); }
+  }
+
+  ///Queries the database for bubbles that have not been popped today
+  ///@return bubbles : a populated list of bubbles that have NOT been popped
+  ///@author Martin Price 
+  Future<List<Bubble>> unpoppedBubbles() async
+  {
+    this._numBubbles = 0;
+    this._myList = [];
+    final results = await db.queryBubblesForRePop();
+    for(var y in results)
+    {
+      bool valid = await db.queryPopForRecent(y['bID']);
+      if(valid)
+      {
+        addBubble(new Bubble.BubbleFromDatabase(y['bID'],y['title'],y['description'],
+          new Color.fromRGBO(y['color_red'],y['color_green'], y['color_blue'],y['opacity']),
+          y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped']));
+      }
+    }
+    print("# number of bubbles not popped today $_numBubbles");
   }
 
   List<Bubble> getList() {
