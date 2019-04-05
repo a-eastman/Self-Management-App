@@ -190,6 +190,62 @@ class ListWidgetState extends State<ListWidget> {
     );
   }
 
+
+  Widget _buildRepeat(Bubble newBubble) {
+    final bool repeat = newBubble.getRepeat();
+    return new ListTile(
+      title: new Text("Repeat"),
+      trailing: new Icon(
+        repeat ? Icons.check_box : Icons.check_box_outline_blank,
+        color: repeat ? Colors.blue : Colors.black,
+      ),
+      onTap: () {
+        setState(() {
+          newBubble.changeRepeat();
+        });
+      },
+    );
+  }
+
+  Widget _buildDay(String day, Bubble newBubble) {
+    final bool repeat = newBubble.getRepeatDay(day);
+    return new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          new Container(
+            width: 55,
+            //title: new Text("Repeat"),
+            child: new FlatButton(
+                child: new Icon(
+                  repeat ? Icons.check_box : Icons.check_box_outline_blank,
+                  color: repeat ? Colors.blue : Colors.black,
+                ),
+                onPressed: () {
+                  setState(() {
+                    newBubble.changeRepeatDay(day);
+                  });
+                }),
+          ),
+          new Text(day),
+        ]);
+  }
+
+  Widget _buildWeek(Bubble newBubble) {
+    if (newBubble.getRepeat()) {
+      return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        _buildDay("Sun", newBubble),
+        _buildDay("Mon", newBubble),
+        _buildDay("Tue", newBubble),
+        _buildDay("Wed", newBubble),
+        _buildDay("Thu", newBubble),
+        _buildDay("Fri", newBubble),
+        _buildDay("Sat", newBubble),
+      ]);
+    } else {
+      return new Row();
+    }
+  }
+
   // Creates a new bubble
   Bubble _pushNewBubble() {
     final myController = TextEditingController();
@@ -201,8 +257,6 @@ class ListWidgetState extends State<ListWidget> {
     FocusNode fn2;
     fn = FocusNode();
     fn2 = FocusNode();
-    int repeat = 0;
-    bool checkBoxValue=false;
 
     void initState() {
       super.initState();
@@ -222,36 +276,13 @@ class ListWidgetState extends State<ListWidget> {
       newBubble.setEntry(myController.text);
       newBubble.setDescription(myController2.text);
       newBubble.setSize(int.parse(myController3.text));
-      //newBubble.setSize(dropdownValue);
-      if(checkBoxValue) {
-        newBubble.setRepeat(1);
-      }
-      else{
-        newBubble.setRepeat(0);
-      }
     }
-
-    /**void _onDropDownChanged(int val) {
-      setState(() {
-        dropdownValue = val;
-      });
-    }*/
-
-    /**void checkBoxState(){
-      setState((){
-        if(checkBoxValue){
-          checkBoxValue = !checkBoxValue;
-        } else {
-            checkBoxValue = !checkBoxValue;
-          }
-      });
-    }*/
 
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
         builder: (BuildContext context) {
           //initState();
-          return new Scaffold(
+          /**return new Scaffold(
             appBar: new AppBar(
               title: const Text('Create New Bubble'),
             ),
@@ -283,41 +314,6 @@ class ListWidgetState extends State<ListWidget> {
                           labelText: 'Priority (0 to 3)',
                         ),
                       ),
-                      /**DropdownButton<int>(
-                        value: dropdownValue,
-                        isExpanded: true,
-                        isDense: false,
-                        hint: new Text("Bubble Size"),
-                        onChanged: (int newValue){
-                          setState((){
-                            dropdownValue = newValue;
-                          });
-                        },
-                        items: <int>[0, 1, 2, 3].map<DropdownMenuItem<int>>((int value) {
-                        return DropdownMenuItem<int>(
-                        value: value,
-                        child: Text(value.toString()),
-                        );}).toList(),
-                      ),*/
-                      /**DropdownButtonFormField<int>(
-                        //hint: new Text("Bubble Size"),
-                        decoration: const InputDecoration(
-                          labelText: 'Size',
-                        ),
-                        onChanged: (value){
-                          print("changed - value: " + value.toString()
-                              + " dropdownValue: " + dropdownValue.toString());
-                          _onDropDownChanged(value);
-                          print("changed - value: " + value.toString()
-                              + " dropdownValue: " + dropdownValue.toString());
-                        },
-                        value: dropdownValue,
-                        items: <int>[0, 1, 2, 3].map<DropdownMenuItem<int>>((int value) {
-                          return DropdownMenuItem<int>(
-                            value: value,
-                            child: Text(value.toString()),
-                          );}).toList(),
-                      ),*/
                       CheckboxListTile(
                         title: const Text('Repeat'),
                         value: checkBoxValue,
@@ -341,7 +337,59 @@ class ListWidgetState extends State<ListWidget> {
                     ]
                 )
             ),
-          );
+          );*/
+          return Scaffold(
+              appBar: AppBar(
+                title: Text('Create New Bubble'),
+              ),
+              body: ListView(children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    TextFormField(
+                      autofocus: true,
+                      //focusNode: fn2,
+                      controller: myController,
+                      decoration: const InputDecoration(
+                        labelText: 'Task Name',
+                      ),
+                    ),
+                    TextFormField(
+                      autofocus: false,
+                      focusNode: fn,
+                      controller: myController2,
+                      decoration: const InputDecoration(
+                        labelText: 'Description',
+                      ),
+                    ),
+                    TextFormField(
+                      autofocus: false,
+                      focusNode: fn2,
+                      controller: myController3,
+                      decoration: const InputDecoration(
+                        labelText: 'Priority (0 to 3)',
+                      ),
+                    ),
+                    _buildRepeat(newBubble),
+                    _buildWeek(newBubble),
+                    Container(
+                        height: 20
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        _editBubble();
+                        _myList.addBubble(newBubble);
+                        _widList.add(BubbleWidget(_curList, _theme));
+                        newBubble.setColor(
+                            _myList.getBubbleAt(0).getColor());
+                        Navigator.pop(context);
+                      },
+                      child: const Text('ADD'),
+                    ),
+                  ],
+                ),
+              ]));
         },
       ),
     );
