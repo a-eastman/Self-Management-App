@@ -6,6 +6,7 @@ import 'themeSelection.dart';
 import 'themes.dart';
 import 'database.dart';
 
+final db = DB.instance;
 void main() => runApp(BubbleView());
 
 class BubbleView extends StatelessWidget {
@@ -47,6 +48,7 @@ class BubbleAppState extends State<BubbleApp>{
   Color globalBubbleColor;
   List<BubbleWidget> _myList;
   BubblesList _bList;
+  bool newDay;
   BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList,
       this._theme, this.globalBubbleColor){
     this._bList =_bList;
@@ -58,11 +60,18 @@ class BubbleAppState extends State<BubbleApp>{
   }
 
   @override
-  void initState(){
+  void initState()
+  {
     super.initState();
-    _bList = new BubblesList();
+    login();
+    if(newDay) _bList = new BubblesList(); // new day, fresh list
+    else _bList = new BubblesList.unpoppedBubbles(); // same day
     _myList = [];
   }
+
+  ///determines whether it is a new day
+  void login() async
+  {newDay = await db.login(); }
 
   ListWidget _buildListView(){
     return new ListWidget(_bList, _myList, _theme);

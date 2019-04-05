@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'bubble_widget.dart';
 import 'database.dart';
 import 'bubbles.dart';
+import 'iamthebubble.dart';
 
 
 void main() => runApp(DBview());
@@ -143,8 +143,6 @@ class BubbleAppState extends State<BubbleApp>{
           title: Text('BUBL'),
         ),
         body: new Stack(
-          children: [BubbleWidget(bubble: b1),
-          BubbleWidget(bubble: b2),],
         )
     );
   }
