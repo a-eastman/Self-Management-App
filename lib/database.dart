@@ -7,7 +7,7 @@ import 'dart:async';
 import 'dart:io';
 
 /// Runs the SQLite database behind flutter
-/// @version 1.2: initialize the database, uses hardcoded queries, no file io
+/// @version 2.0: tables for bubbles, pop, state, and color
 /// @author Martin Price
 /// @date March 2019
 class DB
@@ -16,6 +16,8 @@ class DB
   static final _dbName = "bubl.db";
   static final _bubble = "bubble";
   static final _pop = "pop_record";
+  static final _app_state = "app_state";
+  static final _color_themes = "color_themes";
   static final _dbVersion = 2;
 
   static Database _database;    //The only reference to the Database
@@ -50,12 +52,19 @@ class DB
                         color_red INTEGER NOT NULL, color_green INTEGER NOT NULL, 
                         color_blue NOT NULL, opacity REAL NOT NULL, size INTEGER, 
                         posX REAL, posY REAL, time_created TEXT, 
-                        deleted INTEGER, frequency INTEGER, times_popped INTEGER)""");
-    await db.execute("""CREATE  TABLE pop_record (pID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        deleted INTEGER, frequency INTEGER, days_to_repeat TEXT, 
+                        times_popped INTEGER)""");
+    await db.execute("""CREATE TABLE pop_record (pID INTEGER PRIMARY KEY AUTOINCREMENT, 
                         bID INTEGER NOT NULL, time_popped TEXT NOT NULL, action TEXT, 
                         FOREIGN KEY (bID) REFERENCES bubble(bID))""");
+    await db.execute("""CREATE TABLE $_app_state (last_opened TEXT)""");
+    await db.execute("""CREATE TABLE $_color_themes (colorID INTEGER PRIMARY KEY AUTOINCREMENT,
+                        color_red INTEGER, color_green, color_blue INTEGER, color_opacity REAL""");
   }
 
+///
+///BUBBLE TABLE
+///
   /// inserts value used to make a new bubble into the bubble db
   /// @return 1: successfully updated db
   /// @return 0: error thrown
@@ -148,12 +157,25 @@ class DB
     catch(e) {print(e); return 1; }
   }
 
+///
+///POP RECORD TABLE
+///
   ///@return all the pop records
   Future<List<Map<String, dynamic>>> queryPop() async
   {
     Database db = await instance.database;
     try{ return await db.query(_pop); }
     catch (e) { print(e); return null; }
+  }
+
+  ///@return all pop records for a specific bubble,
+  ///@returns in order of most frequent pop down
+  Future<List<Map<String, dynamic>>> queryPopByBubble(int bID) async
+  {
+    Database db = await instance.database;
+    try{ return await db.query(_pop, where: 'bID = ?', whereArgs: [bID], 
+                              orderBy: 'time_popped DESC'); }
+    catch (e) {print(e); return []; }
   }
 
   /// Inserts value into the pop_bubble
@@ -169,14 +191,77 @@ class DB
     catch (e) { print(e); return 0; }
   }
 
+  /// Queries a specifc bubble that have been popped today,
+  /// only checks for the last pop made per bubble to save on time
+  /// @param bID : specifc bubble to grab
+  /// @return true : if the specific bubble has been popped today
+  Future<bool> queryPopForRecent(int bID) async
+  {
+    var currTime = new DateTime.now();
+    final results = await queryPopByBubble(bID);
+    var lastPopped = DateTime.parse(results.first['time_popped'])
+    var diff = currTime.difference(lastPopped);
+    return diff.inDays == 0;
+  }
 
-  ///FOR DEV USE ONLY
+ ///
+ ///APP STATE TABLE
+ /// 
+  
+  /// Enters in the latest login id
+  /// @return 1 : success
+  /// @return 0 : error thrown
+  Future<int> enterLogin(String time) async
+  {
+    Database db = await instance.database;
+    try { return await db.insert(_app_state, {'last_opened': time} ); }
+    catch (e) {print(e); return 0;}
+  }
+
+  ///@return : Gets the latest login time
+  Future<String> latestLoginTime() async
+  {
+    Database db = await instance.database;
+    try{ return (await db.query(_app_state, orderBy: 'last_opened DESC')).first['last_opened']; }
+    catch (e) {print(e); return "";}
+  }
+
+  ///Compares the time to that of the latest login time
+  ///@return true : new day has 
+  ///@ return false : same day as last login time
+  Future<bool> login() async
+  {
+    String lastTime = await latestLoginTime();
+    if(lastTime == "") { enterLogin(new DateTime.now().toString()); return false; } // first time login
+    
+    var prevTime = DateTime.parse(lastTime);
+    var currTime = new DateTime.now();
+    var diff = currTime.difference(prevTime);
+    enterLogin(currTime.toString());
+    return diff.inDays > 0;
+  }
+
+///
+///COLOR THEME TABLE
+///
+  /// Populates the color_theme table with pre deetermined patterns
+  /// typically only used on initital startup 
+  void populateColorTheme() async
+  {
+
+  }
+
+///
+///FOR DEV USE ONLY
+///
   ///refreshes the DB, drops and recreates tables
   void refreshDB() async
   {
     Database db = await instance.database;
     db.execute("DROP TABLE $_bubble;");
     db.execute("DROP TABLE $_pop;");
+    db.execute("DROP TABLE $_app_state");
+    db.execute("DROP TABLE $_color_themes");
     createDB();
   }
   void createDB() async
@@ -187,10 +272,14 @@ class DB
                         color_red INTEGER NOT NULL, color_green INTEGER NOT NULL, 
                         color_blue NOT NULL, opacity REAL NOT NULL, size INTEGER, 
                         posX REAL, posY REAL, time_created TEXT, 
-                        deleted INTEGER, frequency INTEGER, times_popped INTEGER)""");
-    await db.execute("""CREATE  TABLE pop_record (pID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        deleted INTEGER, frequency INTEGER, days_to_repeat TEXT, 
+                        times_popped INTEGER)""");
+    await db.execute("""CREATE  TABLE $_pop (pID INTEGER PRIMARY KEY AUTOINCREMENT, 
                         bID INTEGER NOT NULL, time_popped TEXT NOT NULL, action TEXT, 
                         FOREIGN KEY (bID) REFERENCES bubble(bID))""");
+    await db.execute("""CREATE TABLE $_app_state (last_opened TEXT)""");
+    await db.execute("""CREATE TABLE $_color_themes (colorID INTEGER PRIMARY KEY AUTOINCREMENT,
+                        color_red INTEGER, color_green, color_blue INTEGER, color_opacity REAL""");
   }
 
 }
