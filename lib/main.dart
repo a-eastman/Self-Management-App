@@ -86,13 +86,11 @@ class BubbleAppState extends State<BubbleApp>{
 }
 
 class BubbleView extends StatelessWidget {
-
   @override
   Widget build(BuildContext context){
     final BubbleTheme theme =BubbleTheme();
-
     return StreamBuilder<ThemeData>(
-      initialData: theme.initialTheme().data,
+      initialData: theme.buildBubbleTheme().data,
       stream: theme.themeDataStream,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
         return MaterialApp(
