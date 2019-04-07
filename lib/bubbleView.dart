@@ -134,7 +134,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
           child: new InkResponse(
             highlightColor: _bubble.getColor(),
             child: new AnimatedContainer(
-              duration: Duration(milliseconds: 70),
+              curve:  ElasticOutCurve(.5) ,
+              duration: Duration(milliseconds: 150),
               height: _bubble.getSize(),
               width: _bubble.getSize(),
               decoration: new BoxDecoration(
