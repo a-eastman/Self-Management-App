@@ -38,6 +38,7 @@ class AddWidgetState extends State<AddWidget> {
 
   void initState() {
     super.initState();
+
     //setState((){});
   }
 
@@ -54,7 +55,6 @@ class AddWidgetState extends State<AddWidget> {
   void _editBubble() {
     newBubble.setEntry(myController.text);
     newBubble.setDescription(myController2.text);
-    newBubble.setSize(int.parse(myController3.text));
   }
 
   /// Creates the checkbox for repeating
@@ -140,13 +140,24 @@ class AddWidgetState extends State<AddWidget> {
                   labelText: 'Description',
                 ),
               ),
-              TextFormField(
-                autofocus: false,
-                focusNode: fn2,
-                controller: myController3,
+              DropdownButtonFormField<int>(
                 decoration: const InputDecoration(
                   labelText: 'Priority (0 to 3)',
                 ),
+                value: newBubble.getSizeIndex(),
+                onChanged: (int newValue) {
+                  setState(() {
+                    newBubble.setSize(newValue);
+                  });
+                },
+                items: <int>[0, 1, 2, 3]
+                    .map<DropdownMenuItem<int>>((int value) {
+                  return DropdownMenuItem<int>(
+                    value: value,
+                    child: Text(value.toString()),
+                  );
+                })
+                    .toList(),
               ),
               _buildRepeat(),
               _buildWeek(),

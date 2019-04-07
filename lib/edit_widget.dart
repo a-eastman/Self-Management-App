@@ -35,17 +35,25 @@ class EditWidgetState extends State<EditWidget> {
 
   var myController;
   var myController2;
-  var myController3;
   FocusNode fn = FocusNode();
   FocusNode fn2 = FocusNode();
+  Bubble temp;
 
   /// Set the initial values
   void initState() {
     super.initState();
+    temp = new Bubble.defaultBubble();
+    temp.setRepeat(_bubble.getRepeat());
+    temp.setRepeatDay("Mon", _bubble.getRepeatDay("Mon"));
+    temp.setRepeatDay("Tue", _bubble.getRepeatDay("Tue"));
+    temp.setRepeatDay("Wed", _bubble.getRepeatDay("Wed"));
+    temp.setRepeatDay("Thu", _bubble.getRepeatDay("Thu"));
+    temp.setRepeatDay("Fri", _bubble.getRepeatDay("Fri"));
+    temp.setRepeatDay("Sat", _bubble.getRepeatDay("Sat"));
+    temp.setRepeatDay("Sun", _bubble.getRepeatDay("Sun"));
+    temp.setSize(_bubble.getSizeIndex());
     myController = TextEditingController(text: _bubble.getEntry());
     myController2 = TextEditingController(text: _bubble.getDescription());
-    myController3 =
-        TextEditingController(text: _bubble.getSizeIndex().toString());
   }
 
   /// Get rid of memory used when closing the screen
@@ -54,7 +62,6 @@ class EditWidgetState extends State<EditWidget> {
     fn2.dispose();
     myController.dispose();
     myController2.dispose();
-    myController3.dispose();
     super.dispose();
   }
 
@@ -62,12 +69,20 @@ class EditWidgetState extends State<EditWidget> {
   void _editBubble() {
     _bubble.setEntry(myController.text);
     _bubble.setDescription(myController2.text);
-    _bubble.setSize(int.parse(myController3.text));
+    _bubble.setSize(temp.getSizeIndex());
+    _bubble.setRepeat(temp.getRepeat());
+    _bubble.setRepeatDay("Mon",temp.getRepeatDay("Mon"));
+    _bubble.setRepeatDay("Tue",temp.getRepeatDay("Tue"));
+    _bubble.setRepeatDay("Wed",temp.getRepeatDay("Wed"));
+    _bubble.setRepeatDay("Thu",temp.getRepeatDay("Thu"));
+    _bubble.setRepeatDay("Fri",temp.getRepeatDay("Fri"));
+    _bubble.setRepeatDay("Sat",temp.getRepeatDay("Sat"));
+    _bubble.setRepeatDay("Sun",temp.getRepeatDay("Sun"));
   }
 
-  /// Creates the repeat chechbox
+  /// Creates the repeat checkbox
   Widget _buildRepeat() {
-    final bool repeat = _bubble.getRepeat();
+    final bool repeat = temp.getRepeat();
     return new ListTile(
       title: new Text("Repeat"),
       trailing: new Icon(
@@ -76,7 +91,7 @@ class EditWidgetState extends State<EditWidget> {
       ),
       onTap: () {
         setState(() {
-          _bubble.changeRepeat();
+          temp.changeRepeat();
         });
       },
     );
@@ -84,13 +99,12 @@ class EditWidgetState extends State<EditWidget> {
 
   /// Creates a day checkbox with label
   Widget _buildDay(String day) {
-    final bool repeat = _bubble.getRepeatDay(day);
+    final bool repeat = temp.getRepeatDay(day);
     return new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           new Container(
             width: 55,
-            //title: new Text("Repeat"),
             child: new FlatButton(
                 child: new Icon(
                   repeat ? Icons.check_box : Icons.check_box_outline_blank,
@@ -98,7 +112,7 @@ class EditWidgetState extends State<EditWidget> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _bubble.changeRepeatDay(day);
+                    temp.changeRepeatDay(day);
                   });
                 }),
           ),
@@ -108,7 +122,7 @@ class EditWidgetState extends State<EditWidget> {
 
   /// Makes the row for the day of the week selection
   Widget _buildWeek() {
-    if (_bubble.getRepeat()) {
+    if (temp.getRepeat()) {
       return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         _buildDay("Sun"),
         _buildDay("Mon"),
@@ -149,13 +163,24 @@ class EditWidgetState extends State<EditWidget> {
                   labelText: 'Description',
                 ),
               ),
-              TextFormField(
-                autofocus: false,
-                focusNode: fn2,
-                controller: myController3,
+              DropdownButtonFormField<int>(
                 decoration: const InputDecoration(
                   labelText: 'Priority (0 to 3)',
                 ),
+                value: temp.getSizeIndex(),
+                onChanged: (int newValue) {
+                  setState(() {
+                    temp.setSize(newValue);
+                  });
+                },
+                items: <int>[0, 1, 2, 3]
+                    .map<DropdownMenuItem<int>>((int value) {
+                  return DropdownMenuItem<int>(
+                    value: value,
+                    child: Text(value.toString()),
+                  );
+                })
+                    .toList(),
               ),
               _buildRepeat(),
               _buildWeek(),
