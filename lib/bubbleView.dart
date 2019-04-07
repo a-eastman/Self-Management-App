@@ -119,8 +119,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
     print(_screenHeight.toString());
     print(_screenWidth.toString());
     return new Positioned(
-      width: _bubble.getSize(),
-      height: _bubble.getSize(),
+      //width: _bubble.getSize(),
+      //height: _bubble.getSize(),
       child: new Opacity(
         opacity: _bubble.getPressed() ? _bubble.getOrgOpacity() : 0.0,
         child: new Draggable(
@@ -133,7 +133,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
           },
           child: new InkResponse(
             highlightColor: _bubble.getColor(),
-            child: new Container(
+            child: new AnimatedContainer(
+              duration: Duration(milliseconds: 70),
               height: _bubble.getSize(),
               width: _bubble.getSize(),
               decoration: new BoxDecoration(
