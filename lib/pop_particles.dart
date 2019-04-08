@@ -5,18 +5,27 @@ import 'dart:math' as math;
 import 'bubbles.dart';
 
 class PopParticles extends StatefulWidget {
-  List<PopParticleNode> _particles = [];
-  Bubble _bubble;
-  DateTime _timeCreated;
+  final Bubble _bubble;
+  final DateTime _timeCreated = DateTime.now();
 
-  PopParticles(this._bubble) {
-    reset();
-    _timeCreated = DateTime.now();
-  }
+  PopParticles(this._bubble);
 
   bool expired()
   {
     return _timeCreated.difference(DateTime.now()).inSeconds.abs() > 5;
+  }
+
+  @override
+  State<StatefulWidget> createState() => PopParticlesState(_bubble);
+}
+
+class PopParticlesState extends State<PopParticles> {
+  List<PopParticleNode> _particles = [];
+  Bubble _bubble;
+
+  PopParticlesState(this._bubble)
+  {
+    reset();
   }
 
   void reset() {
@@ -26,15 +35,6 @@ class PopParticles extends StatefulWidget {
       _particles.add(PopParticleNode(_bubble));
     }
   }
-
-  @override
-  State<StatefulWidget> createState() => PopParticlesState(_particles);
-}
-
-class PopParticlesState extends State<PopParticles> {
-  List<PopParticleNode> _particles = [];
-
-  PopParticlesState(this._particles);
 
   @override
   Widget build(BuildContext context) {
