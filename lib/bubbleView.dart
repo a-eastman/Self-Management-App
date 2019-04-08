@@ -124,7 +124,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
     return new Positioned(
       //width: _bubble.getSize(),
       //height: _bubble.getSize(),
-      child: new Opacity(
+      child: new AnimatedOpacity(
+        duration: Duration(milliseconds: 100),
         opacity: _bubble.getPressed() ? _bubble.getOrgOpacity() : 0.0,
         child: new Draggable(
           onDraggableCanceled: (Velocity velocity, Offset offset){
