@@ -138,7 +138,7 @@ class PopParticleNodeState extends State<PopParticleNode>
       + randomBetween(rand, -_bubble.getSize() / 4, _bubble.getSize() / 4);
     _baseYPos = _bubble.getYPos()
       + randomBetween(rand, -_bubble.getSize() / 4, _bubble.getSize() / 4)
-      + (_bubble.getYPos() / 3.0);
+      + (_bubble.getSize() / (_bubble.getSizeIndex() + 1.0));
 
     _xAnimation = Tween(begin: 0.0, end: xMult).animate(CurvedAnimation(
       parent: _controller,
