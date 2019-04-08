@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // import 'themeSelection.dart';
 import 'themes.dart';
 import 'bubbles.dart';
+import './pop_particles.dart';
 //import 'package:audioplayer/audioplayer.dart';
 
 // ignore: must_be_immutable
@@ -10,6 +11,7 @@ class BubbleWidget extends StatefulWidget{
   //final String entr;
   BubbleTheme _theme;
   BubblesList _bList;
+  List<PopParticles> _popParticlesList = [];
   // const BubbleWidget({Key key, this.bubble}) : super(key : key);
   BubbleWidget(BubblesList _bList, BubbleTheme _theme){
     // this._bubble = _bubble;
@@ -25,19 +27,20 @@ class BubbleWidget extends StatefulWidget{
   }
 
   BubbleWidgetState createState() =>
-      BubbleWidgetState(this._bList, this._theme);
+      BubbleWidgetState(this._bList, this._theme, this._popParticlesList);
 }
 
 //Bubble class
 class BubbleWidgetState extends State<BubbleWidget>{
   BubblesList _bList;
   BubbleTheme _theme;
+  List<PopParticles> _popParticlesList = [];
   static final TextStyle _bubbleFont = const TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 15.0,
       fontFamily: 'SoulMarker');
   // AudioPlayer ap = new AudioPlayer();
-  BubbleWidgetState(BubblesList _bList, BubbleTheme _theme){
+  BubbleWidgetState(BubblesList _bList, BubbleTheme _theme, this._popParticlesList){
     // this._bubble = _bubble;
     this._bList = _bList;
     this._theme = _theme;
@@ -134,8 +137,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
           child: new InkResponse(
             highlightColor: _bubble.getColor(),
             child: new AnimatedContainer(
-              curve:  ElasticOutCurve(.5) ,
-              duration: Duration(milliseconds: 150),
+              curve:  ElasticOutCurve(.9) ,
+              duration: Duration(milliseconds: 250),
               height: _bubble.getSize(),
               width: _bubble.getSize(),
               decoration: new BoxDecoration(
@@ -159,6 +162,10 @@ class BubbleWidgetState extends State<BubbleWidget>{
               setState((){ //pop bubble
                 _bubble.changePressed();
                 _bubble.setPopState();
+                if (!_bubble.getPressed())
+                {
+                  _popParticlesList.add(PopParticles(_bubble));
+                }
                 // switch (_bubble.getSizeIndex()){
                 //   case 0: {
                 //     ap.play("Sounds/SmallPop.mp3");
@@ -396,6 +403,11 @@ class BubbleWidgetState extends State<BubbleWidget>{
     for (int i = 0; i < _bList.getSize(); i++){
       if (!_bList.getBubbleAt(i).getShouldDelete()){
         _widList.add(makeBubble(_bList.getBubbleAt(i), context));
+      }
+    }
+    for (int i = 0; i < _popParticlesList.length; i++){
+      {
+        _widList.add(_popParticlesList[i]);
       }
     }
     return _widList;
