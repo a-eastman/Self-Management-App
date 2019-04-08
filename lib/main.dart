@@ -1,91 +1,168 @@
+
 import 'package:flutter/material.dart';
 import 'database.dart';
 import 'bubbles.dart';
-import 'iamthebubble.dart';
 
-final db = DB.instance;
-void main() => runApp(BubbleView());
 
-class BubbleView extends StatelessWidget {
+void main() => runApp(DBview());
+  final db = DB.instance;
+
+class DBview extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'SQFlite Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
-    final BubbleTheme theme =BubbleTheme();
-
-    return StreamBuilder<ThemeData>(
-      initialData: theme.initialTheme().data,
-      stream: theme.themeDataStream,
-      builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
-        return MaterialApp(
-          title: 'Bubl with DB Integrated',
-          theme: snapshot.data,
-          home: BubbleApp(
-            theme: theme,
-          ),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('BUBL Test DB'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              child: Text('insert values', style: TextStyle(fontSize: 20),),
+              onPressed: () { _insert(); },
+            ),
+            RaisedButton(
+              child: Text('Refresh', style: TextStyle(fontSize: 20),),
+              onPressed: () { _refresh(); },
+            ),
+            RaisedButton(
+              child: Text('Test Attribute', style: TextStyle(fontSize: 20),),
+              onPressed: () { _testColor(); },
+            ),
+            RaisedButton(
+              child: Text('login', style: TextStyle(fontSize: 20),),
+              onPressed: () { _login(); },
+            ),
+            //BubbleWidget(bubble: new Bubble.defaultBubble()),
+          ],
+        ),
+      ),
+      //body:
+      //new Stack(
+      //children: [BubbleWidget(bubble: b1),
+      //BubbleWidget(bubble: b2)
     );
+  }
+
+  //Helper methods used by Martin to quickly test the DB
+  void _queryBub() async
+  {
+    final allBubbles = await db.queryBubble();
+    print("Printing Bubbles");
+    try{ allBubbles.forEach((row) => print(row)); }
+    catch (e) { print("No bubs"); }
+
+  }
+  void _queryPop() async
+  {
+    final allPop = await db.queryBubblesForRePop();
+    print("Printing popped");
+    try{ allPop.forEach((row) => print(row)); }
+    catch (e) { print("No pops"); }
+  }
+  void _insert() async
+  {
+    //print("Testing the bubble table");
+    //print(await db.insertBubble('Hello World 2', 'Test to See the DB 2', 100, 200, 100, 0.50, 5, 0.75, 0.25));
+    //print("Testing the pop table");
+    //print(await(db.insertPop()));
+
+    print("Creating a new bubble");
+    await db.insertBubble("Hello", "There", 120, 140, 160, 0.50, 2, 0.75, 0.25);
+    int x = await db.queryLastCreatedBubbleID();
+    Map<String, dynamic> y = await db.queryBubbleByID(x, []);
+    Bubble b2 = new Bubble.BubbleFromDatabase(x,y['title'],y['description'],
+                  new Color.fromRGBO(y['color_red'],y['color_green'],
+                                     y['color_blue'],y['opacity']),
+                  y['size'], y['xPos'], y['yPos'], y['opacity'], y['times_popped']);
+    print("Bubble created from DB");
+    print(b2.getBubbleID());
+    print(b2.getDescription());
+    print(b2.getSize());
+
+  }
+  void _testDB() async
+  {
+    print('Printing out bubl table:');
+    final bubl = await db.queryBubble();
+    try{ bubl.forEach((row) => print(row)); }
+    catch(e) {print(e); }
+
+    print('Printing out pop_record table:');
+    final pop = await db.queryPop();
+    try{ pop.forEach((row) => print(row)); }
+    catch(e) {print(e); }
+  }
+  void _refresh() async
+  {
+    print("Refreshing Bubl.db");
+    await db.refreshDB();
+  }
+
+  void _testBubble() async
+  {
+    print("Testing a Bubble");
+    //print(b1.getBubbleID());
+  }
+
+  void _login() async
+  {
+    print('Logging in now');
+    final newDay = await db.login();
+    if(newDay) print('Logged in to a new day'); 
+    else print('Welcome back!');
+    final logins = await db.queryAppState();
+    try{logins.forEach((row) => print(row)); }
+    catch(e) {print(e); print('No logins found'); }
+  }
+
+  void _testColor()
+  {
 
   }
 }
 
-class BubbleApp extends StatefulWidget{
-  final BubbleTheme theme;
-  final Color globalBubbleColor;
-  BubblesList _bList;
-  List<BubbleWidget> _widList = [];
-
-  BubbleApp({Key key, this.theme, this.globalBubbleColor,});
+/*class BubbleApp extends StatefulWidget{
   @override
-  BubbleAppState createState() =>
-      BubbleAppState(_bList, _widList, theme, globalBubbleColor);
+  BubbleAppState createState() => BubbleAppState();
 }
 
 class BubbleAppState extends State<BubbleApp>{
-  BubbleTheme _theme;
-  Color globalBubbleColor;
-  List<BubbleWidget> _myList;
-  BubblesList _bList;
-  bool newDay;
-  BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList,
-      this._theme, this.globalBubbleColor){
-    this._bList =_bList;
-    this._myList = _widList;
-  }
-
-  void setBubbleColor(Color newBubbleColor){
-    this.globalBubbleColor = newBubbleColor;
-  }
-
-  @override
-  void initState()
-  {
-    super.initState();
-    login();
-    if(newDay) _bList = new BubblesList(); // new day, fresh list
-    else _bList = new BubblesList.unpoppedBubbles(); // same day
-    _myList = [];
-  }
-
-  ///determines whether it is a new day
-  void login() async
-  {newDay = await db.login(); }
-
-  ListWidget _buildListView(){
-    return new ListWidget(_bList, _myList, _theme);
-  }
-
-  Widget _buildBubbleView(){
-    return new BubbleWidget(_bList, _theme);
-  }
+  Bubble b1 = new Bubble.defaultBubble();
+  Bubble b2 = new Bubble("DOUG DIMMADOME",
+      "OWNER OF THE DIMSDALE DIMMADOME",
+      Colors.red,
+      200,
+      true,
+      0.2,
+      0.2,
+      1.0
+  );
+  //Implement move bubble here
 
   Widget build(BuildContext context){
-    return PageView(
-      children: <Widget>[
-        _buildBubbleView(),
-        _buildListView(),
-        //_buildButton(),
-      ],
-      pageSnapping: true,
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('BUBL'),
+        ),
+        body: new Stack(
+          children: [BubbleWidget(bubble: b1),
+          BubbleWidget(bubble: b2),],
+        )
     );
   }
-}
+}*/

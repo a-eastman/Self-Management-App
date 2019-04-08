@@ -114,17 +114,16 @@ class BubbleWidgetState extends State<BubbleWidget>{
   Widget makeBubble(Bubble _bubble, BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
     double _screenWidth =MediaQuery.of(context).size.width;
-    print(_screenHeight.toString());
-    print(_screenWidth.toString());
     return new Positioned(
       width: _bubble.getSize(),
       height: _bubble.getSize(),
       child: new Opacity(
-        opacity: _bubble.getPressed() ? _bubble.getOpacity() : 0.0,
+        opacity: _bubble.getPressed() ? 0.0 : _bubble.getOpacity(), //flipped for naming conventions
         //opacity: _bubble.getOpacity(),
-        child: new Draggable(
+        child: _bubble.getPressed() ? null: new Draggable(
           onDraggableCanceled: (Velocity velocity, Offset offset){
-            setState((){
+            if(!_bubble.getPressed())
+              setState((){
               _bubble.changeXPos(offset.dx, _screenWidth);
               _bubble.changeYPos(
                   offset.dy - _bubble.getSize()/2.0, _screenHeight);
@@ -391,7 +390,6 @@ class BubbleWidgetState extends State<BubbleWidget>{
   ///LAST EDIT MADE BY MARTIN FOR MAKING BUBBLES
   List<Widget> _makeWidList(BuildContext context){
     List<Widget> _widList = [];
-    // _widList.clear();
     for (int i = 0; i < _bList.getSize(); i++){
         _widList.add(makeBubble(_bList.getBubbleAt(i), context));
       }

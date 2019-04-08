@@ -57,9 +57,11 @@ class DB
     await db.execute("""CREATE TABLE pop_record (pID INTEGER PRIMARY KEY AUTOINCREMENT, 
                         bID INTEGER NOT NULL, time_popped TEXT NOT NULL, action TEXT, 
                         FOREIGN KEY (bID) REFERENCES bubble(bID))""");
-    await db.execute("""CREATE TABLE $_app_state (last_opened TEXT)""");
+    await db.execute("""CREATE TABLE $_app_state (loginID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        last_opened TEXT)""");
     await db.execute("""CREATE TABLE $_color_themes (colorID INTEGER PRIMARY KEY AUTOINCREMENT,
-                        color_red INTEGER, color_green, color_blue INTEGER, color_opacity REAL""");
+                        color_name TEXT, color_red INTEGER, color_green, color_blue INTEGER, 
+                        color_opacity REAL)""");
   }
 
 ///
@@ -78,7 +80,7 @@ class DB
                                 'color_blue':_colorBlue, 'opacity':_opacity,
                                 'size':_size, 'posX':_posX, 'posY':_posY,
                                 'time_created': new DateTime.now().toString(),
-                                'deleted': 0, 'frequency':1, 'times_popped':1};
+                                'deleted': 0, 'frequency':1, 'times_popped':0};
     try{ return await db.insert(_bubble, row); }
     catch (e) { print(e); return 0; }
   }
@@ -178,6 +180,15 @@ class DB
     catch (e) {print(e); return []; }
   }
 
+  ///@return all VALID pop records for a specific bubble
+  Future<List<Map<String, dynamic>>> queryValidPopsByBubble(int bID) async
+  {
+    Database db = await instance.database;
+    try{ return await db.query(_pop, where: """bID = ? AND NOT action = 'UNPOPPED'""", whereArgs: [bID], 
+                              orderBy: 'time_popped DESC'); }
+    catch (e) {print(e); return []; }
+  }
+
   /// Inserts value into the pop_bubble
   /// @param bID : bubble ID that was popped
   /// @return 1: suceessfully updated db
@@ -191,6 +202,22 @@ class DB
     catch (e) { print(e); return 0; }
   }
 
+  ///Changes tyhe action of the latest pop of a bubble to UNPOPPED
+  ///@param bID : bubble id to be reverted
+  ///@return 1: successfully updated db
+  ///@return 0: error thrown
+  Future<int> undoPop(int bID) async
+  {
+    Database db = await instance.database;
+    try
+    {
+      final pID = (await queryPopByBubble(bID)).first['pID'];
+      return await db.update(_pop, {'action': 'UNPOPPED'}, where: 'pID = ?', whereArgs: [pID]);
+    }
+    catch(e) {return 0;}
+
+  }
+
   /// Queries a specifc bubble that have been popped today,
   /// only checks for the last pop made per bubble to save on time
   /// @param bID : specifc bubble to grab
@@ -198,10 +225,14 @@ class DB
   Future<bool> queryPopForRecent(int bID) async
   {
     var currTime = new DateTime.now();
-    final results = await queryPopByBubble(bID);
-    var lastPopped = DateTime.parse(results.first['time_popped']);
-    var diff = currTime.difference(lastPopped);
-    return diff.inDays == 0;
+    final results = await queryValidPopsByBubble(bID);
+    try
+    {
+      var lastPopped = DateTime.parse(results.first['time_popped']);
+      var diff = currTime.difference(lastPopped);
+      return diff.inDays > 0;
+    }
+    catch(e) {print('Bubble $bID was never popped'); return true;}
   }
 
  ///
@@ -232,13 +263,19 @@ class DB
   Future<bool> login() async
   {
     String lastTime = await latestLoginTime();
-    if(lastTime == "") { enterLogin(new DateTime.now().toString()); return false; } // first time login
-    
+    if(lastTime == "") {enterLogin(new DateTime.now().toString()); return false; } // first time login
     var prevTime = DateTime.parse(lastTime);
     var currTime = new DateTime.now();
     var diff = currTime.difference(prevTime);
     enterLogin(currTime.toString());
     return diff.inDays > 0;
+  }
+
+  Future<List<Map<String, dynamic>>> queryAppState() async
+  {
+    Database db = await instance.database;
+    try {return db.query(_app_state, orderBy: 'last_opened DESC');}
+    catch(e) {print(e); return null; }
   }
 
 ///
@@ -277,9 +314,11 @@ class DB
     await db.execute("""CREATE  TABLE $_pop (pID INTEGER PRIMARY KEY AUTOINCREMENT, 
                         bID INTEGER NOT NULL, time_popped TEXT NOT NULL, action TEXT, 
                         FOREIGN KEY (bID) REFERENCES bubble(bID))""");
-    await db.execute("""CREATE TABLE $_app_state (last_opened TEXT)""");
+    await db.execute("""CREATE TABLE $_app_state (loginID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        last_opened TEXT)""");
     await db.execute("""CREATE TABLE $_color_themes (colorID INTEGER PRIMARY KEY AUTOINCREMENT,
-                        color_red INTEGER, color_green, color_blue INTEGER, color_opacity REAL""");
+                        color_name TEXT, color_red INTEGER, color_green, color_blue INTEGER, 
+                        color_opacity REAL)""");
   }
 
 }

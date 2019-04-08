@@ -136,20 +136,25 @@ class Bubble{
   { return _bubbleID; }
 
   bool getPressed(){
-    return this._pressed;
+    return !this._pressed;
   }
 
   ///Last Edit Martin
   ///If after changed, _pressed is false -> bubble was popped
   void changePressed(){
     _pressed = !_pressed;
-    increment();
-    if(!_pressed)
+    if(getPressed()){
       db.insertPop(this._bubbleID);
+      db.updateBubbleTimesPopped(this._bubbleID);
+      increment();
+    }
+    else
+      db.undoPop(this._bubbleID);
+    _queryDBs();
   }
 
   void setPopState(){
-    if (!_pressed){
+    if (getPressed()){
       _opacity = 0.0;
     }
     else{
@@ -163,9 +168,7 @@ class Bubble{
 
   //Increments the value of _numPressed
   void increment(){
-    if(_pressed == false){
-      _numPressed++;
-    }
+    _numPressed++;
   }
 
   // For testing purposes only!
@@ -471,8 +474,14 @@ class BubblesList {
           new Color.fromRGBO(y['color_red'],y['color_green'], y['color_blue'],y['opacity']),
           y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped']));
       }
+      else
+      {
+        addBubble(new Bubble.BubbleFromDatabase(y['bID'],y['title'],y['description'],
+          new Color.fromRGBO(y['color_red'],y['color_green'], y['color_blue'],y['opacity']),
+          y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped']));
+        _myList[_numBubbles-1].changePressed();
+      }
     }
-    print("# number of bubbles not popped today $_numBubbles");
   }
 
   List<Bubble> getList() {
@@ -491,7 +500,6 @@ class BubblesList {
 
   void addBubble(Bubble b) {
     _myList.add(b);
-
     _numBubbles++;
     // _myList.add(b);
   }
@@ -550,5 +558,12 @@ class BubblesList {
         return;
       }
     }
+  }
+
+  ///Prints out the bubbles list
+  void toString2()
+  {
+    for(int i = 0; i < _numBubbles; i++)
+      print(getBubbleAt(i).toString());
   }
 }

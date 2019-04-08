@@ -106,7 +106,10 @@ class ListWidgetState extends State<ListWidget> {
       subtitle: new Text(bubble.getDescription()),
       onTap: () {
         setState(() {
-          bubble.changePressed();
+          if(!bubble.getPressed())
+            bubble.changePressed();
+          else
+            bubble.changePressed();
         });
       },
       onLongPress: () {

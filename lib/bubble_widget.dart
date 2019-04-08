@@ -36,8 +36,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
               onPanUpdate: (DragUpdateDetails details) {
                 // print(details.focalPoint.distanceSquared);
                   setState((){
-                    _bubble.changeXPos(details.globalPosition.dx);
-                    _bubble.changeYPos(details.globalPosition.dy);
+                    _bubble.changeXPos(details.globalPosition.dx, _screenWidth);
+                    _bubble.changeYPos(details.globalPosition.dy, _screenHeight);
                   });
               },
               child: Container(

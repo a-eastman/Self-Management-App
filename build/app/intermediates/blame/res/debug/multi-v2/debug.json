@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\values_values.arsc.flat",
+            "outputFile": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\values_values.arsc.flat",
             "map": [
                 {
-                    "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

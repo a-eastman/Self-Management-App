@@ -22,10 +22,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   Bubble preview = new Bubble.defaultBubble();
 
   ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
-
-  //Bubble preview = new Bubble.defaultBubble();
-
-
+  
   Widget _previewBubble(){
     if(bublist.getSize() == 0){
       previewColor = Colors.blue;

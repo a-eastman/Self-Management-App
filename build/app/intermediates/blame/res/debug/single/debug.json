@@ -1,26 +1,26 @@
 [
     {
-        "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+        "merged": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+        "merged": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\drawable_launch_background.xml.flat",
-        "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\drawable\\launch_background.xml"
+        "merged": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\drawable_launch_background.xml.flat",
+        "source": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\android\\app\\src\\main\\res\\drawable\\launch_background.xml"
     },
     {
-        "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+        "merged": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+        "merged": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\caeleb\\Documents\\Flutter\\Projects\\bubble\\HARTProject\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+        "merged": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\price\\Documents\\GitHub\\HARTProject\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
     }
 ]
