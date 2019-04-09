@@ -3,8 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 
 import 'bubbles.dart';
+import 'dart:async';
 
 class PopParticles extends StatefulWidget {
+
   final Bubble _bubble;
   final DateTime _timeCreated = DateTime.now();
 
@@ -22,15 +24,21 @@ class PopParticles extends StatefulWidget {
 class PopParticlesState extends State<PopParticles> {
   List<PopParticleNode> _particles = [];
   Bubble _bubble;
+  final int _lifetimeMS = 1000;
 
   PopParticlesState(this._bubble)
   {
     reset();
+    Timer(Duration(milliseconds: _lifetimeMS), _clear);
+  }
+
+  void _clear()
+  {
+    _particles.clear();
   }
 
   void reset() {
     print("pop reset");
-    _particles = [];
     for (int i = 0; i < 10; i++) {
       _particles.add(PopParticleNode(_bubble));
     }
