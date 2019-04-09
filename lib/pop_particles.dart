@@ -84,16 +84,17 @@ class PopParticleNodeState extends State<PopParticleNode>
   
   final int _durationMs = 600;
 
-  // Extents multiplied by bubbleSize screenHeight
+  // X extents multiplied by screen width
   final double _xExtents = .15;
   final double _minXMult = -1.0;
   final double _maxXMult = 1.0;
 
+  // Y extents multiplied by screen height
   final double _yExtents = -.3;
   final double _minYMult = .7;
   final double _maxYMult = 1.3;
 
-  // Base size is multiplied by bubbleSize * screenHeight
+  // Base size multiplied by screen height * base bubble size
   final double _baseSizeMin = .2;
   final double _baseSizeMax = .45;
   final double _minShrinkTime = 0.3;
