@@ -27,12 +27,13 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
 
   Widget _previewBubble(double _screenHeight){
     if(bublist.getSize() == 0){
-      previewColor = Colors.blue;
+      //previewColor = Colors.blue;
     }else{
       previewColor = bublist.getBubbleAt(0).getColor();
+      preview.setColor(previewColor);
     }
-    preview.setColor(previewColor);
-    preview.setSize(1);
+    
+    preview.setSize(2);
     preview.setEntry("Preview Bubble");
     return new Container(
       width: preview.getSize() * _screenHeight,
