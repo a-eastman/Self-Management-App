@@ -18,7 +18,14 @@ class Bubble{
 
   bool _shouldDelete; //If the bubble is set to delete or not
 
-  bool _repeat; //If the bubble should repeat or not
+  bool repeat;
+  bool repeatMonday;
+  bool repeatTuesday;
+  bool repeatWednesday;
+  bool repeatThursday;
+  bool repeatFriday;
+  bool repeatSaturday;
+  bool repeatSunday;
 
   //STATIC VARS
   static final String _defEntry = "Entry";
@@ -65,6 +72,15 @@ class Bubble{
     this._opacity = _orgOpacity; //Will be updated based off of number of
                                  // overlapping bubbles, set to 1.0 by default
     this._shouldDelete = false;
+
+    repeat = false;
+    repeatMonday = false;
+    repeatTuesday =false;
+    repeatWednesday =false;
+    repeatThursday =false;
+    repeatFriday =false;
+    repeatSaturday =false;
+    repeatSunday =false;
   }
 
   //Default Bubble constructor, sets all values to default values
@@ -83,19 +99,63 @@ class Bubble{
     this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
     this._shouldDelete = false;
-    this._repeat = false;
+    repeat = false;
+    repeatMonday = false;
+    repeatTuesday =false;
+    repeatWednesday =false;
+    repeatThursday =false;
+    repeatFriday =false;
+    repeatSaturday =false;
+    repeatSunday =false;
   }
+
 
   bool getRepeat(){
-    return this._repeat;
-  }
-
-  void setRepeat(bool _repeat){
-    this._repeat = _repeat;
+    return repeat;
   }
 
   void changeRepeat(){
-    _repeat = !_repeat;
+    repeat = !repeat;
+  }
+
+  bool getRepeatDay(String day){
+    bool result = true;
+    switch(day) {
+      case "Mon": {result = repeatMonday;}
+      break;
+      case "Tue": {result = repeatTuesday;}
+      break;
+      case "Wed": {result = repeatWednesday;}
+      break;
+      case "Thu": {result = repeatThursday;}
+      break;
+      case "Fri": {result = repeatFriday;}
+      break;
+      case "Sat": {result = repeatSaturday;}
+      break;
+      case "Sun": {result = repeatSunday;}
+      break;
+    }
+    return result;
+  }
+
+  void changeRepeatDay(String day){
+    switch(day) {
+      case "Mon": {repeatMonday = !repeatMonday;}
+      break;
+      case "Tue": {repeatTuesday = !repeatTuesday;}
+      break;
+      case "Wed": {repeatWednesday = !repeatWednesday;}
+      break;
+      case "Thu": {repeatThursday = !repeatThursday;}
+      break;
+      case "Fri": {repeatFriday = !repeatFriday;}
+      break;
+      case "Sat": {repeatSaturday = !repeatSaturday;}
+      break;
+      case "Sun": {repeatSunday = !repeatSunday;}
+      break;
+    }
   }
 
   bool getPressed(){
