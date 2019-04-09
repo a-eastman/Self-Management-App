@@ -15,6 +15,7 @@ class Bubble{
   int _numInfront; //How many bubbles are in front of current bubble
   double _opacity; //current opacity of the bubble
   double _orgOpacity; //The original opacity of the bubble
+  bool _dotAppear = false;
 
   bool _shouldDelete; //If the bubble is set to delete or not
 
@@ -120,6 +121,13 @@ class Bubble{
 
   void setRepeat(bool r){
     repeat = r;
+  }
+
+  bool getDotAppear() => _dotAppear;
+
+  void setDotAppear(bool dotAppear)
+  {
+    this._dotAppear = dotAppear;
   }
 
   bool getRepeatDay(String day){
