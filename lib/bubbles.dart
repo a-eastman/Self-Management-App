@@ -19,6 +19,15 @@ class Bubble{
   bool _shouldDelete; //If the bubble is set to delete or not
   int _bubbleID;
 
+  bool repeat;
+  bool repeatMonday;
+  bool repeatTuesday;
+  bool repeatWednesday;
+  bool repeatThursday;
+  bool repeatFriday;
+  bool repeatSaturday;
+  bool repeatSunday;
+
   //STATIC VARS
   static final String _defEntry = "Entry";
   static final String _defDesc = "Description";
@@ -63,6 +72,15 @@ class Bubble{
                                  // overlapping bubbles, set to 1.0 by default
     this._shouldDelete = false;
 
+    repeat = false;
+    repeatMonday = false;
+    repeatTuesday =false;
+    repeatWednesday =false;
+    repeatThursday =false;
+    repeatFriday =false;
+    repeatSaturday =false;
+    repeatSunday =false;
+
     //when this bubble is created, inserts new values into the database
     db.insertBubble(_entry, _description, _color.red, _color.green, _color.blue,
         _opacity, _sizeIndex, _xPos, _yPos);
@@ -85,6 +103,15 @@ class Bubble{
     this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
     this._shouldDelete = false;
+
+    repeat = false;
+    repeatMonday = false;
+    repeatTuesday =false;
+    repeatWednesday =false;
+    repeatThursday =false;
+    repeatFriday =false;
+    repeatSaturday =false;
+    repeatSunday =false;
 
     //when this bubble is created, inserts new values into the database
     db.insertBubble(_entry, _description, _color.red, _color.green, _color.blue,
@@ -255,27 +282,25 @@ class Bubble{
   }
 
   //Changes the X position
-  void changeXPos(double newXPos, double screenWidth){
-    if ((newXPos + this._size) > screenWidth){
-      newXPos = screenWidth - this._size;
+  void changeXPos(double newXPos, double actualSize, double screenWidth){
+    if ((newXPos + actualSize) > screenWidth){
+      newXPos = screenWidth - actualSize;
     }
     else if(newXPos < 3.0){ //TODO: update to use screen constraint
       newXPos = 3.0;
     }
     this._xPos = newXPos;
-    updateXPos(_bubbleID, newXPos);
   }
   //Changes the Y position
-  void changeYPos(double newYPos, double screenHeight){
-    if ((newYPos + this._size) > screenHeight){
-      newYPos = screenHeight - this._size;
+  void changeYPos(double newYPos, double actualSize, double screenHeight){
+    if ((newYPos + actualSize) > screenHeight){
+      newYPos = screenHeight - actualSize;
     }
     else if(newYPos < 3.0){ //TODO: update to use screen constraint
       newYPos = 3.0;
     }
     this._yPos = newYPos;
-    updateYPos(_bubbleID, newYPos);
-  }
+}
 
   //Changes the opacity (0.0 to 1.0)
   void changeOpacity(double newOp){
@@ -410,6 +435,78 @@ class Bubble{
     try{ pop.forEach((row) => print(row)); }
     catch(e) {print(e); }
   }
+
+///REPEAT
+  bool getRepeat(){
+    return repeat;
+  }
+
+  void changeRepeat(){
+    repeat = !repeat;
+  }
+
+  void setRepeat(bool r){
+    repeat = r;
+  }
+
+  bool getRepeatDay(String day){
+    bool result = true;
+    switch(day) {
+      case "Mon": {result = repeatMonday;}
+      break;
+      case "Tue": {result = repeatTuesday;}
+      break;
+      case "Wed": {result = repeatWednesday;}
+      break;
+      case "Thu": {result = repeatThursday;}
+      break;
+      case "Fri": {result = repeatFriday;}
+      break;
+      case "Sat": {result = repeatSaturday;}
+      break;
+      case "Sun": {result = repeatSunday;}
+      break;
+    }
+    return result;
+  }
+
+  void changeRepeatDay(String day){
+    switch(day) {
+      case "Mon": {repeatMonday = !repeatMonday;}
+      break;
+      case "Tue": {repeatTuesday = !repeatTuesday;}
+      break;
+      case "Wed": {repeatWednesday = !repeatWednesday;}
+      break;
+      case "Thu": {repeatThursday = !repeatThursday;}
+      break;
+      case "Fri": {repeatFriday = !repeatFriday;}
+      break;
+      case "Sat": {repeatSaturday = !repeatSaturday;}
+      break;
+      case "Sun": {repeatSunday = !repeatSunday;}
+      break;
+    }
+  }
+
+  void setRepeatDay(String day, bool repeat){
+    switch(day) {
+      case "Mon": {repeatMonday = repeat;}
+      break;
+      case "Tue": {repeatTuesday = repeat;}
+      break;
+      case "Wed": {repeatWednesday = repeat;}
+      break;
+      case "Thu": {repeatThursday = repeat;}
+      break;
+      case "Fri": {repeatFriday = repeat;}
+      break;
+      case "Sat": {repeatSaturday = repeat;}
+      break;
+      case "Sun": {repeatSunday = repeat;}
+      break;
+    }
+}
 }
 
 //A BubblesList class, used to wrap the Bubbles in so that
