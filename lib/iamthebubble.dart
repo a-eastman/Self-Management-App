@@ -38,10 +38,6 @@ class BubbleWidgetState extends State<BubbleWidget>{
   BubblesList _bList;
   BubbleTheme _theme;
   List<PopParticles> _popParticlesList = [];
-  static final TextStyle _bubbleFont = const TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 15.0,
-      fontFamily: 'SoulMarker');
   // AudioPlayer ap = new AudioPlayer();
   BubbleWidgetState(BubblesList _bList, BubbleTheme _theme){
     // this._bubble = _bubble;
@@ -53,6 +49,12 @@ class BubbleWidgetState extends State<BubbleWidget>{
     double _screenHeight =MediaQuery.of(context).size.height;
     double _screenWidth = MediaQuery.of(context).size.width;
     double _bSize = _screenHeight * _bubble.getSize();
+    
+    TextStyle _bubbleFont = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: .15 * _bSize,
+      color: Colors.black,
+      fontFamily: 'SoulMarker');
 
     var strikeThroughFont =
     TextStyle(
@@ -116,10 +118,15 @@ class BubbleWidgetState extends State<BubbleWidget>{
                   color:_bubble.getColor(),
                 ),
                 child: Center(
-                  child:Text(
-                    _bubble.getEntry(),
-                    style:_bubbleFont,
-                    overflow: TextOverflow.ellipsis,
+                  child: AnimatedDefaultTextStyle(
+                    curve:  ElasticOutCurve(.9),
+                    duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : 250),
+                    style: _bubbleFont,
+                    child:Text(
+                      _bubble.getEntry(),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    )
                   ),
                 ),
               ),
@@ -183,7 +190,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
                     color:_bubble.getColor(),
                   ),
                   child: Center(
-                    child:AnText(
+                    child:Text(
                       _bubble.getEntry(),
                       style:_bubbleFont,
                       overflow: TextOverflow.ellipsis,
