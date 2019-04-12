@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'iamthebubble.dart';
+import 'bubble_widget.dart';
 import 'list_widget.dart';
 import 'bubbles.dart';
 import 'themeSelection.dart';
@@ -23,11 +23,11 @@ class BubbleApp extends StatefulWidget{
 
 class BubbleAppState extends State<BubbleApp>{
   BubbleTheme _theme;
-  Color globalBubbleColor;
+  Color _globalBubbleColor;
   List<BubbleWidget> _myList;
   BubblesList _bList;
   BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList,
-      this._theme, this.globalBubbleColor){
+      this._theme, this._globalBubbleColor){
     this._bList =_bList;
     this._myList = _widList;
   }
@@ -36,7 +36,7 @@ class BubbleAppState extends State<BubbleApp>{
   Bubble b2;
 
   void setBubbleColor(Color newBubbleColor){
-    this.globalBubbleColor = newBubbleColor;
+    this._globalBubbleColor = newBubbleColor;
   }
 
   @override
@@ -73,7 +73,7 @@ class BubbleAppState extends State<BubbleApp>{
   }
 
   Widget _buildBubbleView(){
-    return new BubbleWidget(_bList, _theme);
+    return new BubbleWidget(_bList, _theme, _globalBubbleColor);
   }
 
   Widget build(BuildContext context){

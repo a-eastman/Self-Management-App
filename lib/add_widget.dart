@@ -115,6 +115,39 @@ class AddWidgetState extends State<AddWidget> {
     }
   }
 
+  // Builds the individual buttons to select a color
+  Widget _buildColorOptionButton(String color, Color bubbleColor, double _screenWidth){
+    double _w = _screenWidth / 8;
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        new Container(
+          width: _w,
+          child: new RaisedButton(
+            color: bubbleColor,
+            onPressed: (){
+              setState(() {
+                newBubble.setColor(bubbleColor);
+              });
+            },
+          ),
+        ),
+        new Text(color),
+      ],
+    );
+  }
+
+  // Builds the row of buttons
+  Widget _buildColorOptions(double _screenWidth){
+    return new Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        _buildColorOptionButton("Blue", Colors.blue, _screenWidth),
+        _buildColorOptionButton("Orange", Colors.orange, _screenWidth),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
@@ -162,6 +195,32 @@ class AddWidgetState extends State<AddWidget> {
                 })
                     .toList(),
               ),
+
+              // DropdownButtonFormField<String>(
+              //   decoration: const InputDecoration(
+              //     labelText: 'Color',
+              //   ),
+              //   value: newBubble.getColorString(),
+              //   onChanged: (String newColor){
+              //     if(newColor.toLowerCase() == "orange"){
+              //       setState(() {
+              //         newBubble.setColor(Colors.orange); 
+              //       });
+              //     }else if(newColor.toLowerCase() == "blue"){
+              //       setState(() {
+              //         newBubble.setColor(Colors.blue); 
+              //       });
+              //     }
+              //   },
+              //   items: <String>["Orange", "Blue"]
+              //   .map<DropdownMenuItem<String>>((String color){
+              //     return DropdownMenuItem<String>(
+              //       value: color,
+              //       child: Text(color),
+              //     );
+              //   }).toList(),
+              // ),
+              _buildColorOptions(_screenWidth),
               _buildRepeat(),
               _buildWeek(_screenWidth),
               Container(height: 20),
@@ -170,7 +229,7 @@ class AddWidgetState extends State<AddWidget> {
                 onPressed: () {
                   _editBubble();
                   _myList.addBubble(newBubble);
-                  newBubble.setColor(getBubbleColor(_myList));
+                  //newBubble.setColor(getBubbleColor(_myList));
                   Navigator.pop(context);
                 },
                 child: const Text('ADD'),

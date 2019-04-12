@@ -5,6 +5,7 @@ class Bubble{
   String _entry; //The title of the task to be displayed
   String _description; //Description of task
   Color _color;
+  String _colorString;
   double _size; //current size of the bubble (0=small, 1=medium, 2=large, 3=xl)
   int _sizeIndex; //index to access sizes list
   bool _pressed; //Keeps track if the bubble is in a pressed state
@@ -31,6 +32,7 @@ class Bubble{
   static final String _defEntry = "Entry";
   static final String _defDesc = "Description";
   static final Color _defColor = Colors.blue;
+  static final String _defColorString = "blue";
   static final bool _defPressed = true;
   static final double _defX = 0.5;
   static final double _defY = 0.5;
@@ -42,12 +44,12 @@ class Bubble{
   static final int _defInfront = 0;
   static final List<double> _sizes = [0.15, 0.2, 0.25, 0.35];
 
-  Bubble(String _entry, String _description, Color _color, int _sizeIndex,
+  Bubble(String _entry, String _description, Color _color, String _colorString, int _sizeIndex,
       bool _pressed, double _xPos, double _yPos, double _orgOpacity){
     this._entry = _entry;
     this._description =_description;
     this._color = _color;
-
+    this._colorString = _colorString;
     this._sizeIndex = _sizeIndex;
     this._size = _sizes[_sizeIndex];
     this._pressed = _pressed;
@@ -88,6 +90,7 @@ class Bubble{
     this._entry = _defEntry;
     this._description =_defDesc;
     this._color =_defColor;
+    this._colorString = _defColorString;
     this._sizeIndex = 1;
     this._size =_sizes[_sizeIndex];
     this._pressed =_defPressed;
@@ -230,6 +233,10 @@ class Bubble{
     return this._color;
   }
 
+  String getColorString(){
+    return this._colorString;
+  }
+
   double getSize(){
     return this._size;
   }
@@ -264,6 +271,10 @@ class Bubble{
 
   void setColor(Color nColor){
     this._color = nColor;
+  }
+
+  void setColorString(String nColorString){
+    this._colorString = _colorString;
   }
   //Changes the size of the bubble
   void nextSize(){

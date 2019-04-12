@@ -14,11 +14,13 @@ class BubbleWidget extends StatefulWidget{
   //final String entr;
   BubbleTheme _theme;
   BubblesList _bList;
+  Color _globalBubbleColor;
   // const BubbleWidget({Key key, this.bubble}) : super(key : key);
-  BubbleWidget(BubblesList _bList, BubbleTheme _theme){
+  BubbleWidget(BubblesList _bList, BubbleTheme _theme, Color _globalBubbleColor){
     // this._bubble = _bubble;
     this._bList =_bList;
     this._theme = _theme;
+    this._globalBubbleColor = _globalBubbleColor;
   }
 
   // Bubble getBubble(){
@@ -29,23 +31,25 @@ class BubbleWidget extends StatefulWidget{
   }
 
   BubbleWidgetState createState() =>
-      BubbleWidgetState(this._bList, this._theme);
+      BubbleWidgetState(this._bList, this._theme, this._globalBubbleColor);
 }
 
 //Bubble class
 class BubbleWidgetState extends State<BubbleWidget>{
   BubblesList _bList;
   BubbleTheme _theme;
+  Color _globalBubbleColor;
   List<PopParticles> _popParticlesList = [];
   static final TextStyle _bubbleFont = const TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 15.0,
       fontFamily: 'SoulMarker');
   // AudioPlayer ap = new AudioPlayer();
-  BubbleWidgetState(BubblesList _bList, BubbleTheme _theme){
+  BubbleWidgetState(BubblesList _bList, BubbleTheme _theme, Color _globalBubbleColor){
     // this._bubble = _bubble;
     this._bList = _bList;
     this._theme = _theme;
+    this._globalBubbleColor = _globalBubbleColor;
   }
 
   Widget makeBubble(Bubble _bubble, BuildContext context) {
