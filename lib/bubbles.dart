@@ -15,8 +15,19 @@ class Bubble{
   int _numInfront; //How many bubbles are in front of current bubble
   double _opacity; //current opacity of the bubble
   double _orgOpacity; //The original opacity of the bubble
+  bool _dotAppear = false;
+  bool _lastActionGrabbed = true;
 
   bool _shouldDelete; //If the bubble is set to delete or not
+
+  bool repeat;
+  bool repeatMonday;
+  bool repeatTuesday;
+  bool repeatWednesday;
+  bool repeatThursday;
+  bool repeatFriday;
+  bool repeatSaturday;
+  bool repeatSunday;
 
   //STATIC VARS
   static final String _defEntry = "Entry";
@@ -31,7 +42,7 @@ class Bubble{
   static final int _defNumPressed = 0;
   static final int _defBehind = 0;
   static final int _defInfront = 0;
-  static final List<double> _sizes = [50.0, 100.0, 150.0, 225.0];
+  static final List<double> _sizes = [0.15, 0.2, 0.25, 0.35];
 
   Bubble(String _entry, String _description, Color _color, int _sizeIndex,
       bool _pressed, double _xPos, double _yPos, double _orgOpacity){
@@ -63,6 +74,15 @@ class Bubble{
     this._opacity = _orgOpacity; //Will be updated based off of number of
                                  // overlapping bubbles, set to 1.0 by default
     this._shouldDelete = false;
+
+    repeat = false;
+    repeatMonday = false;
+    repeatTuesday =false;
+    repeatWednesday =false;
+    repeatThursday =false;
+    repeatFriday =false;
+    repeatSaturday =false;
+    repeatSunday =false;
   }
 
   //Default Bubble constructor, sets all values to default values
@@ -81,6 +101,100 @@ class Bubble{
     this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
     this._shouldDelete = false;
+    repeat = false;
+    repeatMonday = false;
+    repeatTuesday =false;
+    repeatWednesday =false;
+    repeatThursday =false;
+    repeatFriday =false;
+    repeatSaturday =false;
+    repeatSunday =false;
+  }
+
+
+  bool getRepeat(){
+    return repeat;
+  }
+
+  void changeRepeat(){
+    repeat = !repeat;
+  }
+
+  void setRepeat(bool r){
+    repeat = r;
+  }
+
+  bool getDotAppear() => _dotAppear;
+
+  void setDotAppear(bool dotAppear)
+  {
+    this._dotAppear = dotAppear;
+  }
+
+  bool lastActionGrabbed() => _lastActionGrabbed;
+  
+  void setLastActiongrabbed(bool lastActionGrabbed)
+  {
+    this._lastActionGrabbed = lastActionGrabbed;
+  }
+
+  bool getRepeatDay(String day){
+    bool result = true;
+    switch(day) {
+      case "Mon": {result = repeatMonday;}
+      break;
+      case "Tue": {result = repeatTuesday;}
+      break;
+      case "Wed": {result = repeatWednesday;}
+      break;
+      case "Thu": {result = repeatThursday;}
+      break;
+      case "Fri": {result = repeatFriday;}
+      break;
+      case "Sat": {result = repeatSaturday;}
+      break;
+      case "Sun": {result = repeatSunday;}
+      break;
+    }
+    return result;
+  }
+
+  void changeRepeatDay(String day){
+    switch(day) {
+      case "Mon": {repeatMonday = !repeatMonday;}
+      break;
+      case "Tue": {repeatTuesday = !repeatTuesday;}
+      break;
+      case "Wed": {repeatWednesday = !repeatWednesday;}
+      break;
+      case "Thu": {repeatThursday = !repeatThursday;}
+      break;
+      case "Fri": {repeatFriday = !repeatFriday;}
+      break;
+      case "Sat": {repeatSaturday = !repeatSaturday;}
+      break;
+      case "Sun": {repeatSunday = !repeatSunday;}
+      break;
+    }
+  }
+
+  void setRepeatDay(String day, bool repeat){
+    switch(day) {
+      case "Mon": {repeatMonday = repeat;}
+      break;
+      case "Tue": {repeatTuesday = repeat;}
+      break;
+      case "Wed": {repeatWednesday = repeat;}
+      break;
+      case "Thu": {repeatThursday = repeat;}
+      break;
+      case "Fri": {repeatFriday = repeat;}
+      break;
+      case "Sat": {repeatSaturday = repeat;}
+      break;
+      case "Sun": {repeatSunday = repeat;}
+      break;
+    }
   }
 
   bool getPressed(){
@@ -167,7 +281,6 @@ class Bubble{
   void setColor(Color nColor){
     this._color = nColor;
   }
-
   //Changes the size of the bubble
   void nextSize(){
     print("nextSize");
@@ -191,9 +304,9 @@ class Bubble{
   }
 
   //Changes the X position
-  void changeXPos(double newXPos, double screenWidth){
-    if ((newXPos + this._size) > screenWidth){
-      newXPos = screenWidth - this._size;
+  void changeXPos(double newXPos, double actualSize, double screenWidth){
+    if ((newXPos + actualSize) > screenWidth){
+      newXPos = screenWidth - actualSize;
     }
     else if(newXPos < 3.0){ //TODO: update to use screen constraint
       newXPos = 3.0;
@@ -201,16 +314,15 @@ class Bubble{
     this._xPos = newXPos;
   }
   //Changes the Y position
-  void changeYPos(double newYPos, double screenHeight){
-    if ((newYPos + this._size) > screenHeight){
-      newYPos = screenHeight - this._size;
+  void changeYPos(double newYPos, double actualSize, double screenHeight){
+    if ((newYPos + actualSize) > screenHeight){
+      newYPos = screenHeight - actualSize;
     }
     else if(newYPos < 3.0){ //TODO: update to use screen constraint
       newYPos = 3.0;
     }
     this._yPos = newYPos;
   }
-
   //Changes the opacity (0.0 to 1.0)
   void changeOpacity(double newOp){
     if (newOp > _greatestOpacity){

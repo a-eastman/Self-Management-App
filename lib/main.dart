@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'bubbleView.dart';
-import 'listView.dart';
+import 'iamthebubble.dart';
+import 'list_widget.dart';
 import 'bubbles.dart';
+import 'themeSelection.dart';
 import 'themes.dart';
 
 void main() => runApp(BubbleView());
 
 
+// ignore: must_be_immutable
 class BubbleApp extends StatefulWidget{
   final BubbleTheme theme;
   final Color globalBubbleColor;
@@ -67,7 +69,7 @@ class BubbleAppState extends State<BubbleApp>{
   }
 
   ListWidget _buildListView(){
-    return new ListWidget(_bList, _myList, _theme);
+    return new ListWidget(_bList, _theme);
   }
 
   Widget _buildBubbleView(){
@@ -90,9 +92,8 @@ class BubbleView extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     final BubbleTheme theme =BubbleTheme();
-
     return StreamBuilder<ThemeData>(
-      initialData: theme.buildBubbleTheme().data,
+      initialData: theme.initialTheme().data,
       stream: theme.themeDataStream,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
         return MaterialApp(

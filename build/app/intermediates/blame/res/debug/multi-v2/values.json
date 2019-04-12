@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Christopher\\Documents\\SeniorProjectSpring2019\\HARTProject-7\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "C:\\Users\\Brian\\Documents\\GitHub\\HARTProject\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Christopher\\Documents\\SeniorProjectSpring2019\\HARTProject-7\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "C:\\Users\\Brian\\Documents\\GitHub\\HARTProject\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
