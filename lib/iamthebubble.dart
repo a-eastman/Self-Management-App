@@ -68,7 +68,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
     print(_screenHeight.toString());
 
     return new AnimatedPositioned(
-      curve:  ElasticOutCurve(.9) ,
+      key: Key(_bubble.globalIndex().toString()),
+      curve:  ElasticOutCurve(.9),
       duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : 250),
       width: _bSize,
       height: _bSize,
