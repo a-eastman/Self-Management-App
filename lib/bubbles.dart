@@ -17,6 +17,7 @@ class Bubble{
   double _orgOpacity; //The original opacity of the bubble
   bool _dotAppear = false;
   bool _lastActionGrabbed = true;
+  int _globalIndex = 0;
 
   bool _shouldDelete; //If the bubble is set to delete or not
 
@@ -44,8 +45,11 @@ class Bubble{
   static final int _defInfront = 0;
   static final List<double> _sizes = [0.15, 0.2, 0.25, 0.35];
 
+  static int _globalBubbleIndex = 0;
+
   Bubble(String _entry, String _description, Color _color, int _sizeIndex,
       bool _pressed, double _xPos, double _yPos, double _orgOpacity){
+    _globalIndex = _globalBubbleIndex++;
     this._entry = _entry;
     this._description =_description;
     this._color = _color;
@@ -87,6 +91,7 @@ class Bubble{
 
   //Default Bubble constructor, sets all values to default values
   Bubble.defaultBubble(){
+    this._globalIndex = _globalBubbleIndex++;
     this._entry = _defEntry;
     this._description =_defDesc;
     this._color =_defColor;
@@ -109,6 +114,14 @@ class Bubble{
     repeatFriday =false;
     repeatSaturday =false;
     repeatSunday =false;
+  }
+
+  int globalIndex() => _globalIndex;
+
+  //Empty bubble constructor marked for deletion
+  Bubble.deleteBubble(){
+    _globalIndex = _globalBubbleIndex++;
+    _shouldDelete = true;
   }
 
 
@@ -408,6 +421,14 @@ class BubblesList {
   void changeElementPressed(int i) {
     _myList[i].changePressed();
   }
+
+  void moveToFront(Bubble bubble)
+  {
+    _myList.remove(bubble);
+    _myList.add(bubble);
+  }
+
+  getIndex(Bubble bubble) => _myList.indexOf(bubble);
 
   //Sets the current list to the settings of another BubblesList
 

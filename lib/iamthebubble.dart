@@ -12,6 +12,7 @@ import 'dart:async';
 
 // ignore: must_be_immutable
 class BubbleWidget extends StatefulWidget{
+
   //final String entr;
   BubbleTheme _theme;
   BubblesList _bList;
@@ -56,6 +57,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
       color: Colors.black,
       fontFamily: 'SoulMarker');
 
+    // TODO style copy
     var strikeThroughFont =
     TextStyle(
       fontWeight: FontWeight.bold,
@@ -106,6 +108,10 @@ class BubbleWidgetState extends State<BubbleWidget>{
                 _bubble.changeYPos(
                     offset.dy + _bSize / 2.0 - _bSize/2.0, _bSize, _screenHeight);
                 _bubble.setLastActiongrabbed(true);
+                
+                setState((){
+                  _bList.moveToFront(_bubble);
+                });
               });
             },
             child: new InkResponse(
@@ -132,8 +138,9 @@ class BubbleWidgetState extends State<BubbleWidget>{
               ),
               onTap: () {
                 setState((){
-                  _bubble.nextSize();
                   _bubble.setLastActiongrabbed(false);
+                  _bubble.nextSize();
+                  _bList.moveToFront(_bubble);
                 });
               },
               onDoubleTap: (){
