@@ -140,10 +140,13 @@ class AddWidgetState extends State<AddWidget> {
   // Builds the row of buttons
   Widget _buildColorOptions(double _screenWidth){
     return new Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        _buildColorOptionButton("Blue", Colors.blue, _screenWidth),
-        _buildColorOptionButton("Orange", Colors.orange, _screenWidth),
+        _buildColorOptionButton("Blue", Colors.blue[300], _screenWidth),
+        _buildColorOptionButton("Orange", Colors.orange[300], _screenWidth),
+        _buildColorOptionButton("Purple", Colors.purple[300], _screenWidth),
+        _buildColorOptionButton("Red", Colors.red[300], _screenWidth),
+        _buildColorOptionButton("Yellow", Colors.yellow[300], _screenWidth),
       ],
     );
   }
@@ -225,7 +228,7 @@ class AddWidgetState extends State<AddWidget> {
               _buildWeek(_screenWidth),
               Container(height: 20),
               RaisedButton(
-                color: getBubbleColor(_myList),
+                color: Colors.grey[300],
                 onPressed: () {
                   _editBubble();
                   _myList.addBubble(newBubble);

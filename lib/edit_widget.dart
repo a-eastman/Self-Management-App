@@ -71,6 +71,7 @@ class EditWidgetState extends State<EditWidget> {
     _bubble.setDescription(myController2.text);
     _bubble.setSize(temp.getSizeIndex());
     _bubble.setRepeat(temp.getRepeat());
+    _bubble.setColor(temp.getColor());
     _bubble.setRepeatDay("Mon",temp.getRepeatDay("Mon"));
     _bubble.setRepeatDay("Tue",temp.getRepeatDay("Tue"));
     _bubble.setRepeatDay("Wed",temp.getRepeatDay("Wed"));
@@ -138,6 +139,42 @@ class EditWidgetState extends State<EditWidget> {
     }
   }
 
+    // Builds the individual buttons to select a color
+  Widget _buildColorOptionButton(String color, Color bubbleColor, double _screenWidth){
+    double _w = _screenWidth / 8;
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        new Container(
+          width: _w,
+          child: new RaisedButton(
+            color: bubbleColor,
+            onPressed: (){
+              setState(() {
+                temp.setColor(bubbleColor);
+              });
+            },
+          ),
+        ),
+        new Text(color),
+      ],
+    );
+  }
+
+  // Builds the row of buttons
+  Widget _buildColorOptions(double _screenWidth){
+    return new Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        _buildColorOptionButton("Blue", Colors.blue[300], _screenWidth),
+        _buildColorOptionButton("Orange", Colors.orange[300], _screenWidth),
+        _buildColorOptionButton("Purple", Colors.purple[300], _screenWidth),
+        _buildColorOptionButton("Red", Colors.red[300], _screenWidth),
+        _buildColorOptionButton("Yellow", Colors.yellow[300], _screenWidth),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
@@ -185,11 +222,12 @@ class EditWidgetState extends State<EditWidget> {
                 })
                     .toList(),
               ),
+              _buildColorOptions(_screenWidth),
               _buildRepeat(),
               _buildWeek(_screenWidth),
               Container(height: 20),
               RaisedButton(
-                color: getBubbleColor(_myList),
+                color: Colors.grey[300],
                 onPressed: () {
                   _editBubble();
                   Navigator.pop(context);

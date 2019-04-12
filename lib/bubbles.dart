@@ -31,7 +31,7 @@ class Bubble{
   //STATIC VARS
   static final String _defEntry = "Entry";
   static final String _defDesc = "Description";
-  static final Color _defColor = Colors.blue;
+  static final Color _defColor = Colors.blue[300];
   static final String _defColorString = "blue";
   static final bool _defPressed = true;
   static final double _defX = 0.5;

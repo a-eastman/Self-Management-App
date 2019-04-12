@@ -26,12 +26,12 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   //Bubble preview = new Bubble.defaultBubble();
 
   Widget _previewBubble(double _screenHeight){
-    if(bublist.getSize() == 0){
-      //previewColor = Colors.blue;
-    }else{
-      previewColor = bublist.getBubbleAt(0).getColor();
-      preview.setColor(previewColor);
-    }
+    // if(bublist.getSize() == 0){
+    //   //previewColor = Colors.blue;
+    // }else{
+    //   previewColor = bublist.getBubbleAt(0).getColor();
+    //   preview.setColor(previewColor);
+    // }
     
     preview.setSize(2);
     preview.setEntry("Preview Bubble");
@@ -50,16 +50,15 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     );
   }
 
-  DemoTheme _buildBubbleTheme() {
-    bubbleColor = Colors.blue;
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+  DemoTheme _buildOceanTheme() {
+    bubbleColor = Colors.teal[300];
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Bubble',
         ThemeData(
+          canvasColor: Colors.teal[100],
           brightness: Brightness.light,
           buttonColor: bubbleColor,
           accentColor: bubbleColor,
@@ -69,11 +68,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
 
   DemoTheme _buildSunsetTheme() {
     bubbleColor = Colors.deepOrange[200];
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // previewColor = bubbleColor;
+    // preview.setColor(previewColor);
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Sunset',
         ThemeData(
@@ -86,11 +85,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
 
   DemoTheme _buildDuskTheme() {
     bubbleColor = Colors.purple[200];
-    previewColor =bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // previewColor =bubbleColor;
+    // preview.setColor(previewColor);
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Dusk',
         ThemeData(
@@ -102,12 +101,12 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   }
 
   DemoTheme _buildSunnyTheme(){
-    this.bubbleColor = Colors.yellow[200];
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    bubbleColor = Colors.yellow[200];
+    // previewColor = bubbleColor;
+    // preview.setColor(previewColor);
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Sunny',
         ThemeData(
@@ -120,19 +119,19 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     );
   }
 
-  DemoTheme _buildOceanTheme(){
-    bubbleColor = Colors.blue[100];
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+  DemoTheme _buildBubbleTheme(){
+    bubbleColor = Colors.blue[300];
+    // previewColor = bubbleColor;
+    // preview.setColor(previewColor);
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Ocean',
         ThemeData(
             backgroundColor: bubbleColor,
             buttonColor: bubbleColor,
-            canvasColor: Colors.lightBlue[300],
+            canvasColor: Colors.lightBlue[50],
             brightness: Brightness.light,
             accentColor: bubbleColor,
             primaryColor: bubbleColor)
