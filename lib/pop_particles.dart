@@ -159,10 +159,10 @@ class PopParticleNodeState extends State<PopParticleNode>
        //* (_bubble.getSizeIndex() + 2.0)
        * bSize;
     _baseXPos = _bubble.getXPos()
-      + (bSize / 2)
       + randomBetween(rand, -bSize / 3.0, bSize  / 3.0);
     _baseYPos = _bubble.getYPos()
       + (bSize / 1.5)
+      - (bSize / 2)
       + randomBetween(rand, -bSize / 3.0, bSize / 3.0);
       //+ (bHeight / (_bubble.getSizeIndex() + 3.0));
 
