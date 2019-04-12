@@ -7,20 +7,23 @@ import 'dart:async';
 
 class PopParticles extends StatefulWidget {
 
+  static int _globalIndex = 1;
+
   final Bubble _bubble;
   final double _screenWidth;
   final double _screenHeight;
   final DateTime _timeCreated = DateTime.now();
+  final Key key = Key((_globalIndex++).toString());
 
   PopParticles(this._bubble, this._screenWidth, this._screenHeight);
 
   bool expired()
   {
-    return _timeCreated.difference(DateTime.now()).inSeconds.abs() > 5;
+    return _timeCreated.difference(DateTime.now()).inSeconds.abs() > 3;
   }
 
   @override
-  State<StatefulWidget> createState() => PopParticlesState(this._bubble, _screenWidth, _screenHeight);
+  State<StatefulWidget> createState() => PopParticlesState(this._bubble, _screenWidth, _screenHeight, "kee");
 }
 
 class PopParticlesState extends State<PopParticles> {
@@ -29,8 +32,9 @@ class PopParticlesState extends State<PopParticles> {
   double _screenWidth;
   double _screenHeight;
   final int _lifetimeMS = 1000;
+  final String _key;
 
-  PopParticlesState(this._bubble, this._screenWidth, this._screenHeight)
+  PopParticlesState(this._bubble, this._screenWidth, this._screenHeight, this._key)
   {
     reset();
     Timer(Duration(milliseconds: _lifetimeMS), _clear);
@@ -44,13 +48,14 @@ class PopParticlesState extends State<PopParticles> {
   void reset() {
     print("pop reset");
     for (int i = 0; i < 10; i++) {
-      _particles.add(PopParticleNode(this._bubble, _screenWidth, _screenHeight));
+      _particles.add(PopParticleNode(this._bubble, _screenWidth, _screenHeight, _key + "." + i.toString()));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      key: Key(_key),
       children: _particles,
     );
   }
@@ -60,11 +65,12 @@ class PopParticleNode extends StatefulWidget {
   final Bubble _bubble;
   final double _screenWidth;
   final double _screenHeight;
+  final String _key;
 
-  PopParticleNode(this._bubble, this._screenWidth, this._screenHeight);
+  PopParticleNode(this._bubble, this._screenWidth, this._screenHeight, this._key);
 
   @override
-  PopParticleNodeState createState() => PopParticleNodeState(_bubble, _screenWidth, _screenHeight);
+  PopParticleNodeState createState() => PopParticleNodeState(_bubble, _screenWidth, _screenHeight, _key);
 }
 
 class PopParticleNodeState extends State<PopParticleNode>
@@ -72,8 +78,9 @@ class PopParticleNodeState extends State<PopParticleNode>
   Bubble _bubble;
   double _screenWidth;
   double _screenHeight;
+  final String _key;
 
-  PopParticleNodeState(this._bubble, this._screenWidth, this._screenHeight);
+  PopParticleNodeState(this._bubble, this._screenWidth, this._screenHeight, this._key);
 
   AnimationController _controller;
   Animation _xAnimation;
@@ -112,6 +119,7 @@ class PopParticleNodeState extends State<PopParticleNode>
     _controller.forward();
 
     return AnimatedBuilder(
+        key: Key(_key),
         animation: _controller,
         builder: (BuildContext context, Widget child) {
           return Transform(

@@ -46,6 +46,20 @@ class BubbleWidgetState extends State<BubbleWidget>{
     this._theme = _theme;
   }
 
+  void cleanUpParticles()
+  {
+    for(int i = 0; i < _popParticlesList.length; i++)
+    {
+      if (_popParticlesList[i].expired())
+      {
+        _popParticlesList.removeAt(i);
+        i--;
+      }
+    }
+    print("POP LENGTH");
+    print(_popParticlesList.length);
+  }
+
   Widget makeBubble(Bubble _bubble, BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
     double _screenWidth = MediaQuery.of(context).size.width;
@@ -151,6 +165,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
                   if (!_bubble.getPressed())
                   {
                     _popParticlesList.add(PopParticles(_bubble, _screenWidth, _screenHeight));
+                    cleanUpParticles();
                     Timer(Duration(milliseconds: 500), () {
                       setState(() {
                         if (!_bubble.getPressed())
