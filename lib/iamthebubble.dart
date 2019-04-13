@@ -105,52 +105,44 @@ class BubbleWidgetState extends State<BubbleWidget>{
           child: new Stack(children: <Widget>[
             
             // Ghost bubble
-            AnimatedOpacity(
-              duration: Duration(milliseconds: _bubble.getDotAppear() ? 250 : 100),
-              opacity: _bubble.getDotAppear() ? 0.3 : 0.0,
-              child: makeBubbleGraphic(_bubble, _bubbleFont, true),
-            ),
+            makeBubbleGraphic(_bubble, _bubbleFont, true),
 
             // Normal interactable bubble
-            new AnimatedOpacity(
-              duration: Duration(milliseconds: 100),
-              opacity: _bubble.getPressed() ? _bubble.getOrgOpacity() * .8 : 0.0,
-              child: new InkResponse(
-                highlightColor: _bubble.getColor(),
-                child: makeBubbleGraphic(_bubble, _bubbleFont, false),
-                onTap: () {
-                  setState((){
-                    _bubble.setLastActiongrabbed(false);
-                    _bubble.nextSize();
-                    _bList.moveToFront(_bubble);
-                  });
-                },
-                onDoubleTap: (){
-                  setState((){ //pop bubble
-                    _bubble.changePressed();
-                    _bubble.setPopState();
-                    if (!_bubble.getPressed())
-                    {
-                      _popParticlesList.add(PopParticles(_bubble, _screenWidth, _screenHeight));
-                      cleanUpParticles();
-                      Timer(Duration(milliseconds: 500), () {
-                        setState(() {
-                          if (!_bubble.getPressed())
-                            _bubble.setDotAppear(true);
-                        });
+            new InkResponse(
+              highlightColor: _bubble.getColor(),
+              child: makeBubbleGraphic(_bubble, _bubbleFont, false),
+              onTap: () {
+                setState((){
+                  _bubble.setLastActiongrabbed(false);
+                  _bubble.nextSize();
+                  _bList.moveToFront(_bubble);
+                });
+              },
+              onDoubleTap: (){
+                setState((){ //pop bubble
+                  _bubble.changePressed();
+                  _bubble.setPopState();
+                  if (!_bubble.getPressed())
+                  {
+                    _popParticlesList.add(PopParticles(_bubble, _screenWidth, _screenHeight));
+                    cleanUpParticles();
+                    Timer(Duration(milliseconds: 500), () {
+                      setState(() {
+                        if (!_bubble.getPressed())
+                          _bubble.setDotAppear(true);
                       });
-                    }
-                    else
-                      _bubble.setDotAppear(false);
-                  });
-                },
-                onLongPress: (){
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        DetailWidget(_bList, _theme, _bubble, _screenHeight, _screenWidth),
-                  ));
-                },
-              ),
+                    });
+                  }
+                  else
+                    _bubble.setDotAppear(false);
+                });
+              },
+              onLongPress: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      DetailWidget(_bList, _theme, _bubble, _screenHeight, _screenWidth),
+                ));
+              },
             ),
           ],),
 
@@ -165,36 +157,49 @@ class BubbleWidgetState extends State<BubbleWidget>{
               ),
             )
           ),
-          
           childWhenDragging: Container(),
         ),
     );
   }
 
-  // Must inherit: opacity, size, font style
+  // Must inherit: size from ancestor
   Widget makeBubbleGraphic(Bubble _bubble, TextStyle _bubbleFont, bool isGhost)
   {
-    return new Container(
-      decoration: new BoxDecoration(
-        shape: BoxShape.circle,
-        color: isGhost ? Colors.transparent : _bubble.getColor(),
-        image: isGhost
-        ? new DecorationImage(
-            image: new AssetImage('images/bubble.png'),
-            fit: BoxFit.fill,
-          )
-        : null,
-      ),
-      child: Stack(children: <Widget>[
-        //isGhost ? Image.asset('images/bubble.png') : null,
-        Center(
-          child: Text(
-            _bubble.getEntry(),
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
+    return new AnimatedOpacity(
+      duration: isGhost
+      ? Duration(milliseconds: _bubble.getDotAppear() ? 250 : 100)
+      : Duration(milliseconds: 100),
+      opacity: isGhost
+      ? _bubble.getDotAppear() ? 0.3 : 0.0
+      : _bubble.getPressed() ? _bubble.getOrgOpacity() * .8 : 0.0,
+      child: AnimatedDefaultTextStyle(
+        curve:  ElasticOutCurve(.9),
+        duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : 250),
+        style: _bubbleFont,
+        child: new Container(
+          decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            color: isGhost ? Colors.transparent : _bubble.getColor(),
+            image: isGhost
+            ? new DecorationImage(
+                image: new AssetImage('images/bubble.png'),
+                fit: BoxFit.fill,
+              )
+            : null,
           ),
-        ),
-      ],),
+          child: Stack(children: <Widget>[
+            //isGhost ? Image.asset('images/bubble.png') : null,
+            Center(
+              child: Text(
+                _bubble.getEntry(),
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: new TextStyle(decoration: isGhost ? TextDecoration.lineThrough : TextDecoration.none),
+              ),
+            ),
+          ],),
+        )
+      )
     );
   }
 
