@@ -109,7 +109,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
 
             // Normal interactable bubble
             new InkResponse(
-              highlightColor: _bubble.getColor(),
+              highlightColor: _bubble.getPressed() ? _bubble.getColor() : Colors.white10,
               child: makeBubbleGraphic(_bubble, _bubbleFont, false),
               onTap: () {
                 setState((){
