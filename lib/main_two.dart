@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'iamthebubble.dart';
 import 'list_widget.dart';
 import 'bubbles.dart';
+import 'themeSelection.dart';
 import 'themes.dart';
 import 'database.dart';
 
@@ -9,14 +10,14 @@ final db = DB.instance;
 void main() => runApp(BubbleView());
 
 class BubbleView extends StatelessWidget {
-  
+  bool newDay;
   @override
   Widget build(BuildContext context){
     final BubbleTheme theme =BubbleTheme();
-    final newDay = login();
+    login();
     BubblesList _bList;
-    if(newDay == true) _bList = new BubblesList();    // new day, fresh list
-    else _bList = new BubblesList.unpoppedBubbles(); // same day
+    if(newDay == true) {_bList = new BubblesList(); print('New Day'); }    // new day, fresh list
+    else {_bList = new BubblesList.unpoppedBubbles(); print('Welcome Back');}// same day
 
     return StreamBuilder<ThemeData>(
       initialData: theme.initialTheme().data,
@@ -35,20 +36,21 @@ class BubbleView extends StatelessWidget {
   }
   
   ///determines whether it is a new day
-  static Future<bool> login() async
-  { return await db.login(); }
+  void login() async
+  { newDay = await db.login(); }
 }
 
+// ignore: must_be_immutable
 class BubbleApp extends StatefulWidget{
   final BubbleTheme theme;
   final Color globalBubbleColor;
   BubblesList bList;
-  List<BubbleWidget> _widList;
-
+  List<BubbleWidget> _widList = [];
+  
   BubbleApp({Key key, this.theme, this.globalBubbleColor, this.bList});
   @override
-  BubbleAppState createState() => 
-                BubbleAppState(bList, _widList, theme, globalBubbleColor);
+  BubbleAppState createState() =>
+      BubbleAppState(bList, _widList, theme, globalBubbleColor);
 }
 
 class BubbleAppState extends State<BubbleApp>{
@@ -67,15 +69,15 @@ class BubbleAppState extends State<BubbleApp>{
   }
 
   @override
-  void initState() 
-  {
+  void initState(){
     super.initState();
+    //setState(() {build(context);} );
     _myList = [];
+    //_bList = new BubblesList();
   }
 
-  ///List View displays all the bubbles,, not just ones unpopped
   ListWidget _buildListView(){
-    return new ListWidget(_bList, _myList, _theme);
+    return new ListWidget(_bList, _theme);
   }
 
   Widget _buildBubbleView(){
@@ -87,7 +89,6 @@ class BubbleAppState extends State<BubbleApp>{
       children: <Widget>[
         _buildBubbleView(),
         _buildListView(),
-        //_buildButton(),
       ],
       pageSnapping: true,
     );
