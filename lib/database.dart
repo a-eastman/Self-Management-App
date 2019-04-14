@@ -1,7 +1,6 @@
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sprintf/sprintf.dart';
 import 'package:path/path.dart';
 import 'dart:async';
 import 'dart:io';
@@ -9,17 +8,54 @@ import 'dart:io';
 /// Runs the SQLite database behind flutter
 /// @version 2.0: tables for bubbles, pop, state, and color
 /// @author Martin Price
-/// @date March 2019
+/// @date April
 class DB
 {
   //Final instance variables
-  static final _dbName = "bubl.db";
-  static final _bubble = "bubble";
-  static final _pop = "pop_record";
-  static final _app_state = "app_state";
-  static final _color_themes = "color_themes";
-  static final _dbVersion = 2;
+  static final _dbName = 'bubl.db';
 
+  //Table and columns for bubble
+  static final String _bubble = 'bubble';
+  static final String _bID = 'bID';
+  static final String _title = 'title';
+  static final String _description = 'description';
+  static final String _color_red = 'color_red';
+  static final String _color_green = 'color_green';
+  static final String _color_blue = 'color_blue';
+  static final String _opacity = 'opacity';
+  static final String _size = 'size';
+  static final String _posX = 'posX';
+  static final String _posY = 'posY';
+  static final String _time_created = 'time_created';
+  static final String _time_deleted = 'time_deleted';
+  static final String _frequency = 'frequency';
+  static final String _days_to_repeat = 'days_to_repeat';
+  static final String _times_popped = 'times_popped';
+
+  static final String _not_deleted = 'ALIVE';
+
+  //Table and columns for pop_record
+  static final String _pop = 'pop_record';
+  static final String _pID = 'pID';
+  static final String _time_of_pop = 'time_of_pop';
+  static final String _action = 'action';
+
+  static final String _popped = 'POPPED';
+  static final String _unpopped = 'UNPOPPED';
+
+  //Table and Columns for app_state
+  static final String _app_state = 'app_state';
+  static final String _loginID = 'loginID';
+  static final String _last_opened = 'last_opened';
+
+  //Table and columns for color themes
+  static final String _color_themes = 'color_themes';
+  static final String _colorID = 'colorID';
+  static final String _color_name = 'color_name';
+  static final String _theme_name = 'theme_name';
+  static final String _theme_pair = 'theme_pair';
+
+  static final _dbVersion = 2;
   static Database _database;    //The only reference to the Database
 
   //Makes this a singleton class, allows only one Class per program
@@ -47,21 +83,22 @@ class DB
   /// Creates the database and corresponding tables
   Future _onCreate(Database db, int version) async
   {
-    await db.execute("""CREATE TABLE bubble (bID INTEGER PRIMARY KEY AUTOINCREMENT, 
-                        title TEXT NOT NULL, description TEXT NOT NULL, 
-                        color_red INTEGER NOT NULL, color_green INTEGER NOT NULL, 
-                        color_blue NOT NULL, opacity REAL NOT NULL, size INTEGER, 
-                        posX REAL, posY REAL, time_created TEXT, 
-                        deleted INTEGER, frequency INTEGER, days_to_repeat TEXT, 
-                        times_popped INTEGER)""");
-    await db.execute("""CREATE TABLE pop_record (pID INTEGER PRIMARY KEY AUTOINCREMENT, 
-                        bID INTEGER NOT NULL, time_popped TEXT NOT NULL, action TEXT, 
-                        FOREIGN KEY (bID) REFERENCES bubble(bID))""");
-    await db.execute("""CREATE TABLE $_app_state (loginID INTEGER PRIMARY KEY AUTOINCREMENT, 
-                        last_opened TEXT)""");
-    await db.execute("""CREATE TABLE $_color_themes (colorID INTEGER PRIMARY KEY AUTOINCREMENT,
-                        color_name TEXT, color_red INTEGER, color_green, color_blue INTEGER, 
-                        color_opacity REAL)""");
+    await db.execute("""CREATE TABLE $_bubble ($_bID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        $_title TEXT NOT NULL, $_description TEXT NOT NULL, 
+                        $_color_red INTEGER NOT NULL, $_color_green INTEGER NOT NULL, 
+                        $_color_blue NOT NULL, $_opacity REAL NOT NULL, $_size INTEGER, 
+                        $_posX REAL, $_posY REAL, $_time_created TEXT NOT NULL, 
+                        $_time_deleted TEXT, $_frequency INTEGER, $_days_to_repeat TEXT, 
+                        $_times_popped INTEGER)""");
+    await db.execute("""CREATE TABLE $_pop ($_pID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        $_bID INTEGER NOT NULL, $_time_of_pop TEXT NOT NULL, $_action TEXT, 
+                        FOREIGN KEY ($_bID) REFERENCES bubble($_bID))""");
+    await db.execute("""CREATE TABLE $_app_state ($_loginID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        $_last_opened TEXT)""");
+    await db.execute("""CREATE TABLE $_color_themes ($_colorID INTEGER PRIMARY KEY AUTOINCREMENT,
+                        $_color_name TEXT, $_color_red INTEGER, $_color_green, $_color_blue INTEGER, 
+                        $_opacity REAL, $_theme_name TEXT, $_theme_pair TEXT)""");
+    await populateColorThemes();
   }
 
 ///
@@ -70,17 +107,18 @@ class DB
   /// inserts value used to make a new bubble into the bubble db
   /// @return 1: successfully updated db
   /// @return 0: error thrown
-  Future<int> insertBubble(String _entry, String _description, int _colorRed,
-      int _colorGreen, int _colorBlue, double _opacity, int _size, double _posX,
-      double _posY) async
+  Future<int> insertBubble(String entry, String description, int colorRed,
+      int colorGreen, int colorBlue, double opacity, int size, double posX,
+      double posY, int frequency, String days) async
   {
     Database db = await instance.database;
-    Map<String, dynamic> row = {'title':_entry, 'description':_description,
-                                'color_red':_colorRed, 'color_green':_colorGreen,
-                                'color_blue':_colorBlue, 'opacity':_opacity,
-                                'size':_size, 'posX':_posX, 'posY':_posY,
-                                'time_created': new DateTime.now().toString(),
-                                'deleted': 0, 'frequency':1, 'times_popped':0};
+    Map<String, dynamic> row = {'$_title':entry, '$_description':description,
+                                '$_color_red':colorRed, '$_color_green':colorGreen,
+                                '$_color_blue':colorBlue, '$_opacity':opacity,
+                                '$_size':size, '$_posX':posX, '$_posY':posY,
+                                '$_time_created': new DateTime.now().toString(),
+                                '$_time_deleted':_not_deleted,'$_frequency': frequency,
+                                '$_days_to_repeat': days, '$_times_popped':0};
     try{ return await db.insert(_bubble, row); }
     catch (e) { print(e); return 0; }
   }
@@ -97,7 +135,7 @@ class DB
   Future<Map<String, dynamic>> queryBubbleByID(int bID, List<String> col) async
   {
     Database db = await instance.database;
-    try{ return (await db.query(_bubble, columns: col, where: 'bID = ?', whereArgs: [bID])).first; }
+    try{ return (await db.query(_bubble, columns: col, where: '$_bID = ?', whereArgs: [bID])).first; }
     catch (e) { print(e); return null; }
   }
 
@@ -106,7 +144,11 @@ class DB
   Future<List<Map<String, dynamic>>> queryBubblesForRePop() async
   {
     Database db = await instance.database;
-    try{ return await db.query(_bubble, where: 'deleted = 0'); }
+    try{ 
+      final result =  await db.query(_bubble, where: '$_time_deleted = ?', whereArgs: [_not_deleted]); 
+      //result.forEach((y) => {print(y)});
+      return result;
+    }
     catch (e) {print(e); return null; }
   }
 
@@ -115,7 +157,11 @@ class DB
   Future<int> queryLastCreatedBubbleID() async
   {
     Database db = await instance.database;
-    try{ return (await db.query(_bubble, columns: ['bID'], orderBy: 'bID DESC')).first['bID']; }
+    try{ 
+      final results = await db.query(_bubble, columns: ['$_bID'], orderBy: '$_bID DESC');
+      int id = results.first['$_bID'];
+      return id; 
+    }
     catch (e) {print(e); return 0; }
   }
 
@@ -124,8 +170,8 @@ class DB
   Future<Map<String, dynamic>> queryBubbleColor(int bID) async
   {
     Database db = await instance.database;
-    String query = sprintf("SELECT color_red, color_green, color_blue, opacity FROM bubble WHERE bID = %d", [bID]);
-    try{ return (await db.rawQuery(query)).first; }
+    try{ return (await db.query(_bubble, columns: ['$_color_red', '$_color_green', '$_color_blue', '$_opacity'], 
+                                where: '$bID = ?', whereArgs: [bID])).first; }
     catch (e) { print(e); return null; }
   }
 
@@ -135,28 +181,107 @@ class DB
   Future<int> updateBubbleByID(int bID, Map<String, dynamic> row) async
   {
     Database db = await instance.database;
-    try{ return await db.update(_bubble, row, where: 'bID = ?', whereArgs: [bID]); }
+    try{ return await db.update(_bubble, row, where: '$_bID = ?', whereArgs: [bID]); }
     catch (e) { print(e); return 1; }
   }
 
   ///Updates the color of a bubble
   ///@param bID : bubble to update
   ///@param row : color v
-  Future<int> updateBubbleColor(int bID)
+  ///@return 1 : successful update
+  ///@return 0 : error thrown
+  Future<int> updateBubbleColor(int bID, Map<String, dynamic> row) async
   {
-
+    Database db = await instance.database;
+    try{ return await db.update(_bubble, row, where: '$_bID = ?', whereArgs: [bID]); }
+    catch(e) {print(e); return 0;}
   }
   
   ///increments the time_popped column by 1
   ///@param bID : bubble just popped
+  ///@return 1 : successful update
+  ///@return 0 : error thrown
   Future<int> updateBubbleTimesPopped(int bID) async
   {
     Database db = await instance.database;
     int currPop;
-    try { currPop = (await db.query(_bubble, columns: ['times_popped'], where: 'bID = ?', whereArgs: [bID])).first['times_popped']; }
-    catch(e) {print(e); return 1; }
-    try { return await db.update(_bubble, {'times_popped': currPop+1}, where: 'bID = ?', whereArgs: [bID]); }
-    catch(e) {print(e); return 1; }
+    try { currPop = (await db.query(_bubble, columns: ['$_times_popped'], where: '$_bID = ?', whereArgs: [bID])).first['times_popped']; }
+    catch(e) {print(e); return 0; }
+    try { return await db.update(_bubble, {'$_times_popped': currPop+1}, where: '$_bID = ?', whereArgs: [bID]); }
+    catch(e) {print(e); return 0; }
+  }
+
+  ///Queries Bubble to see if the Bubble repeats on this day
+  ///@param bID : bubble ID
+  ///@return true : repeats on this day
+  ///@return false : does not repeat
+  Future<bool> bubbleRepeatsToday(int bID) async
+  {
+    Database db = await instance.database;
+    String currDay = dayToString(new DateTime.now().weekday);   //Monday = 1, Sunday = 7
+    String days;
+    try{
+      final result = (await db.query(_bubble, columns: ['$_bID, $_frequency, $_days_to_repeat'], 
+                where: '$_bID = ?', whereArgs: [bID])).first;
+      int freq = await result['$_frequency'];
+      if(freq == 0){
+        final subResult = await queryValidPopsByBubble(bID);
+        if(subResult.isEmpty) 
+          return true;                 //Bubble does not repeat but has never been popped
+        return false;                  //Bubble does not repeat but has been popped
+      }
+      days = await result['$_days_to_repeat']; 
+    }
+    catch(e) { print('Unable to query $_days_to_repeat'); return false; }
+    
+    for(String day in days.split('|')){  
+      if(day == currDay){
+        print('Bubble does repeat every $day');
+        return true;
+      }
+    }
+    print('Bubble does not repeat on $currDay');
+    return false;
+  }
+  
+  ///@return string of day determined in a switch
+  String dayToString(int currDay)
+  {
+    switch(currDay)
+    {
+      case 1: { return 'Mon'; } break;
+      case 2: { return 'Tue'; } break;
+      case 3: { return 'Wed'; } break;
+      case 4: { return 'Thu'; } break;
+      case 5: { return 'Fri'; } break;
+      case 6: { return 'Sat'; } break;
+      case 7: { return 'Sun'; } break;
+    }
+  }
+
+  ///Inserts a time_deleted value into a bubble
+  ///@param bID : bubble ID
+  ///@return 1 : successfully update
+  ///@return 0 : error thrown
+  Future<int> insertDelete(int bID) async
+  {
+    Database db = await instance.database;
+    String time = new DateTime.now().toString();
+    try {return await db.update(_bubble, {'$_time_deleted' : time}, 
+          where: '$_bID = ?', whereArgs: [bID]); }
+    catch(e) { return 0; }
+  }
+
+  ///Returns a deleted bubble to alive
+  ///@param bID : bubble ID
+  ///@return 1 : successfully update
+  ///@return 0 : error thrown
+  Future<int> reverseDelete(int bID) async
+  {
+    Database db = await instance.database;
+    try{ return await db.update(_bubble, {'$_time_deleted' : _not_deleted},
+          where: '$_bID = ?', whereArgs: [bID]); }
+    catch(e) { return 0; }
   }
 
 ///
@@ -175,8 +300,8 @@ class DB
   Future<List<Map<String, dynamic>>> queryPopByBubble(int bID) async
   {
     Database db = await instance.database;
-    try{ return await db.query(_pop, where: 'bID = ?', whereArgs: [bID], 
-                              orderBy: 'time_popped DESC'); }
+    try{ return await db.query(_pop, where: '$_bID = ?', whereArgs: [bID], 
+                              orderBy: '$_time_of_pop DESC'); }
     catch (e) {print(e); return []; }
   }
 
@@ -184,8 +309,8 @@ class DB
   Future<List<Map<String, dynamic>>> queryValidPopsByBubble(int bID) async
   {
     Database db = await instance.database;
-    try{ return await db.query(_pop, where: """bID = ? AND NOT action = 'UNPOPPED'""", whereArgs: [bID], 
-                              orderBy: 'time_popped DESC'); }
+    try{ return await db.query(_pop, where: '$_bID = ? AND $_action = ?', whereArgs: [bID, _popped], 
+                              orderBy: '$_time_of_pop DESC'); }
     catch (e) {print(e); return []; }
   }
 
@@ -196,8 +321,8 @@ class DB
   Future<int> insertPop(int bID) async
   {
     Database db = await instance.database;
-    Map<String, dynamic> row = {'bID':bID, 'time_popped':new DateTime.now().toString(),
-      'action':'POPPED'};
+    Map<String, dynamic> row = {'$_bID':bID, '$_time_of_pop':new DateTime.now().toString(),
+      '$_action':'$_popped'};
     try { return await db.insert(_pop, row); }
     catch (e) { print(e); return 0; }
   }
@@ -211,8 +336,8 @@ class DB
     Database db = await instance.database;
     try
     {
-      final pID = (await queryPopByBubble(bID)).first['pID'];
-      return await db.update(_pop, {'action': 'UNPOPPED'}, where: 'pID = ?', whereArgs: [pID]);
+      final pid = (await queryPopByBubble(bID)).first['$_pID'];
+      return await db.update(_pop, {'$_action': '$_unpopped'}, where: '$_pID = ?', whereArgs: [pid]);
     }
     catch(e) {return 0;}
 
@@ -228,11 +353,11 @@ class DB
     final results = await queryValidPopsByBubble(bID);
     try
     {
-      var lastPopped = DateTime.parse(results.first['time_popped']);
+      var lastPopped = DateTime.parse(results.first['$_time_of_pop']);
       var diff = currTime.difference(lastPopped);
       return diff.inDays > 0;
     }
-    catch(e) {print('Bubble $bID was never popped'); return true;}
+    catch(e) {return true;}
   }
 
  ///
@@ -245,7 +370,7 @@ class DB
   Future<int> enterLogin(String time) async
   {
     Database db = await instance.database;
-    try { return await db.insert(_app_state, {'last_opened': time} ); }
+    try { return await db.insert(_app_state, {'$_last_opened': time} ); }
     catch (e) {print(e); return 0;}
   }
 
@@ -253,7 +378,11 @@ class DB
   Future<String> latestLoginTime() async
   {
     Database db = await instance.database;
-    try{ return (await db.query(_app_state, orderBy: 'last_opened DESC')).first['last_opened']; }
+    try{ 
+      String s = (await db.query(_app_state, orderBy: '$_last_opened DESC')).first['$_last_opened'];
+      print('Last login time was $s');
+      return s;
+    }
     catch (e) {print(e); return "";}
   }
 
@@ -263,7 +392,7 @@ class DB
   Future<bool> login() async
   {
     String lastTime = await latestLoginTime();
-    if(lastTime == "") {enterLogin(new DateTime.now().toString()); return false; } // first time login
+    if(lastTime == "") {enterLogin(new DateTime.now().toString()); return true; } // first time login
     var prevTime = DateTime.parse(lastTime);
     var currTime = new DateTime.now();
     var diff = currTime.difference(prevTime);
@@ -271,21 +400,63 @@ class DB
     return diff.inDays > 0;
   }
 
+  ///@return list of logins ordered by most recent
   Future<List<Map<String, dynamic>>> queryAppState() async
   {
     Database db = await instance.database;
-    try {return db.query(_app_state, orderBy: 'last_opened DESC');}
+    try {return db.query(_app_state, orderBy: '$_last_opened DESC');}
     catch(e) {print(e); return null; }
   }
 
 ///
 ///COLOR THEME TABLE
 ///
+  ///@return a query of the color table
+  Future<List<Map<String, dynamic>>> queryColors() async
+  {
+    Database db = await instance.database;
+    try{ return await db.query(_color_themes); }
+    catch(e) { return []; }
+  }
+
+  ///@return a specifc color 
+  Future<Map<String, dynamic>> queryColorsByID(int cID) async
+  {
+    Database db = await instance.database;
+    try{ return (await db.query(_color_themes, where: 
+          '$_colorID = ?', whereArgs: [cID])).first; }
+    catch (e) { return {}; }
+  }
+
   /// Populates the color_theme table with pre deetermined patterns
   /// typically only used on initital startup 
-  void populateColorTheme() async
+  void populateColorThemes() async
   {
+    Database db = await instance.database;
+    Color c = Colors.blue;        //Bubble Theme
+    await db.insert(_color_themes, {_color_name: 'blue', 
+      _color_red: c.red, _color_green: c.green, _color_blue: c.blue, _opacity: c.opacity,
+      _theme_name: 'Bubble'});
+    
+    c = Colors.deepOrange[200];   //Sunset Theme
+    await db.insert(_color_themes, {_color_name: 'deepOrange', 
+      _color_red: c.red, _color_green: c.green, _color_blue: c.blue, _opacity: c.opacity,
+      _theme_name: 'Sunset'});
+    
+    c = Colors.purple[200];       //Dusk Theme
+    await db.insert(_color_themes, {_color_name: 'purple', 
+      _color_red: c.red, _color_green: c.green, _color_blue: c.blue, _opacity: c.opacity,
+      _theme_name: 'Dusk'});
 
+    c = Colors.yellow[200];       //Sunny Theme
+    await db.insert(_color_themes, {_color_name: 'yellow', 
+      _color_red: c.red, _color_green: c.green, _color_blue: c.blue, _opacity: c.opacity,
+      _theme_name: 'Sunny'});
+
+    c = Colors.blue[100];          //Ocean Theme
+    await db.insert(_color_themes, {_color_name: 'blue', 
+      _color_red: c.red, _color_green: c.green, _color_blue: c.blue, _opacity: c.opacity,
+      _theme_name: 'Ocean'});
   }
 
 ///
@@ -304,21 +475,21 @@ class DB
   void createDB() async
   {
     Database db = await instance.database;
-    await db.execute("""CREATE TABLE bubble (bID INTEGER PRIMARY KEY AUTOINCREMENT, 
-                        title TEXT NOT NULL, description TEXT NOT NULL, 
-                        color_red INTEGER NOT NULL, color_green INTEGER NOT NULL, 
-                        color_blue NOT NULL, opacity REAL NOT NULL, size INTEGER, 
-                        posX REAL, posY REAL, time_created TEXT, 
-                        deleted INTEGER, frequency INTEGER, days_to_repeat TEXT, 
-                        times_popped INTEGER)""");
-    await db.execute("""CREATE  TABLE $_pop (pID INTEGER PRIMARY KEY AUTOINCREMENT, 
-                        bID INTEGER NOT NULL, time_popped TEXT NOT NULL, action TEXT, 
-                        FOREIGN KEY (bID) REFERENCES bubble(bID))""");
-    await db.execute("""CREATE TABLE $_app_state (loginID INTEGER PRIMARY KEY AUTOINCREMENT, 
-                        last_opened TEXT)""");
-    await db.execute("""CREATE TABLE $_color_themes (colorID INTEGER PRIMARY KEY AUTOINCREMENT,
-                        color_name TEXT, color_red INTEGER, color_green, color_blue INTEGER, 
-                        color_opacity REAL)""");
+    await db.execute("""CREATE TABLE $_bubble ($_bID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        $_title TEXT NOT NULL, $_description TEXT NOT NULL, 
+                        $_color_red INTEGER NOT NULL, $_color_green INTEGER NOT NULL, 
+                        $_color_blue NOT NULL, $_opacity REAL NOT NULL, $_size INTEGER, 
+                        $_posX REAL, $_posY REAL, $_time_created TEXT NOT NULL, 
+                        $_time_deleted TEXT, $_frequency INTEGER, $_days_to_repeat TEXT, 
+                        $_times_popped INTEGER)""");
+    await db.execute("""CREATE TABLE $_pop ($_pID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        $_bID INTEGER NOT NULL, $_time_of_pop TEXT NOT NULL, $_action TEXT, 
+                        FOREIGN KEY ($_bID) REFERENCES bubble($_bID))""");
+    await db.execute("""CREATE TABLE $_app_state ($_loginID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        $_last_opened TEXT)""");
+    await db.execute("""CREATE TABLE $_color_themes ($_colorID INTEGER PRIMARY KEY AUTOINCREMENT,
+                        $_color_name TEXT, $_color_red INTEGER, $_color_green, $_color_blue INTEGER, 
+                        $_opacity REAL, $_theme_name TEXT, $_theme_pair TEXT)""");
+    await populateColorThemes();
   }
-
 }
