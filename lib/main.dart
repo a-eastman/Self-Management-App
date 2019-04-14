@@ -71,7 +71,7 @@ class BubbleAppState extends State<BubbleApp>{
   ListWidget _buildListView(){
     return new ListWidget(_bList, _theme);
   }
-//a
+//
   Widget _buildBubbleView(){
     return new BubbleWidget(_bList, _theme);
   }
