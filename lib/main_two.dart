@@ -4,7 +4,7 @@ import 'list_widget.dart';
 import 'bubbles.dart';
 import 'themeSelection.dart';
 import 'themes.dart';
-import 'settingsScreen.dart'
+import 'settingsScreen.dart';
 
 void main() => runApp(BubbleView());
 
