@@ -3,10 +3,8 @@ import 'bubbles.dart';
 import 'themeSelection.dart';
 import 'themes.dart';
 
-//currently an extremely basic prototype, no actual functionality
 // ignore: must_be_immutable
 class SettingsScreen extends StatefulWidget {
-  List<String> _settingNames = ['Theme', 'Font Size', 'Replay Tutorial'];//for testing
   BubblesList _bubList;
   BubbleTheme _theme;
 
@@ -15,24 +13,18 @@ class SettingsScreen extends StatefulWidget {
     this._theme = theme;
   }
 
-  SettingsScreenState createState() => SettingsScreenState(_settingNames);
-  //SettingsScreenState createState() => SettingsScreenState(_bubList, _theme);
+  SettingsScreenState createState() => SettingsScreenState(_bubList, _theme);
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-  List<String> _settingsNames;//for testing
   BubblesList _bubList;
   BubbleTheme _theme;
 
-  SettingsScreenState(List<String> settingsNames) {//for testing
-    this._settingsNames = settingsNames;
-  }
-  /*
   SettingsScreenState(BubblesList list, BubbleTheme theme) {
     this._bubList = list;
     this._theme = theme;
   }
-  */
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,15 +36,11 @@ class SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildSelection(){
-    return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: _settingsNames.length * 2 - 1,
-        itemBuilder: /*1*/ (context, i) {//i is the row iterator, begins at 0 and increments twice when the function is called
-          if (i.isOdd) return Divider(); /*2*///adds a 1 pixel divider object between rows
-
-          final index = i ~/ 2; /*3*///divide i by 2 and return truncated integer result
-          return _buildRow(_settingsNames[index]);
-        });
+    return ListView(children: <Widget>[
+      _buildThemeButton(),
+      _buildFontSelection(),
+      _buildTutorialButton(),
+    ],);
   }
 
   Widget _buildRow(String s) {
@@ -63,8 +51,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  //use onTap on a ListTile to call the theme menu
-  Widget _buildThemeButton() { //getting an error page when opening the theme menu, not sure why
+  Widget _buildThemeButton() {
     return ListTile(
       title: Text(
         'Themes',
@@ -79,10 +66,20 @@ class SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildFontSelection() {
-    return null;
+    //TODO: make font selection interactive and work
+    return ListTile(
+      title: Text(
+        'Font Size'
+      )
+    );
   }
 
   Widget _buildTutorialButton() {
-    return null;
+    //TODO: make interactive and work once tutorial is in place
+    return ListTile(
+      title: Text(
+        'Replay Tutorial'
+      )
+    );
   }
 }
