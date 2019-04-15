@@ -58,6 +58,7 @@ class AddWidgetState extends State<AddWidget> {
   bool repeatSaturday = false;
   bool repeatSunday = false;
   Color bColor = Colors.blue;
+  String bColorString = "blue";
   FocusNode fn = FocusNode();
   FocusNode fn2 = FocusNode();
 
@@ -86,7 +87,7 @@ class AddWidgetState extends State<AddWidget> {
   void _makeBubble(){
     if(!bubbleCreated){
       print('Make a new bubble!');
-      newBubble = new Bubble(myController.text, myController2.text, bColor, 
+      newBubble = new Bubble(myController.text, myController2.text, bColor, bColorString, 
         sizeIndex, true, 0.5, 0.5, 1.0, repeat, repeatMonday, repeatTuesday, repeatWednesday,
         repeatThursday, repeatFriday, repeatSaturday, repeatSunday);
       bubbleCreated = true;

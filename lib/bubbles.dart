@@ -50,7 +50,7 @@ class Bubble
   //Database variable
   final db = DB.instance;
 
-  Bubble(String _entry, String _description, String _colorString, int _sizeIndex,
+  Bubble(String _entry, String _description, Color _color, String _colorString, int _sizeIndex,
       bool _pressed, double _xPos, double _yPos, double _orgOpacity, bool _frequency,
       bool _repeatMonday, bool _repeatTuesday, bool _repeatWednesday, 
       bool _repeatThursday, bool _repeatFriday, bool _repeatSaturday, bool _repeatSunday){
