@@ -38,6 +38,9 @@ class BubbleWidget extends StatefulWidget{
 
 //Bubble class
 class BubbleWidgetState extends State<BubbleWidget>{
+    
+  final bool _allowGhostBubble = true; // TODO implement ghost bubble toggle
+  
   BubblesList _bList;
   BubbleTheme _theme;
   Color _globalBubbleColor;
@@ -83,19 +86,12 @@ class BubbleWidgetState extends State<BubbleWidget>{
     double _screenWidth = MediaQuery.of(context).size.width;
     double _bSize = _screenHeight * _bubble.getSize();
     
+    // TODO font settings I guess
     TextStyle _bubbleFont = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: .15 * _bSize,
       color: Colors.black,
       fontFamily: 'SoulMarker');
-
-    // TODO style copy
-    var strikeThroughFont =
-    TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 15.0,
-      fontFamily: 'SoulMarker',
-      decoration: TextDecoration.lineThrough);
       
     print(_screenHeight.toString());
 
@@ -222,10 +218,12 @@ class BubbleWidgetState extends State<BubbleWidget>{
   }
 
   List<Widget> _makeWidList(BuildContext context){
+
     List<Widget> _widList = [];
     // _widList.clear();
     for (int i = 0; i < _bList.getSize(); i++){
-        _widList.add(makeBubble(_bList.getBubbleAt(i), context));
+        if (_allowGhostBubble || _bList.getBubbleAt(i).getPressed())
+          _widList.add(makeBubble(_bList.getBubbleAt(i), context));
     }
     for (int i = 0; i < _popParticlesList.length; i++){
       {
