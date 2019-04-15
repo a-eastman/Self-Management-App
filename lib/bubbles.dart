@@ -18,6 +18,9 @@ class Bubble
   int _numInfront;      //How many bubbles are in front of current bubble
   double _opacity;      //current opacity of the bubble
   double _orgOpacity;   //The original opacity of the bubble
+  bool _dotAppear = false;
+  bool _lastActionGrabbed = true;
+  int _globalIndex = 0;
   int _bubbleID;        // bID of the bubble from the DB
 
   bool _shouldDelete;    //If the bubble is set to delete or not
@@ -49,11 +52,14 @@ class Bubble
 
   //Database variable
   final db = DB.instance;
+  
+  static int _globalBubbleIndex = 0;
 
   Bubble(String _entry, String _description, Color _color, String _colorString, int _sizeIndex,
       bool _pressed, double _xPos, double _yPos, double _orgOpacity, bool _frequency,
       bool _repeatMonday, bool _repeatTuesday, bool _repeatWednesday, 
       bool _repeatThursday, bool _repeatFriday, bool _repeatSaturday, bool _repeatSunday){
+    _globalIndex = _globalBubbleIndex++;
     this._entry = _entry;
     this._description =_description;
     this._colorString = _colorString;
@@ -95,6 +101,7 @@ class Bubble
 
   //Default Bubble constructor, sets all values to default values
   Bubble.defaultBubble(){
+    this._globalIndex = _globalBubbleIndex++;
     this._entry = _defEntry;
     this._description =_defDesc;
     this._color =_defColor;
@@ -175,6 +182,14 @@ class Bubble
   int getBubbleID()
   { return _bubbleID; }
 
+  int globalIndex() => _globalIndex;
+
+  //Empty bubble constructor marked for deletion
+  Bubble.deletionBubble(){
+    _globalIndex = _globalBubbleIndex++;
+    _shouldDelete = true;
+  }
+
   bool getRepeat(){
     return repeat;
   }
@@ -197,6 +212,20 @@ class Bubble
       value ++;
     updateFrequency(_bubbleID, value);
     print('Updating Frequecy to $value');
+  }
+
+  bool getDotAppear() => _dotAppear;
+
+  void setDotAppear(bool dotAppear)
+  {
+    this._dotAppear = dotAppear;
+  }
+
+  bool lastActionGrabbed() => _lastActionGrabbed;
+  
+  void setLastActiongrabbed(bool lastActionGrabbed)
+  {
+    this._lastActionGrabbed = lastActionGrabbed;
   }
 
   bool getRepeatDay(String day){
@@ -402,7 +431,6 @@ class Bubble
   void setColorString(String nColorString){
     this._colorString = _colorString;
   }
-  
   //Changes the size of the bubble
   void nextSize(){
     //print("nextSize");
@@ -578,10 +606,12 @@ class Bubble
 class BubblesList {
   final db = DB.instance;
   List<Bubble> _myList; //List of bubbles
+
   int _numBubbles; //Number of bubbles in list
 
   BubblesList.newEmptyBubbleList() {
     _myList = []; //Sets an empty list
+
     this._numBubbles = 0; //Initial size is 0
   }
 
@@ -660,6 +690,7 @@ class BubblesList {
 
   void addBubble(Bubble b) {
     _myList.add(b);
+
     _numBubbles++;
     // _myList.add(b);
   }
@@ -677,6 +708,14 @@ class BubblesList {
   void changeElementPressed(int i) {
     _myList[i].changePressed();
   }
+
+  void moveToFront(Bubble bubble)
+  {
+    _myList.remove(bubble);
+    _myList.add(bubble);
+  }
+
+  getIndex(Bubble bubble) => _myList.indexOf(bubble);
 
   //Sets the current list to the settings of another BubblesList
 
