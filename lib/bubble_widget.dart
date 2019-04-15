@@ -67,6 +67,16 @@ class BubbleWidgetState extends State<BubbleWidget>{
     print("POP LENGTH");
     print(_popParticlesList.length);
   }
+  
+  //Animation values for tweaking
+  final double _bubbleOpacity = .8;
+  final int _ghostAppearMS = 250;
+  final int _ghostDisappearMS = 100;
+  final int _ghostAppearDelayMS = 500;
+  final int _normalAlphaMS = 100;
+  final double _ghostOpacity = .3;
+  final Curve _sizeChangeCurve = ElasticOutCurve(.9);
+  final int _sizeChangeMS = 250;
 
   Widget makeBubble(Bubble _bubble, BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
@@ -91,8 +101,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
 
     return new AnimatedPositioned(
       key: Key(_bubble.globalIndex().toString()),
-      curve:  ElasticOutCurve(.9),
-      duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : 250),
+      curve:  _sizeChangeCurve,
+      duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : _sizeChangeMS),
       width: _bSize,
       height: _bSize,
       top: _bubble.getYPos() - _bSize / 2.0,
@@ -134,7 +144,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
                   {
                     _popParticlesList.add(PopParticles(_bubble, _screenWidth, _screenHeight));
                     cleanUpParticles();
-                    Timer(Duration(milliseconds: 500), () {
+                    Timer(Duration(milliseconds: _ghostAppearDelayMS), () {
                       setState(() {
                         if (!_bubble.getPressed())
                           _bubble.setDotAppear(true);
@@ -167,6 +177,47 @@ class BubbleWidgetState extends State<BubbleWidget>{
           ),
         childWhenDragging: Container(),
       ),
+    );
+  }
+
+  // Must inherit: size from ancestor
+  Widget makeBubbleGraphic(Bubble _bubble, TextStyle _bubbleFont, bool isGhost)
+  {
+    return new AnimatedOpacity(
+      duration: isGhost
+      ? Duration(milliseconds: _bubble.getDotAppear() ? _ghostAppearMS : _ghostDisappearMS)
+      : Duration(milliseconds: _normalAlphaMS),
+      opacity: isGhost
+      ? _bubble.getDotAppear() ? _ghostOpacity : 0.0
+      : _bubble.getPressed() ? _bubble.getOrgOpacity() * _bubbleOpacity : 0.0,
+      child: AnimatedDefaultTextStyle(
+        curve: _sizeChangeCurve,
+        duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : _sizeChangeMS),
+        style: _bubbleFont,
+        child: new Container(
+          decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            color: isGhost ? Colors.transparent : _bubble.getColor(),
+            image: isGhost
+            ? new DecorationImage(
+                image: new AssetImage('images/bubble.png'),
+                fit: BoxFit.fill,
+              )
+            : null,
+          ),
+          child: Stack(children: <Widget>[
+            //isGhost ? Image.asset('images/bubble.png') : null,
+            Center(
+              child: Text(
+                _bubble.getEntry(),
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: new TextStyle(decoration: isGhost ? TextDecoration.lineThrough : TextDecoration.none),
+              ),
+            ),
+          ],),
+        )
+      )
     );
   }
 
@@ -215,47 +266,6 @@ class BubbleWidgetState extends State<BubbleWidget>{
       body: new Stack(
         children: _makeWidList(context),
       ),
-    );
-  }
-
-  // Must inherit: size from ancestor
-  Widget makeBubbleGraphic(Bubble _bubble, TextStyle _bubbleFont, bool isGhost)
-  {
-    return new AnimatedOpacity(
-      duration: isGhost
-      ? Duration(milliseconds: _bubble.getDotAppear() ? 250 : 100)
-      : Duration(milliseconds: 100),
-      opacity: isGhost
-      ? _bubble.getDotAppear() ? 0.3 : 0.0
-      : _bubble.getPressed() ? _bubble.getOrgOpacity() * .8 : 0.0,
-      child: AnimatedDefaultTextStyle(
-        curve:  ElasticOutCurve(.9),
-        duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : 250),
-        style: _bubbleFont,
-        child: new Container(
-          decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            color: isGhost ? Colors.transparent : _bubble.getColor(),
-            image: isGhost
-            ? new DecorationImage(
-                image: new AssetImage('images/bubble.png'),
-                fit: BoxFit.fill,
-              )
-            : null,
-          ),
-          child: Stack(children: <Widget>[
-            //isGhost ? Image.asset('images/bubble.png') : null,
-            Center(
-              child: Text(
-                _bubble.getEntry(),
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                style: new TextStyle(decoration: isGhost ? TextDecoration.lineThrough : TextDecoration.none),
-              ),
-            ),
-          ],),
-        )
-      )
     );
   }
 }
