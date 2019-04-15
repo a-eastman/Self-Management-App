@@ -349,7 +349,7 @@ class Bubble
   }
 
   Color getColor(){
-    return this._color;
+    return Colors.blue; // TODO temp fix until bubbe color is fixed
   }
 
   String getColorString(){
