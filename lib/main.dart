@@ -1,112 +1,96 @@
-
 import 'package:flutter/material.dart';
+import 'iamthebubble.dart';
+import 'list_widget.dart';
+import 'bubbles.dart';
+import 'themeSelection.dart';
+import 'themes.dart';
 import 'database.dart';
 
+final db = DB.instance;
+void main() => runApp(BubbleView());
 
-void main() => runApp(DBview());
-  final db = DB.instance;
-
-class DBview extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SQFlite Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget{
+class BubbleView extends StatelessWidget {
+  bool newDay;
   @override
   Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('BUBL Test DB'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            RaisedButton(
-              child: Text('insert values', style: TextStyle(fontSize: 20),),
-              onPressed: () { _testDB(); },
-            ),
-            RaisedButton(
-              child: Text('Refresh', style: TextStyle(fontSize: 20),),
-              onPressed: () { _refresh(); },
-            ),
-            RaisedButton(
-              child: Text('Test Attribute', style: TextStyle(fontSize: 20),),
-              onPressed: () { _queryPop(); },
-            ),
-            RaisedButton(
-              child: Text('login', style: TextStyle(fontSize: 20),),
-              onPressed: () { _login(); },
-            ),
-          ],
-        ),
-      ),
+    final BubbleTheme theme =BubbleTheme();
+    login();
+    BubblesList _bList;
+    if(newDay == true) {_bList = new BubblesList(); print('New Day'); }    // new day, fresh list
+    else {_bList = new BubblesList.unpoppedBubbles(); print('Welcome Back');}// same day
+
+    return StreamBuilder<ThemeData>(
+      initialData: theme.initialTheme().data,
+      stream: theme.themeDataStream,
+      builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
+        return MaterialApp(
+          title: 'Bubl with DB Integrated',
+          theme: snapshot.data,
+          home: BubbleApp(
+            theme: theme,
+            bList: _bList,
+          ),
+        );
+      },
     );
   }
+  
+  ///determines whether it is a new day
+  void login() async
+  { newDay = await db.login(); }
+}
 
-  //Helper methods used by Martin to quickly test the DB
-  void _queryBub() async
-  {
-    final allBubbles = await db.queryBubble();
-    print("Printing Bubbles");
-    try{ allBubbles.forEach((row) => print(row)); }
-    catch (e) { print("No bubs"); }
+// ignore: must_be_immutable
+class BubbleApp extends StatefulWidget{
+  final BubbleTheme theme;
+  final Color globalBubbleColor;
+  BubblesList bList;
+  List<BubbleWidget> _widList = [];
+  
+  BubbleApp({Key key, this.theme, this.globalBubbleColor, this.bList});
+  @override
+  BubbleAppState createState() =>
+      BubbleAppState(bList, _widList, theme, globalBubbleColor);
+}
 
-  }
-  void _queryPop() async
-  {
-    final allPop = await db.queryPop();
-    print("Printing popped");
-    try{ allPop.forEach((row) => print(row)); }
-    catch (e) { print("No pops"); }
-  }
-  void _insert() async
-  {
-  }
-  void _testDB() async
-  {
-    print('Printing out bubl table:');
-    final bubl = await db.queryBubble();
-    try{ bubl.forEach((row) => print(row)); }
-    catch(e) {print(e); }
-
-    print('Printing out pop_record table:');
-    final pop = await db.queryPop();
-    try{ pop.forEach((row) => print(row)); }
-    catch(e) {print(e); }
-  }
-  void _refresh() async
-  {
-    print("Refreshing Bubl.db");
-    await db.refreshDB();
+class BubbleAppState extends State<BubbleApp>{
+  BubbleTheme _theme;
+  Color globalBubbleColor;
+  List<BubbleWidget> _myList;
+  BubblesList _bList;
+  BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList,
+      this._theme, this.globalBubbleColor){
+    this._bList =_bList;
+    this._myList = _widList;
   }
 
-  void _testBubble() async
-  {
-    print("Testing a Bubble");
+  void setBubbleColor(Color newBubbleColor){
+    this.globalBubbleColor = newBubbleColor;
   }
 
-  void _login() async
-  {
-    print('Logging in now');
-    final newDay = await db.login();
-    if(newDay) print('Logged in to a new day'); 
-    else print('Welcome back!');
-    final logins = await db.queryAppState();
-    try{logins.forEach((row) => print(row)); }
-    catch(e) {print(e); print('No logins found'); }
+  @override
+  void initState(){
+    super.initState();
+    //setState(() {build(context);} );
+    _myList = [];
+    //_bList = new BubblesList();
   }
 
-  void _testColor()
-  {
+  ListWidget _buildListView(){
+    return new ListWidget(_bList, _theme);
+  }
 
+  Widget _buildBubbleView(){
+    return new BubbleWidget(_bList, _theme);
+  }
+
+  Widget build(BuildContext context){
+    return PageView(
+      children: <Widget>[
+        _buildBubbleView(),
+        _buildListView(),
+      ],
+      pageSnapping: true,
+    );
   }
 }
