@@ -7,7 +7,6 @@ import 'add_widget.dart';
 import 'edit_widget.dart';
 import 'detail_widget.dart';
 import 'pop_particles.dart';
-//import 'package:audioplayer/audioplayer.dart';
 
 // ignore: must_be_immutable
 class BubbleWidget extends StatefulWidget{
@@ -56,8 +55,9 @@ class BubbleWidgetState extends State<BubbleWidget>{
     double _screenHeight =MediaQuery.of(context).size.height;
     double _screenWidth = MediaQuery.of(context).size.width;
     double _bSize = _screenHeight * _bubble.getSize();
-    print(_screenHeight.toString());
     return new Positioned(
+      top: _bubble.getYPos(),
+      left: _bubble.getXPos(),
       //width: _bSize,
       //height: _bSize,
       child: new AnimatedOpacity(
@@ -153,8 +153,6 @@ class BubbleWidgetState extends State<BubbleWidget>{
           childWhenDragging: Container(),
         ),
       ),
-      top: _bubble.getYPos(),
-      left: _bubble.getXPos(),
     );
   }
 
@@ -162,9 +160,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
     List<Widget> _widList = [];
     // _widList.clear();
     for (int i = 0; i < _bList.getSize(); i++){
-      if (!_bList.getBubbleAt(i).getShouldDelete()){
         _widList.add(makeBubble(_bList.getBubbleAt(i), context));
-      }
     }
     for (int i = 0; i < _popParticlesList.length; i++){
       {

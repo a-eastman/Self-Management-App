@@ -4,7 +4,9 @@ import 'list_widget.dart';
 import 'bubbles.dart';
 import 'themeSelection.dart';
 import 'themes.dart';
+import 'database.dart';
 
+final db = DB.instance;
 void main() => runApp(BubbleView());
 
 
@@ -12,10 +14,10 @@ void main() => runApp(BubbleView());
 class BubbleApp extends StatefulWidget{
   final BubbleTheme theme;
   final Color globalBubbleColor;
-  BubblesList _bList = new BubblesList();
+  BubblesList _bList;
   List<BubbleWidget> _widList = [];
-
-  BubbleApp({Key key, this.theme, this.globalBubbleColor,});
+  
+  BubbleApp(this._bList, {Key key, this.theme, this.globalBubbleColor});
   @override
   BubbleAppState createState() =>
       BubbleAppState(_bList, _widList, theme, globalBubbleColor);
@@ -31,9 +33,6 @@ class BubbleAppState extends State<BubbleApp>{
     this._bList =_bList;
     this._myList = _widList;
   }
-  Bubble b0;
-  Bubble b1;
-  Bubble b2;
 
   void setBubbleColor(Color newBubbleColor){
     this._globalBubbleColor = newBubbleColor;
@@ -42,30 +41,9 @@ class BubbleAppState extends State<BubbleApp>{
   @override
   void initState(){
     super.initState();
-    //ThemeBloc themeBloc = new ThemeBloc();
+    //setState(() {build(context);} );
     _myList = [];
-    _bList = new BubblesList();
-    // b0 = new Bubble("Caeleb", "Nasoff", Colors.blue, 2,
-    //                  true, 50.0, 50.0, 0.8);
-    // b1 = new Bubble.defaultBubble();
-    // b2 = new Bubble("DOUG DIMMADOME",
-    //     "OWNER OF THE DIMSDALE DIMMADOME",
-    //     Colors.red,
-    //     3,
-    //     true,
-    //     0.2,
-    //     0.2,
-    //     1.0
-    // );
-    // _myList.add(BubbleWidget(bubble: b1));
-    // _bList.addBubble(b0);
-    // _myList.add(BubbleWidget(_bList, _theme));
-    // _myList.removeAt(0);
-    // _bList.removeBubbleAt(0);
-    // _myList.add(BubbleWidget(bubble: b2));
-    //_bList.addBubble(b1);
-    // _bList.addBubble(b0);
-    //_bList.addBubble(b2); //Cleared screen initially
+    //_bList = new BubblesList();
   }
 
   ListWidget _buildListView(){
@@ -88,23 +66,32 @@ class BubbleAppState extends State<BubbleApp>{
 }
 
 class BubbleView extends StatelessWidget {
-
+  bool newDay;
   @override
   Widget build(BuildContext context){
     final BubbleTheme theme =BubbleTheme();
+    login();
+    BubblesList _bList;
+    if(newDay == true) {_bList = new BubblesList(); print('New Day'); }    // new day, fresh list
+    else {_bList = new BubblesList.unpoppedBubbles(); print('Welcome Back');}// same day
+
     return StreamBuilder<ThemeData>(
-      initialData: theme.buildBubbleTheme().data,
+      initialData: theme.initialTheme().data,
       stream: theme.themeDataStream,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
         return MaterialApp(
-          title: 'App3',
+          title: 'Bubl with DB Integrated',
           theme: snapshot.data,
           home: BubbleApp(
+            _bList,
             theme: theme,
           ),
         );
       },
     );
-
   }
+  
+  ///determines whether it is a new day
+  void login() async
+  { newDay = await db.login(); }
 }

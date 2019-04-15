@@ -57,7 +57,7 @@ class ListWidgetState extends State<ListWidget> {
   Widget build(BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
     double _screenWidth = MediaQuery.of(context).size.width;
-    _curList = new BubblesList();
+    _curList = new BubblesList.newEmptyBubbleList();
     for (int i = 0; i < _myList.getSize(); i++) {
       if (!_myList.getBubbleAt(i).getShouldDelete()) {
         _curList.addBubble(_myList.getBubbleAt(i));

@@ -102,7 +102,7 @@ class DetailWidgetState extends State<DetailWidget> {
           new Text(day),
         ]);
   }
-
+  
   /// Creates the row of days of the week that will appear if the
   /// bubble has repeat set to true.
   Widget _buildWeek(Bubble _bubble) {

@@ -71,7 +71,7 @@ class EditWidgetState extends State<EditWidget> {
     _bubble.setDescription(myController2.text);
     _bubble.setSize(temp.getSizeIndex());
     _bubble.setRepeat(temp.getRepeat());
-    _bubble.setColor(temp.getColor());
+    _bubble.setColor(temp.getColor()); // TODO: Came from a merge, can't tell if needed
     _bubble.setRepeatDay("Mon",temp.getRepeatDay("Mon"));
     _bubble.setRepeatDay("Tue",temp.getRepeatDay("Tue"));
     _bubble.setRepeatDay("Wed",temp.getRepeatDay("Wed"));
@@ -227,7 +227,7 @@ class EditWidgetState extends State<EditWidget> {
               _buildWeek(_screenWidth),
               Container(height: 20),
               RaisedButton(
-                color: Colors.grey[300],
+                color: getBubbleColor(_myList),
                 onPressed: () {
                   _editBubble();
                   Navigator.pop(context);
