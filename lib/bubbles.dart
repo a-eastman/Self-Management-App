@@ -18,6 +18,7 @@ class Bubble
   int _numInfront;      //How many bubbles are in front of current bubble
   double _opacity;      //current opacity of the bubble
   double _orgOpacity;   //The original opacity of the bubble
+
   bool _dotAppear = false;
   bool _lastActionGrabbed = true;
   int _globalIndex = 0;
@@ -459,8 +460,8 @@ class Bubble
 
   //Changes the X position
   void changeXPos(double newXPos, double actualSize, double screenWidth){
-    if ((newXPos + actualSize) > screenWidth){
-      newXPos = screenWidth - actualSize;
+    if (newXPos > screenWidth - (actualSize / 2.0)){
+      newXPos = screenWidth - (actualSize / 2.0);
     }
     else if(newXPos < 3.0){ //TODO: update to use screen constraint
       newXPos = 3.0;
@@ -471,8 +472,8 @@ class Bubble
   }
   //Changes the Y position
   void changeYPos(double newYPos, double actualSize, double screenHeight){
-    if ((newYPos + actualSize) > screenHeight){
-      newYPos = screenHeight - actualSize;
+    if (newYPos > screenHeight - (actualSize)){
+      newYPos = screenHeight - (actualSize);
     }
     else if(newYPos < 3.0){ //TODO: update to use screen constraint
       newYPos = 3.0;

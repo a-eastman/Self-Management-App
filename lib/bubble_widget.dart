@@ -106,9 +106,9 @@ class BubbleWidgetState extends State<BubbleWidget>{
         child: new Draggable(
           onDraggableCanceled: (Velocity velocity, Offset offset){
             setState((){
-              _bubble.changeXPos(offset.dx + _bSize / 2.0, _bSize, _screenWidth);
+              _bubble.changeXPos(offset.dx + (_bSize / 2.0), _bSize, _screenWidth);
               _bubble.changeYPos(
-                  offset.dy + _bSize / 2.0 - _bSize/2.0, _bSize, _screenHeight);
+                  offset.dy , _bSize, _screenHeight);
               _bubble.setLastActiongrabbed(true);
               
               setState((){
