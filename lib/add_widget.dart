@@ -288,7 +288,7 @@ class AddWidgetState extends State<AddWidget> {
               _buildWeek(_screenWidth),
               Container(height: 20),
               RaisedButton(
-                color: bColor,
+                color: Colors.grey[300],
                 onPressed: () {
                   //_editBubble();
                   _makeBubble();
