@@ -33,4 +33,65 @@ class BubbleTheme {
         )
     );
   }
+
+  DemoTheme buildOceanTheme() {
+    return DemoTheme(
+      'Bubble',
+      ThemeData(
+        canvasColor: Colors.teal[100],
+        brightness: Brightness.light,
+        buttonColor: Colors.teal[300],
+        accentColor: Colors.teal[300],
+        primaryColor: Colors.teal[300],
+      ));
+  }
+
+  DemoTheme buildSunsetTheme() {
+    return DemoTheme(
+      'Sunset',
+      ThemeData(
+        brightness: Brightness.dark,
+        accentColor: Colors.deepOrange[200],
+        buttonColor: Colors.deepOrange[200],
+        primaryColor: Colors.deepOrange[200],
+      ));
+  }
+
+  DemoTheme buildDuskTheme() {
+    return DemoTheme(
+      'Dusk',
+      ThemeData(
+        brightness: Brightness.dark,
+        buttonColor: Colors.purple[200],
+        accentColor: Colors.purple[200],
+        primaryColor: Colors.purple[200],
+      ));
+  }
+
+  DemoTheme buildSunnyTheme(){
+    return DemoTheme(
+      'Sunny',
+      ThemeData(
+      backgroundColor: Colors.blue[100],
+      buttonColor: Colors.yellow[200],
+      canvasColor: Colors.blue[100],
+      brightness: Brightness.light,
+      accentColor: Colors.yellow[200],
+      primaryColor: Colors.yellow[200])
+    );
+  }
+
+  DemoTheme buildBubbleTheme(){
+    return DemoTheme(
+      'Ocean',
+      ThemeData(
+      backgroundColor: Colors.blue[300],
+      buttonColor: Colors.blue[300],
+      canvasColor: Colors.lightBlue[50],
+      brightness: Brightness.light,
+      accentColor: Colors.blue[300],
+      primaryColor: Colors.blue[300])
+    );
+  }
 }
+

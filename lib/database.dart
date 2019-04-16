@@ -83,6 +83,7 @@ class DB
   /// Creates the database and corresponding tables
   Future _onCreate(Database db, int version) async
   {
+    print('before creating tables');
     await db.execute("""CREATE TABLE $_bubble ($_bID INTEGER PRIMARY KEY AUTOINCREMENT, 
                         $_title TEXT NOT NULL, $_description TEXT NOT NULL, 
                         $_color_red INTEGER NOT NULL, $_color_green INTEGER NOT NULL, 
@@ -90,15 +91,19 @@ class DB
                         $_posX REAL, $_posY REAL, $_time_created TEXT NOT NULL, 
                         $_time_deleted TEXT, $_frequency INTEGER, $_days_to_repeat TEXT, 
                         $_times_popped INTEGER)""");
+    print('Created bubble');
     await db.execute("""CREATE TABLE $_pop ($_pID INTEGER PRIMARY KEY AUTOINCREMENT, 
                         $_bID INTEGER NOT NULL, $_time_of_pop TEXT NOT NULL, $_action TEXT, 
                         FOREIGN KEY ($_bID) REFERENCES bubble($_bID))""");
+    print('Created pop');
     await db.execute("""CREATE TABLE $_app_state ($_loginID INTEGER PRIMARY KEY AUTOINCREMENT, 
                         $_last_opened TEXT)""");
+    print('Created app state');
     await db.execute("""CREATE TABLE $_color_themes ($_colorID INTEGER PRIMARY KEY AUTOINCREMENT,
                         $_color_name TEXT, $_color_red INTEGER, $_color_green, $_color_blue INTEGER, 
                         $_opacity REAL, $_theme_name TEXT, $_theme_pair TEXT)""");
-    await populateColorThemes();
+    print('Created colors');
+    //await populateColorThemes();
   }
 
 ///
@@ -205,7 +210,7 @@ class DB
   {
     Database db = await instance.database;
     int currPop;
-    try { currPop = (await db.query(_bubble, columns: ['$_times_popped'], where: '$_bID = ?', whereArgs: [bID])).first['times_popped']; }
+    try { currPop = (await db.query(_bubble, columns: ['$_times_popped'], where: '$_bID = ?', whereArgs: [bID])).first['$_times_popped']; }
     catch(e) {print(e); return 0; }
     try { return await db.update(_bubble, {'$_times_popped': currPop+1}, where: '$_bID = ?', whereArgs: [bID]); }
     catch(e) {print(e); return 0; }
@@ -465,7 +470,9 @@ class DB
   ///refreshes the DB, drops and recreates tables
   void refreshDB() async
   {
+    print('Here');
     Database db = await instance.database;
+    print('Here 2');
     db.execute("DROP TABLE $_bubble;");
     db.execute("DROP TABLE $_pop;");
     db.execute("DROP TABLE $_app_state");
