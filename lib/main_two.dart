@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'iamthebubble.dart';
+import 'bubble_widget.dart';
+//import 'iamthebubble.dart';
 import 'list_widget.dart';
 import 'bubbles.dart';
 import 'themeSelection.dart';
 import 'themes.dart';
 import 'database.dart';
+import 'settingsScreen.dart';
 
 final db = DB.instance;
 void main() => runApp(BubbleView());
@@ -84,12 +86,18 @@ class BubbleAppState extends State<BubbleApp>{
     return new BubbleWidget(_bList, _theme);
   }
 
+  Widget _buildSettingsScreen() {
+    return new SettingsScreen(_bList, _theme);
+  }
+
   Widget build(BuildContext context){
     return PageView(
       children: <Widget>[
+        _buildSettingsScreen(),
         _buildBubbleView(),
         _buildListView(),
       ],
+      controller: PageController(initialPage: 1),
       pageSnapping: true,
     );
   }

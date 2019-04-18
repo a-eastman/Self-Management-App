@@ -20,6 +20,9 @@ class Bubble
   int _bubbleID;        // bID of the bubble from the DB
 
   bool _shouldDelete;    //If the bubble is set to delete or not
+  bool _dotAppear = false;
+  bool _lastActionGrabbed = true;
+  int _globalIndex = 0;
 
   bool repeat;
   bool repeatMonday;
@@ -44,6 +47,8 @@ class Bubble
   static final int _defBehind = 0;
   static final int _defInfront = 0;
   static final List<double> _sizes = [0.15, 0.2, 0.25, 0.35];
+
+  static int _globalBubbleIndex = 0;
 
   //Database variable
   final db = DB.instance;
@@ -117,7 +122,7 @@ class Bubble
     repeatSunday =false;
 
     //when this bubble is created, inserts new values into the database
-    insertBubble();
+    //insertBubble();
   }
 
   ///@author Martin Price
@@ -171,6 +176,22 @@ class Bubble
 
   int getBubbleID()
   { return _bubbleID; }
+
+  int globalIndex() => _bubbleID;
+
+  //Empty bubble constructor marked for deletion
+  Bubble.deleteBubble(){
+    _globalIndex = _globalBubbleIndex++;
+    _shouldDelete = true;
+  }
+  bool getDotAppear() => _dotAppear;
+  void setDotAppear(bool dotAppear){
+    this._dotAppear = dotAppear;
+  }
+  bool lastActionGrabbed() => _lastActionGrabbed;
+  void setLastActiongrabbed(bool lastActionGrabbed){
+    this._lastActionGrabbed = lastActionGrabbed;
+  } 
 
   bool getRepeat(){
     return repeat;
@@ -664,9 +685,13 @@ class BubblesList {
   void changeElementPressed(int i) {
     _myList[i].changePressed();
   }
+  void moveToFront(Bubble bubble){
+    _myList.remove(bubble);
+    _myList.add(bubble);
+  }
+  getIndex(Bubble bubble) => _myList.indexOf(bubble);
 
   //Sets the current list to the settings of another BubblesList
-
   void setTo(BubblesList nList) {
     _myList = nList.getList();
 

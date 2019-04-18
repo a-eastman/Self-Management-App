@@ -1,14 +1,16 @@
+/// Runs the SQLite database behind flutter
+/// @version 3.1: settings now integrated into a XML doc
+/// @author Martin Price
+/// @date April 2019
+
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+//import 'package:xml/xml.dart' as xml;
 import 'package:path/path.dart';
 import 'dart:async';
 import 'dart:io';
 
-/// Runs the SQLite database behind flutter
-/// @version 2.0: tables for bubbles, pop, state, and color
-/// @author Martin Price
-/// @date April
 class DB
 {
   //Final instance variables
@@ -47,6 +49,7 @@ class DB
   static final String _app_state = 'app_state';
   static final String _loginID = 'loginID';
   static final String _last_opened = 'last_opened';
+  static final String _font_size = 'font_size';
 
   //Table and columns for color themes
   static final String _color_themes = 'color_themes';

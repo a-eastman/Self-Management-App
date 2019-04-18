@@ -31,16 +31,8 @@ class MyHomePage extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             RaisedButton(
-              child: Text('insert values', style: TextStyle(fontSize: 20),),
-              onPressed: () { _testDB(); },
-            ),
-            RaisedButton(
               child: Text('Refresh', style: TextStyle(fontSize: 20),),
               onPressed: () { _refresh(); },
-            ),
-            RaisedButton(
-              child: Text('Test Attribute', style: TextStyle(fontSize: 20),),
-              onPressed: () { _queryPop(); },
             ),
             RaisedButton(
               child: Text('login', style: TextStyle(fontSize: 20),),
@@ -51,47 +43,11 @@ class MyHomePage extends StatelessWidget{
       ),
     );
   }
-
-  //Helper methods used by Martin to quickly test the DB
-  void _queryBub() async
-  {
-    final allBubbles = await db.queryBubble();
-    print("Printing Bubbles");
-    try{ allBubbles.forEach((row) => print(row)); }
-    catch (e) { print("No bubs"); }
-
-  }
-  void _queryPop() async
-  {
-    final allPop = await db.queryPop();
-    print("Printing popped");
-    try{ allPop.forEach((row) => print(row)); }
-    catch (e) { print("No pops"); }
-  }
-  void _insert() async
-  {
-  }
-  void _testDB() async
-  {
-    print('Printing out bubl table:');
-    final bubl = await db.queryBubble();
-    try{ bubl.forEach((row) => print(row)); }
-    catch(e) {print(e); }
-
-    print('Printing out pop_record table:');
-    final pop = await db.queryPop();
-    try{ pop.forEach((row) => print(row)); }
-    catch(e) {print(e); }
-  }
   void _refresh() async
   {
     print("Refreshing Bubl.db");
     await db.refreshDB();
-  }
-
-  void _testBubble() async
-  {
-    print("Testing a Bubble");
+    print('DB refreshed');
   }
 
   void _login() async
@@ -103,10 +59,5 @@ class MyHomePage extends StatelessWidget{
     final logins = await db.queryAppState();
     try{logins.forEach((row) => print(row)); }
     catch(e) {print(e); print('No logins found'); }
-  }
-
-  void _testColor()
-  {
-
   }
 }
