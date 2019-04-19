@@ -56,6 +56,7 @@ class BubbleApp extends StatefulWidget{
 }
 
 class BubbleAppState extends State<BubbleApp>{
+  static BubbleAppState instance;
   BubbleTheme _theme;
   Color globalBubbleColor;
   List<BubbleWidget> _myList;
@@ -64,6 +65,12 @@ class BubbleAppState extends State<BubbleApp>{
       this._theme, this.globalBubbleColor){
     this._bList =_bList;
     this._myList = _widList;
+    instance = this;
+  }
+
+  void updateState()
+  {
+    setState(() { });
   }
 
   void setBubbleColor(Color newBubbleColor){
@@ -98,8 +105,9 @@ class BubbleAppState extends State<BubbleApp>{
         _buildListView(),
       ],
       controller: PageController(initialPage: 1),
-      physics: ClampingScrollPhysics(),
+      physics: PageScrollPhysics(),
       pageSnapping: true,
+      //onPageChanged: (int page){setState(() { });},
     );
   }
 }

@@ -10,6 +10,7 @@ import 'themes.dart';
 import 'bubbles.dart';
 import 'add_widget.dart';
 import 'detail_widget.dart';
+import 'main.dart';
 
 // ignore: must_be_immutable
 class ListWidget extends StatefulWidget {
@@ -89,7 +90,7 @@ class ListWidgetState extends State<ListWidget> {
           new IconButton(
             icon: Icon(Icons.add_circle_outline),
             onPressed: () {
-              setState(() {
+              BubbleAppState.instance.setState(() {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
                       AddWidget(this._myList, _theme),
@@ -118,8 +119,9 @@ class ListWidgetState extends State<ListWidget> {
       ),
       subtitle: new Text(_bubble.getDescription()),
       onTap: () {
-        setState(() {
+        BubbleAppState.instance.setState(() {
           _bubble.changePressed();
+          _bubble.setDotAppear(!_bubble.getPressed());
         });
       },
       onLongPress: () {
