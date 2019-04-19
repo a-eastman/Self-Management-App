@@ -375,11 +375,11 @@ class Bubble
   }
 
   double getXPos(){
-    return this._xPos.clamp(0.0, 1.0);
+    return _xPos > 2.0 ? .5 :_xPos;
   }
 
   double getYPos(){
-    return this._yPos.clamp(0.0, 1.0);
+    return _yPos > 2.0 ? .5 :_yPos;
   }
 
   double getOpacity(){
@@ -448,7 +448,7 @@ class Bubble
     }
     
     this._xPos = (newXPos + (actualSize / 2.0)) / screenWidth;
-    updateXPos(_bubbleID, newXPos);
+    updateXPos(_bubbleID, this._xPos);
     print('Updating X Pos to $newXPos');
   }
   //Changes the Y position
@@ -462,7 +462,7 @@ class Bubble
     }
     
     this._yPos = (newYPos + (actualSize / 2.0) - 80) / screenHeight; // App bar height is 70
-    updateYPos(_bubbleID, newYPos);
+    updateYPos(_bubbleID, this._yPos);
     print('Updating Y Pos to $newYPos');
   }
   //Changes the opacity (0.0 to 1.0)
