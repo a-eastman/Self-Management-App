@@ -375,11 +375,11 @@ class Bubble
   }
 
   double getXPos(){
-    return this._xPos;
+    return this._xPos.clamp(0.0, 1.0);
   }
 
   double getYPos(){
-    return this._yPos;
+    return this._yPos.clamp(0.0, 1.0);
   }
 
   double getOpacity(){
@@ -439,25 +439,29 @@ class Bubble
 
   //Changes the X position
   void changeXPos(double newXPos, double actualSize, double screenWidth){
+    
     if ((newXPos + actualSize) > screenWidth){
       newXPos = screenWidth - actualSize;
     }
     else if(newXPos < 3.0){ //TODO: update to use screen constraint
       newXPos = 3.0;
     }
-    this._xPos = newXPos;
+    
+    this._xPos = (newXPos + (actualSize / 2.0)) / screenWidth;
     updateXPos(_bubbleID, newXPos);
     print('Updating X Pos to $newXPos');
   }
   //Changes the Y position
   void changeYPos(double newYPos, double actualSize, double screenHeight){
+    
     if ((newYPos + actualSize) > screenHeight){
       newYPos = screenHeight - actualSize;
     }
     else if(newYPos < 3.0){ //TODO: update to use screen constraint
       newYPos = 3.0;
     }
-    this._yPos = newYPos;
+    
+    this._yPos = (newYPos + (actualSize / 2.0) - 80) / screenHeight; // App bar height is 70
     updateYPos(_bubbleID, newYPos);
     print('Updating Y Pos to $newYPos');
   }
