@@ -44,6 +44,13 @@ class BubbleWidgetState extends State<BubbleWidget>{
   BubbleWidgetState(BubblesList _bList, BubbleTheme _theme){
     // this._bubble = _bubble;
     this._bList = _bList;
+    // Reset animation values
+    for (int i = 0; i < _bList.getSize(); i++)
+    {
+      var _bubble = _bList.getBubbleAt(i);
+      _bubble.setDotAppear(!_bubble.getPressed());
+      _bubble.setLastActiongrabbed(false);
+    }
     this._theme = _theme;
   }
 
