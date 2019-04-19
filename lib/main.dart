@@ -1,109 +1,67 @@
+
 import 'package:flutter/material.dart';
-import 'bubbleView.dart';
-import 'listView.dart';
-import 'bubbles.dart';
-import 'themes.dart';
-
-void main() => runApp(BubbleView());
+import 'database.dart';
 
 
-class BubbleApp extends StatefulWidget{
-  final BubbleTheme theme;
-  final Color globalBubbleColor;
-  BubblesList _bList = new BubblesList();
-  List<BubbleWidget> _widList = [];
+void main() => runApp(DBview());
+  final db = DB.instance;
 
-  BubbleApp({Key key, this.theme, this.globalBubbleColor,});
+class DBview extends StatelessWidget {
   @override
-  BubbleAppState createState() =>
-      BubbleAppState(_bList, _widList, theme, globalBubbleColor);
-}
-
-class BubbleAppState extends State<BubbleApp>{
-  BubbleTheme _theme;
-  Color globalBubbleColor;
-  List<BubbleWidget> _myList;
-  BubblesList _bList;
-  BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList,
-      this._theme, this.globalBubbleColor){
-    this._bList =_bList;
-    this._myList = _widList;
-  }
-  Bubble b0;
-  Bubble b1;
-  Bubble b2;
-
-  void setBubbleColor(Color newBubbleColor){
-    this.globalBubbleColor = newBubbleColor;
-  }
-
-  @override
-  void initState(){
-    super.initState();
-    //ThemeBloc themeBloc = new ThemeBloc();
-    _myList = [];
-    _bList = new BubblesList();
-    // b0 = new Bubble("Caeleb", "Nasoff", Colors.blue, 2,
-    //                  true, 50.0, 50.0, 0.8);
-    // b1 = new Bubble.defaultBubble();
-    // b2 = new Bubble("DOUG DIMMADOME",
-    //     "OWNER OF THE DIMSDALE DIMMADOME",
-    //     Colors.red,
-    //     3,
-    //     true,
-    //     0.2,
-    //     0.2,
-    //     1.0
-    // );
-    // _myList.add(BubbleWidget(bubble: b1));
-    // _bList.addBubble(b0);
-    // _myList.add(BubbleWidget(_bList, _theme));
-    // _myList.removeAt(0);
-    // _bList.removeBubbleAt(0);
-    // _myList.add(BubbleWidget(bubble: b2));
-    //_bList.addBubble(b1);
-    // _bList.addBubble(b0);
-    //_bList.addBubble(b2); //Cleared screen initially
-  }
-
-  ListWidget _buildListView(){
-    return new ListWidget(_bList, _myList, _theme);
-  }
-
-  Widget _buildBubbleView(){
-    return new BubbleWidget(_bList, _theme);
-  }
-
-  Widget build(BuildContext context){
-    return PageView(
-      children: <Widget>[
-        _buildBubbleView(),
-        _buildListView(),
-      ],
-      pageSnapping: true,
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'SQFlite Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
     );
   }
 }
 
-class BubbleView extends StatelessWidget {
-
+class MyHomePage extends StatelessWidget{
+  bool newDay;
   @override
   Widget build(BuildContext context){
-    final BubbleTheme theme =BubbleTheme();
-
-    return StreamBuilder<ThemeData>(
-      initialData: theme.buildBubbleTheme().data,
-      stream: theme.themeDataStream,
-      builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
-        return MaterialApp(
-          title: 'App3',
-          theme: snapshot.data,
-          home: BubbleApp(
-            theme: theme,
-          ),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('BUBL Test DB'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              child: Text('Refresh', style: TextStyle(fontSize: 20),),
+              onPressed: () { _refresh(); },
+            ),
+            RaisedButton(
+              child: Text('login', style: TextStyle(fontSize: 20),),
+              onPressed: () { _login(); },
+            ),
+          ],
+        ),
+      ),
     );
+  }
+  void _refresh() async
+  {
+    print("Refreshing Bubl.db");
+    await db.refreshDB();
+    print('DB refreshed');
+  }
 
+  void _login() async
+  {
+    print('Logging in now');
+    login();
+  }
+
+  ///determines whether it is a new day
+  void login() async
+  { 
+    newDay = await db.login();
+    if(newDay) print('New day'); 
+    else print('Welcome back!'); 
   }
 }

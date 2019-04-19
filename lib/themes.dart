@@ -34,14 +34,15 @@ class BubbleTheme {
     );
   }
 
-  DemoTheme buildBubbleTheme() {
+  DemoTheme buildOceanTheme() {
     return DemoTheme(
       'Bubble',
       ThemeData(
+        canvasColor: Colors.teal[100],
         brightness: Brightness.light,
-        buttonColor: Colors.blue,
-        accentColor: Colors.blue,
-        primaryColor: Colors.blue,
+        buttonColor: Colors.teal[300],
+        accentColor: Colors.teal[300],
+        primaryColor: Colors.teal[300],
       ));
   }
 
@@ -80,16 +81,16 @@ class BubbleTheme {
     );
   }
 
-  DemoTheme buildOceanTheme(){
+  DemoTheme buildBubbleTheme(){
     return DemoTheme(
       'Ocean',
       ThemeData(
-      backgroundColor: Colors.blue[100],
-      buttonColor: Colors.blue[100],
-      canvasColor: Colors.lightBlue[300],
+      backgroundColor: Colors.blue[300],
+      buttonColor: Colors.blue[300],
+      canvasColor: Colors.lightBlue[50],
       brightness: Brightness.light,
-      accentColor: Colors.blue[100],
-      primaryColor: Colors.blue[100])
+      accentColor: Colors.blue[300],
+      primaryColor: Colors.blue[300])
     );
   }
 }
