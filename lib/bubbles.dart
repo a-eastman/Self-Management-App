@@ -24,14 +24,14 @@ class Bubble
   bool _lastActionGrabbed = true;
   int _globalIndex = 0;
 
-  bool repeat;
-  bool repeatMonday;
-  bool repeatTuesday;
-  bool repeatWednesday;
-  bool repeatThursday;
-  bool repeatFriday;
-  bool repeatSaturday;
-  bool repeatSunday;
+  bool _repeat;
+  bool _repeatMonday;
+  bool _repeatTuesday;
+  bool _repeatWednesday;
+  bool _repeatThursday;
+  bool _repeatFriday;
+  bool _repeatSaturday;
+  bool _repeatSunday;
 
   //STATIC VARS
   static final String _defEntry = "Entry";
@@ -85,14 +85,14 @@ class Bubble
                                  // overlapping bubbles, set to 1.0 by default
     this._shouldDelete = false;
 
-    repeat = _frequency;
-    repeatMonday = _repeatMonday;
-    repeatTuesday = _repeatTuesday;
-    repeatWednesday = _repeatWednesday;
-    repeatThursday = _repeatThursday;
-    repeatFriday = _repeatFriday;
-    repeatSaturday = _repeatSaturday;
-    repeatSunday = _repeatSunday;
+    _repeat = _frequency;
+    this._repeatMonday = _repeatMonday;
+    this._repeatTuesday = _repeatTuesday;
+    this._repeatWednesday = _repeatWednesday;
+    this._repeatThursday = _repeatThursday;
+    this._repeatFriday = _repeatFriday;
+    this._repeatSaturday = _repeatSaturday;
+    this._repeatSunday = _repeatSunday;
     insertBubble();
   }
 
@@ -112,14 +112,14 @@ class Bubble
     this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
     this._shouldDelete = false;
-    repeat = false;
-    repeatMonday = false;
-    repeatTuesday =false;
-    repeatWednesday =false;
-    repeatThursday =false;
-    repeatFriday =false;
-    repeatSaturday =false;
-    repeatSunday =false;
+    this._repeat = false;
+    this._repeatMonday = false;
+    this._repeatTuesday =false;
+    this._repeatWednesday =false;
+    this._repeatThursday =false;
+    this._repeatFriday =false;
+    this._repeatSaturday =false;
+    this._repeatSunday =false;
 
     //when this bubble is created, inserts new values into the database
     //insertBubble();
@@ -161,7 +161,7 @@ class Bubble
   ///when this bubble is created, inserts new values into the database
   void insertBubble() async{
     int r = 0;
-    if(this.repeat)
+    if(this._repeat)
       r = 1;
     await db.insertBubble(_entry, _description, _color.red, _color.green, 
       _color.blue, _opacity, _sizeIndex, _xPos, _yPos, r, repeatToString());
@@ -194,24 +194,24 @@ class Bubble
   } 
 
   bool getRepeat(){
-    return repeat;
+    return _repeat;
   }
 
   ///Last update Martin Price
   ///When repeat is updated, app updates the DB
   void changeRepeat(){
-    repeat = !repeat;
+    _repeat = !_repeat;
     int value = 0;
-    if(repeat)
+    if(_repeat)
       value ++;
     updateFrequency(_bubbleID, value);
     print('Updating Frequecy to $value');
   }
 
   void setRepeat(bool r){
-    repeat = r;
+    _repeat = r;
     int value = 0;
-    if(repeat)
+    if(_repeat)
       value ++;
     updateFrequency(_bubbleID, value);
     print('Updating Frequecy to $value');
@@ -220,60 +220,60 @@ class Bubble
   bool getRepeatDay(String day){
     bool result = true;
     switch(day) {
-      case "Mon": {result = repeatMonday;}
+      case "Mon": {result = _repeatMonday;}
       break;
-      case "Tue": {result = repeatTuesday;}
+      case "Tue": {result = _repeatTuesday;}
       break;
-      case "Wed": {result = repeatWednesday;}
+      case "Wed": {result = _repeatWednesday;}
       break;
-      case "Thu": {result = repeatThursday;}
+      case "Thu": {result = _repeatThursday;}
       break;
-      case "Fri": {result = repeatFriday;}
+      case "Fri": {result = _repeatFriday;}
       break;
-      case "Sat": {result = repeatSaturday;}
+      case "Sat": {result = _repeatSaturday;}
       break;
-      case "Sun": {result = repeatSunday;}
+      case "Sun": {result = _repeatSunday;}
       break;
     }
     return result;
   }
 
-  void changeRepeatDay(String day){
-    switch(day) {
-      case "Mon": {repeatMonday = !repeatMonday;}
+  void changeRepeatDay(String _day){
+    switch(_day) {
+      case "Mon": {_repeatMonday = !_repeatMonday;}
       break;
-      case "Tue": {repeatTuesday = !repeatTuesday;}
+      case "Tue": {_repeatTuesday = !_repeatTuesday;}
       break;
-      case "Wed": {repeatWednesday = !repeatWednesday;}
+      case "Wed": {_repeatWednesday = !_repeatWednesday;}
       break;
-      case "Thu": {repeatThursday = !repeatThursday;}
+      case "Thu": {_repeatThursday = !_repeatThursday;}
       break;
-      case "Fri": {repeatFriday = !repeatFriday;}
+      case "Fri": {_repeatFriday = !_repeatFriday;}
       break;
-      case "Sat": {repeatSaturday = !repeatSaturday;}
+      case "Sat": {_repeatSaturday = !_repeatSaturday;}
       break;
-      case "Sun": {repeatSunday = !repeatSunday;}
+      case "Sun": {_repeatSunday = !_repeatSunday;}
       break;
     }
     String days = repeatToString();
     updateDaysToRepeat(_bubbleID, days);
   }
 
-  void setRepeatDay(String day, bool repeat){
-    switch(day) {
-      case "Mon": {repeatMonday = repeat;}
+  void setRepeatDay(String _day, bool _repeat){
+    switch(_day) {
+      case "Mon": {_repeatMonday = _repeat;}
       break;
-      case "Tue": {repeatTuesday = repeat;}
+      case "Tue": {_repeatTuesday = _repeat;}
       break;
-      case "Wed": {repeatWednesday = repeat;}
+      case "Wed": {_repeatWednesday = _repeat;}
       break;
-      case "Thu": {repeatThursday = repeat;}
+      case "Thu": {_repeatThursday = _repeat;}
       break;
-      case "Fri": {repeatFriday = repeat;}
+      case "Fri": {_repeatFriday = _repeat;}
       break;
-      case "Sat": {repeatSaturday = repeat;}
+      case "Sat": {_repeatSaturday = _repeat;}
       break;
-      case "Sun": {repeatSunday = repeat;}
+      case "Sun": {_repeatSunday = _repeat;}
       break;
     }
     String days = repeatToString();
@@ -285,19 +285,19 @@ class Bubble
   ///@author Martin Price
   String repeatToString(){
     String days = '';
-    if(repeatMonday)
+    if(_repeatMonday)
       days += 'Mon|';
-    if(repeatTuesday)
+    if(_repeatTuesday)
       days += 'Tue|';
-    if(repeatWednesday)
+    if(_repeatWednesday)
       days += 'Wed|';
-    if(repeatThursday)
+    if(_repeatThursday)
       days += 'Thu|';
-    if(repeatFriday)
+    if(_repeatFriday)
       days += 'Fri|';
-    if(repeatSaturday)
+    if(_repeatSaturday)
       days += 'Sat|';
-    if(repeatSunday)
+    if(_repeatSunday)
       days += 'Sun|';
     return days;
   }
