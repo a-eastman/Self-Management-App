@@ -20,7 +20,6 @@ class DBview extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget{
-  bool newDay;
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -54,14 +53,11 @@ class MyHomePage extends StatelessWidget{
   void _login() async
   {
     print('Logging in now');
-    login();
-  }
-
-  ///determines whether it is a new day
-  void login() async
-  { 
-    newDay = await db.login();
-    if(newDay) print('New day'); 
-    else print('Welcome back!'); 
+    final newDay = await db.login();
+    if(newDay) print('Logged in to a new day'); 
+    else print('Welcome back!');
+    final logins = await db.queryAppState();
+    try{logins.forEach((row) => print(row)); }
+    catch(e) {print(e); print('No logins found'); }
   }
 }

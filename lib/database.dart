@@ -387,13 +387,9 @@ class DB
   {
     Database db = await instance.database;
     try{ 
-      final result = await queryAppState();
-      if(result.isNotEmpty){
-        String s = result.first['$_last_opened'];
-        print('Last login time was $s');
-        return s;
-      }
-      else return "";
+      String s = (await db.query(_app_state, orderBy: '$_last_opened DESC')).first['$_last_opened'];
+      print('Last login time was $s');
+      return s;
     }
     catch (e) {print(e); return "";}
   }
@@ -404,15 +400,11 @@ class DB
   Future<bool> login() async
   {
     String lastTime = await latestLoginTime();
-    if(lastTime == "") {
-      print('no logins'); 
-      await enterLogin(new DateTime.now().toString()); 
-      return true; 
-    } // first time login
+    if(lastTime == "") {enterLogin(new DateTime.now().toString()); return true; } // first time login
     var prevTime = DateTime.parse(lastTime);
     var currTime = new DateTime.now();
     var diff = currTime.difference(prevTime);
-    await enterLogin(currTime.toString());
+    enterLogin(currTime.toString());
     return diff.inDays > 0;
   }
 
@@ -420,22 +412,24 @@ class DB
   Future<List<Map<String, dynamic>>> queryAppState() async
   {
     Database db = await instance.database;
-    try {return await db.query(_app_state, orderBy: '$_last_opened DESC');}
-    catch(e) {print(e); return []; }
+    try {return db.query(_app_state, orderBy: '$_last_opened DESC');}
+    catch(e) {print(e); return null; }
   }
 
 ///
 ///COLOR THEME TABLE
 ///
   ///@return a query of the color table
-  Future<List<Map<String, dynamic>>> queryColors() async{
+  Future<List<Map<String, dynamic>>> queryColors() async
+  {
     Database db = await instance.database;
     try{ return await db.query(_color_themes); }
     catch(e) { return []; }
   }
 
   ///@return a specifc color 
-  Future<Map<String, dynamic>> queryColorsByID(int cID) async{
+  Future<Map<String, dynamic>> queryColorsByID(int cID) async
+  {
     Database db = await instance.database;
     try{ return (await db.query(_color_themes, where: 
           '$_colorID = ?', whereArgs: [cID])).first; }
@@ -444,7 +438,8 @@ class DB
 
   /// Populates the color_theme table with pre deetermined patterns
   /// typically only used on initital startup 
-  void populateColorThemes() async{
+  void populateColorThemes() async
+  {
     Database db = await instance.database;
     Color c = Colors.blue;        //Bubble Theme
     await db.insert(_color_themes, {_color_name: 'blue', 
@@ -476,7 +471,8 @@ class DB
 ///FOR DEV USE ONLY
 ///
   ///refreshes the DB, drops and recreates tables
-  void refreshDB() async{
+  void refreshDB() async
+  {
     print('Here');
     Database db = await instance.database;
     print('Here 2');
@@ -486,7 +482,8 @@ class DB
     db.execute("DROP TABLE $_color_themes");
     createDB();
   }
-  void createDB() async{
+  void createDB() async
+  {
     Database db = await instance.database;
     await db.execute("""CREATE TABLE $_bubble ($_bID INTEGER PRIMARY KEY AUTOINCREMENT, 
                         $_title TEXT NOT NULL, $_description TEXT NOT NULL, 

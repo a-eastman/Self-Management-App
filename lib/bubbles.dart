@@ -120,7 +120,6 @@ class Bubble
     repeatFriday =false;
     repeatSaturday =false;
     repeatSunday =false;
-    this._bubbleID = -1;
 
     //when this bubble is created, inserts new values into the database
     //insertBubble();
@@ -175,9 +174,8 @@ class Bubble
     this._bubbleID = await db.queryLastCreatedBubbleID(); 
   }
 
-  int getBubbleID(){ 
-    return _bubbleID; 
-  }
+  int getBubbleID()
+  { return _bubbleID; }
 
   int globalIndex() => _bubbleID;
 
@@ -511,16 +509,15 @@ class Bubble
   ///@param bID : the bubble ID that is being looked for
   ///@param columnID : the column or attribute to return
   ///@return the attribute
-  Future<dynamic> queryBubble(int bID, List<String> columnID) async{
+  Future<dynamic> queryBubble(int bID, List<String> columnID) async
+  {
     Map<String, dynamic> result = await db.queryBubbleByID(bID, columnID);
     return result[columnID[0]];
   }
-  dynamic queryTitle(int bID){ 
-    return queryBubble(bID, ['title']); 
-  }
-  dynamic queryDesc(int bID){ 
-    return queryBubble(bID, ["description"]); 
-  }
+  dynamic queryTitle(int bID)
+  { return queryBubble(bID, ['title']); }
+  dynamic queryDesc(int bID)
+  { return queryBubble(bID, ["description"]); }
   dynamic querySize(int bID)
   { return queryBubble(bID, ["size"]); }
   dynamic queryXPos(int bID)
@@ -608,7 +605,7 @@ class BubblesList {
   ///@return bubbles : a populated list of bubbles
   ///@return [] : error or no bubbles
   ///@author Martin Price
-  void populateBubbles() async
+  Future<List<Bubble>> populateBubbles() async
   {
     this._numBubbles = 0;
     this._myList = [];
@@ -635,7 +632,7 @@ class BubblesList {
   ///Queries the database for bubbles that have not been popped today
   ///@return bubbles : a populated list of bubbles that have NOT been popped
   ///@author Martin Price 
-  void unpoppedBubbles() async
+  Future<List<Bubble>> unpoppedBubbles() async
   {
     this._numBubbles = 0;
     this._myList = [];

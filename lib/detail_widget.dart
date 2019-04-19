@@ -1,3 +1,9 @@
+///Screen for showing the details of a bubble
+///@author Abigail Eastman, Caeleb Nasoff, Chris Malitsky
+///
+///
+///LAST EDIT : April 19, 2019
+
 import 'package:flutter/material.dart';
 import 'themeSelection.dart';
 import 'themes.dart';
@@ -44,7 +50,7 @@ class DetailWidgetState extends State<DetailWidget> {
     this._screenWidth = _screenWidth;
   }
 
-  /// Creates a fake bubble to show in the details screen
+  /// Creates a fake bubble to show in the details screen.
   Widget fakeBubble(Bubble _bubble, double _screenHeight) {
     double _bSize = _screenHeight * _bubble.getSize();
     return new Container(
@@ -63,7 +69,7 @@ class DetailWidgetState extends State<DetailWidget> {
   }
 
   /// Builds the row to be shown in the details screen of
-  /// the repeat text with the checkbox
+  /// the repeat text with the checkbox.
   Widget _buildRepeat(Bubble _bubble) {
     final bool repeat = _bubble.getRepeat();
     return new Row(
@@ -121,7 +127,7 @@ class DetailWidgetState extends State<DetailWidget> {
   }
 
   /// Configures the Container on top of the
-  /// example bubble
+  /// example bubble.
   Widget getBottomSpacing(Bubble _bubble) {
     double height = 0;
     if (_bubble.getSizeIndex() == 3) {
@@ -137,7 +143,7 @@ class DetailWidgetState extends State<DetailWidget> {
   }
 
   /// Configures the Container on bottom of the
-  /// example bubble
+  /// example bubble.
   Widget getTopSpacing(Bubble _bubble) {
     double height = 0;
     if (_bubble.getSizeIndex() == 3) {
