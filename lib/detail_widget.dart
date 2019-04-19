@@ -15,21 +15,22 @@ import 'edit_widget.dart';
 class DetailWidget extends StatefulWidget {
   BubblesList myList; //List of bubbles
   BubbleTheme _theme;
-  Bubble bubble;
+  Bubble _bubble;
   double _screenHeight;
   double _screenWidth;
 
   //ListWidget({Key key, this.myList}) : super(key : key);
-  DetailWidget(BubblesList myList, BubbleTheme _theme, Bubble bubble, double _screenHeight, double _screenWidth) {
-    this.myList = myList;
+  DetailWidget(BubblesList _myList, BubbleTheme _theme, Bubble _bubble,
+      double _screenHeight, double _screenWidth) {
+    this.myList = _myList;
     this._theme = _theme;
-    this.bubble = bubble;
+    this._bubble = _bubble;
     this._screenHeight = _screenHeight;
     this._screenWidth = _screenWidth;
   }
 
   DetailWidgetState createState() =>
-      DetailWidgetState(this.myList, this._theme, this.bubble, this._screenHeight, this._screenWidth);
+      DetailWidgetState(this.myList, this._theme, this._bubble, this._screenHeight, this._screenWidth);
 }
 
 class DetailWidgetState extends State<DetailWidget> {
@@ -42,10 +43,11 @@ class DetailWidgetState extends State<DetailWidget> {
   double _screenHeight;
   double _screenWidth;
 
-  DetailWidgetState(BubblesList myList, BubbleTheme _theme, Bubble bubble, double _screenHeight, double _screenWidth) {
-    this._myList = myList;
+  DetailWidgetState(BubblesList _myList, BubbleTheme _theme, Bubble _bubble,
+      double _screenHeight, double _screenWidth) {
+    this._myList = _myList;
     this._theme = _theme;
-    this._bubble = bubble;
+    this._bubble = _bubble;
     this._screenHeight = _screenHeight;
     this._screenWidth = _screenWidth;
   }
@@ -71,7 +73,7 @@ class DetailWidgetState extends State<DetailWidget> {
   /// Builds the row to be shown in the details screen of
   /// the repeat text with the checkbox.
   Widget _buildRepeat(Bubble _bubble) {
-    final bool repeat = _bubble.getRepeat();
+    final bool _repeat = _bubble.getRepeat();
     return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -80,8 +82,8 @@ class DetailWidgetState extends State<DetailWidget> {
           textScaleFactor: 1.25,
         ),
         new Icon(
-          repeat ? Icons.check_box : Icons.check_box_outline_blank,
-          color: repeat ? _bubble.getColor() : Colors.black,
+          _repeat ? Icons.check_box : Icons.check_box_outline_blank,
+          color: _repeat ? _bubble.getColor() : Colors.black,
         ),
       ],
     );
@@ -126,36 +128,20 @@ class DetailWidgetState extends State<DetailWidget> {
     }
   }
 
-  /// Configures the Container on top of the
+  /// Configures the Container on bottom and top of the
   /// example bubble.
-  Widget getBottomSpacing(Bubble _bubble) {
-    double height = 0;
+  Widget getSpacing(Bubble _bubble) {
+    double _height = 0;
     if (_bubble.getSizeIndex() == 3) {
-      height = 10;
+      _height = 10;
     } else if (_bubble.getSizeIndex() == 2) {
-      height = 25;
+      _height = 25;
     } else if (_bubble.getSizeIndex() == 1) {
-      height = 35;
+      _height = 35;
     } else if (_bubble.getSizeIndex() == 0) {
-      height = 50;
+      _height = 50;
     }
-    return new Container(height: height);
-  }
-
-  /// Configures the Container on bottom of the
-  /// example bubble.
-  Widget getTopSpacing(Bubble _bubble) {
-    double height = 0;
-    if (_bubble.getSizeIndex() == 3) {
-      height = 10;
-    } else if (_bubble.getSizeIndex() == 2) {
-      height = 25;
-    } else if (_bubble.getSizeIndex() == 1) {
-      height = 35;
-    } else if (_bubble.getSizeIndex() == 0) {
-      height = 50;
-    }
-    return new Container(height: height);
+    return new Container(height: _height);
   }
 
   @override
@@ -181,9 +167,9 @@ class DetailWidgetState extends State<DetailWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              getTopSpacing(_bubble),
+              getSpacing(_bubble),
               fakeBubble(_bubble, _screenHeight),
-              getBottomSpacing(_bubble),
+              getSpacing(_bubble),
               Text(
                 "Title: " + _bubble.getEntry(),
                 style: _biggerFont,
