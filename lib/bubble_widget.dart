@@ -60,6 +60,16 @@ class BubbleWidgetState extends State<BubbleWidget>{
     print("POP LENGTH");
     print(_popParticlesList.length);
   }
+  
+  // Animation values for tweaking
+  final double _bubbleOpacity = .8;                       // Opacity of bubble in bubble view
+  final int _ghostAppearMS = 250;                         // How long it takes ghost bubble to fade in after delay
+  final int _ghostDisappearMS = 100;                      // How long it takes ghost bubble to disappear when unpopped
+  final int _ghostAppearDelayMS = 500;                    // How long a delay after popping before ghost bubble starts to fade in
+  final int _normalAlphaMS = 100;                         // How long it takes for the bubble to fade in/out after popping/unpopping
+  final double _ghostOpacity = .3;                        // Opacity of ghost bubble
+  final Curve _sizeChangeCurve = ElasticOutCurve(.9);     // Curve of bubble resizing
+  final int _sizeChangeMS = 250;                          // Duration of bubble resizing
 
   Widget makeBubble(Bubble _bubble, BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
@@ -84,8 +94,8 @@ class BubbleWidgetState extends State<BubbleWidget>{
 
     return new AnimatedPositioned(
       key: Key(_bubble.globalIndex().toString()),
-      curve:  ElasticOutCurve(.9),
-      duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : 250),
+      curve: _sizeChangeCurve,
+      duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : _sizeChangeMS),
       width: _bSize,
       height: _bSize,
       top: _bubble.getYPos() - _bSize / 2.0,
@@ -127,7 +137,7 @@ class BubbleWidgetState extends State<BubbleWidget>{
                   {
                     _popParticlesList.add(PopParticles(_bubble, _screenWidth, _screenHeight));
                     cleanUpParticles();
-                    Timer(Duration(milliseconds: 500), () {
+                    Timer(Duration(milliseconds: _ghostAppearDelayMS), () {
                       setState(() {
                         if (!_bubble.getPressed())
                           _bubble.setDotAppear(true);
@@ -168,14 +178,14 @@ class BubbleWidgetState extends State<BubbleWidget>{
   {
     return new AnimatedOpacity(
       duration: isGhost
-      ? Duration(milliseconds: _bubble.getDotAppear() ? 250 : 100)
-      : Duration(milliseconds: 100),
+      ? Duration(milliseconds: _bubble.getDotAppear() ? _ghostAppearMS : _ghostDisappearMS)
+      : Duration(milliseconds: _normalAlphaMS),
       opacity: isGhost
-      ? _bubble.getDotAppear() ? 0.3 : 0.0
-      : _bubble.getPressed() ? _bubble.getOrgOpacity() * .8 : 0.0,
+      ? _bubble.getDotAppear() ? _ghostOpacity : 0.0
+      : _bubble.getPressed() ? _bubble.getOrgOpacity() * _bubbleOpacity : 0.0,
       child: AnimatedDefaultTextStyle(
-        curve:  ElasticOutCurve(.9),
-        duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : 250),
+        curve: _sizeChangeCurve,
+        duration: Duration(milliseconds: _bubble.lastActionGrabbed() ? 0 : _sizeChangeMS),
         style: _bubbleFont,
         child: new Container(
           decoration: new BoxDecoration(
