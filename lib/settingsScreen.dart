@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'bubbles.dart';
 import 'themeSelection.dart';
 import 'themes.dart';
-import 'database.dart';
 import 'fontSelection.dart';
 
 // ignore: must_be_immutable

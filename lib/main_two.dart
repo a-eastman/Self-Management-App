@@ -15,10 +15,10 @@ class BubbleView extends StatelessWidget {
   Widget build(BuildContext context){
     final BubbleTheme theme =BubbleTheme();
     BubblesList _bList = new BubblesList.newEmptyBubbleList();
-
+    //db.initXML().then((result){});
     return StreamBuilder<ThemeData>(
       initialData: theme.buildBubbleTheme().data,
-      //initialData: theme.buildXMLTheme().data,
+      //initialData: theme.getSelectedTheme().data,
       stream: theme.themeDataStream,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
         return MaterialApp(
@@ -67,6 +67,7 @@ class BubbleAppState extends State<BubbleApp>{
   void initState(){
     super.initState();
     populated = false;
+    db.initXML();
     _bList.populateBubblesForWidget().then((result){
       setState(() {
         populated = true;

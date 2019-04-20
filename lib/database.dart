@@ -77,6 +77,7 @@ class DB{
   /// Calls the initDB() for first time use
   /// Along side DB, also establishes the XML script
   Future<Database> get database async{
+    initXML();
     dict = await getApplicationDocumentsDirectory();
     if(_database !=null)
       return _database;
@@ -497,13 +498,15 @@ class DB{
     print('Created colors');
     await populateColorThemes();
     print('Populating colors');
+    initXML();
   }
 
   ///initializes the XML
-  void initXML() async{
+  Future<bool> initXML() async{
     dict = await getApplicationDocumentsDirectory();
     _xmlFile = openXMLScript();
     _settingsXML = await createXML();
+    return true;
   }
 
   ///opens and initializes the XML script page

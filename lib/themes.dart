@@ -94,9 +94,9 @@ class BubbleTheme {
     );
   }
 
-  DemoTheme buildXMLTheme(){
-    final xml = DB.instance;
-    int currTheme = xml.getStoredThemeID();
+  DemoTheme getSelectedTheme(){
+    DB.instance.initXML();
+    int currTheme = DB.instance.getStoredThemeID();
     switch(currTheme){
       case 1: return initialTheme(); break;
       case 2: return buildSunsetTheme(); break;
