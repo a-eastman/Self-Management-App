@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:async';
+import 'database.dart';
 
 class DemoTheme {
   final String name;
   final ThemeData data;
-
   const DemoTheme(this.name, this.data,);
 }
 
@@ -92,6 +92,18 @@ class BubbleTheme {
       accentColor: Colors.blue[300],
       primaryColor: Colors.blue[300])
     );
+  }
+
+  DemoTheme getSelectedTheme(){
+    DB.instance.initXML();
+    int currTheme = DB.instance.getStoredThemeID();
+    switch(currTheme){
+      case 1: return initialTheme(); break;
+      case 2: return buildSunsetTheme(); break;
+      case 3: return buildDuskTheme(); break;
+      case 4: return buildSunnyTheme(); break;
+      case 5: return buildOceanTheme(); break;
+    }
   }
 }
 

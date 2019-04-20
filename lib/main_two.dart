@@ -2,10 +2,9 @@
 import 'package:flutter/material.dart';
 import 'database.dart';
 
-
+final db = DB.instance;
+final xml = DB.instance;
 void main() => runApp(DBview());
-  final db = DB.instance;
-
 class DBview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,6 +21,7 @@ class DBview extends StatelessWidget {
 class MyHomePage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
+    xml.initXML();
     return Scaffold(
       appBar: AppBar(
         title: Text('BUBL Test DB'),
@@ -35,29 +35,29 @@ class MyHomePage extends StatelessWidget{
               onPressed: () { _refresh(); },
             ),
             RaisedButton(
-              child: Text('login', style: TextStyle(fontSize: 20),),
-              onPressed: () { _login(); },
+              child: Text('XML', style: TextStyle(fontSize: 20),),
+              onPressed: () { _printXML(); },
             ),
           ],
         ),
       ),
     );
   }
-  void _refresh() async
-  {
+  void _refresh() async{
     print("Refreshing Bubl.db");
     await db.refreshDB();
     print('DB refreshed');
+    print('Refreshing XML');
+    await db.refreshXML();
+    print('XML refreshed');
   }
 
-  void _login() async
-  {
-    print('Logging in now');
-    final newDay = await db.login();
-    if(newDay) print('Logged in to a new day'); 
-    else print('Welcome back!');
-    final logins = await db.queryAppState();
-    try{logins.forEach((row) => print(row)); }
-    catch(e) {print(e); print('No logins found'); }
+  void _printXML(){
+    print('Printing XML');
+    xml.printXML();
+    print('Font Size ${xml.getStoredFontSize()}');
+    print('Increasing font by 1');
+    xml.enterFontSize(xml.getStoredFontSize()+1);
+    print('Font Size ${xml.getStoredFontSize()}');
   }
 }
