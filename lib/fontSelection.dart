@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'themes.dart';
 import 'bubbles.dart';
+import 'database.dart';
 
 class FontSelectorPage extends StatefulWidget {
   final BubbleTheme theme;
@@ -23,6 +24,8 @@ class FontSelectorPageState extends State<FontSelectorPage>{
   BubblesList bublist;
   Color previewColor;
   Color bubbleColor;
+  final db = DB.instance;
+  
   Bubble preview = new Bubble.defaultBubble();
 
   FontSelectorPageState(this.theme, this.bublist, this.bubbleColor);
@@ -54,6 +57,8 @@ class FontSelectorPageState extends State<FontSelectorPage>{
   }
 
   DemoTheme _buildSmallTheme() {
+    db.enterFontSize(10.0);
+    print('Font size is now ${db.getStoredFontSize()}');
     return DemoTheme(
       'Small',
       ThemeData(
@@ -70,6 +75,8 @@ class FontSelectorPageState extends State<FontSelectorPage>{
   }
 
   DemoTheme _buildMediumTheme() {
+    db.enterFontSize(14.0);
+    print('Font size is now ${db.getStoredFontSize()}');
     return DemoTheme(
         'Medium',
         ThemeData(
@@ -86,6 +93,8 @@ class FontSelectorPageState extends State<FontSelectorPage>{
   }
 
   DemoTheme _buildLargeTheme() {
+    db.enterFontSize(18.0);
+    print('Font size is now ${db.getStoredFontSize()}');
     return DemoTheme(
         'Large',
         ThemeData(

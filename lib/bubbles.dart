@@ -593,6 +593,17 @@ class BubblesList {
     this._numBubbles = 0; //Initial size is 0
   }
 
+  Future<bool> populateBubblesForWidget() async{
+    bool newDay = await db.login();
+    print('Logged in!');
+    if(newDay){
+      print('New Day!');
+      return await populateBubbles();
+    }
+    print('Same Day');
+    return await unpoppedBubbles();
+  }
+
   ///Default Contrustor that calls the database for populating bubbles
   ///@author Martin Price
   BubblesList()
@@ -605,7 +616,7 @@ class BubblesList {
   ///@return bubbles : a populated list of bubbles
   ///@return [] : error or no bubbles
   ///@author Martin Price
-  Future<List<Bubble>> populateBubbles() async
+  Future<bool> populateBubbles() async
   {
     this._numBubbles = 0;
     this._myList = [];
@@ -620,6 +631,7 @@ class BubblesList {
       
       }
     }
+    print('finished bubbles for today');
   }
 
   ///Contructor used to gather bubbles that have not been popped yet today
@@ -632,7 +644,7 @@ class BubblesList {
   ///Queries the database for bubbles that have not been popped today
   ///@return bubbles : a populated list of bubbles that have NOT been popped
   ///@author Martin Price 
-  Future<List<Bubble>> unpoppedBubbles() async
+  Future<bool> unpoppedBubbles() async
   {
     this._numBubbles = 0;
     this._myList = [];
@@ -650,6 +662,7 @@ class BubblesList {
         } 
       }
     }
+    print('Finished unpopped bubbles');
   }
 
   List<Bubble> getList() {

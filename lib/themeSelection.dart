@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'themes.dart';
 import 'bubbles.dart';
+import 'database.dart';
 
 class ThemeSelectorPage extends StatefulWidget {
   final BubbleTheme theme;
@@ -19,6 +20,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   BubblesList bublist;
   Color previewColor;
   Color bubbleColor;
+  final db = DB.instance;
   Bubble preview = new Bubble.defaultBubble();
 
   ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
@@ -50,6 +52,8 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   }
 
   DemoTheme _buildBubbleTheme() {
+    db.enterThemeID(1);
+    print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.blue;
     previewColor = bubbleColor;
     preview.setColor(previewColor);
@@ -67,6 +71,8 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   }
 
   DemoTheme _buildSunsetTheme() {
+    db.enterThemeID(2);
+    print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.deepOrange[200];
     previewColor = bubbleColor;
     preview.setColor(previewColor);
@@ -84,6 +90,8 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   }
 
   DemoTheme _buildDuskTheme() {
+    db.enterThemeID(3);
+    print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.purple[200];
     previewColor =bubbleColor;
     preview.setColor(previewColor);
@@ -101,6 +109,8 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   }
 
   DemoTheme _buildSunnyTheme(){
+    db.enterThemeID(4);
+    print('Theme is now ${db.getStoredThemeID()}');
     this.bubbleColor = Colors.yellow[200];
     previewColor = bubbleColor;
     preview.setColor(previewColor);
@@ -120,6 +130,8 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   }
 
   DemoTheme _buildOceanTheme(){
+    db.enterThemeID(5);
+    print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.blue[100];
     previewColor = bubbleColor;
     preview.setColor(previewColor);

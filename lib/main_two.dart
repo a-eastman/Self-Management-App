@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'bubble_widget.dart';
-//import 'iamthebubble.dart';
 import 'list_widget.dart';
 import 'bubbles.dart';
-import 'themeSelection.dart';
 import 'themes.dart';
 import 'database.dart';
 import 'settingsScreen.dart';
@@ -16,13 +14,11 @@ class BubbleView extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     final BubbleTheme theme =BubbleTheme();
-    login();
-    BubblesList _bList;
-    if(newDay == true) {_bList = new BubblesList(); print('New Day'); }    // new day, fresh list
-    else {_bList = new BubblesList.unpoppedBubbles(); print('Welcome Back');}// same day
+    BubblesList _bList = new BubblesList.newEmptyBubbleList();
 
     return StreamBuilder<ThemeData>(
       initialData: theme.buildBubbleTheme().data,
+      //initialData: theme.buildXMLTheme().data,
       stream: theme.themeDataStream,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
         return MaterialApp(
@@ -36,10 +32,6 @@ class BubbleView extends StatelessWidget {
       },
     );
   }
-  
-  ///determines whether it is a new day
-  void login() async
-  { newDay = await db.login(); }
 }
 
 // ignore: must_be_immutable
@@ -60,6 +52,7 @@ class BubbleAppState extends State<BubbleApp>{
   Color globalBubbleColor;
   List<BubbleWidget> _myList;
   BubblesList _bList;
+  bool populated;
   BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList,
       this._theme, this.globalBubbleColor){
     this._bList =_bList;
@@ -73,11 +66,43 @@ class BubbleAppState extends State<BubbleApp>{
   @override
   void initState(){
     super.initState();
-    //setState(() {build(context);} );
+    populated = false;
+    _bList.populateBubblesForWidget().then((result){
+      setState(() {
+        populated = true;
+      });
+    });
     _myList = [];
-    //_bList = new BubblesList();
   }
 
+  Widget build(BuildContext context){
+    if(populated == false){
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Loading in'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator(),
+            ],
+          ),
+        ),
+      );
+    }
+    else{
+      return PageView(
+        children: <Widget>[
+          _buildSettingsScreen(),
+          _buildBubbleView(),
+          _buildListView(),
+        ],
+        controller: PageController(initialPage: 1),
+        pageSnapping: true,
+      );
+    }
+  }
   ListWidget _buildListView(){
     return new ListWidget(_bList, _theme);
   }
@@ -88,17 +113,5 @@ class BubbleAppState extends State<BubbleApp>{
 
   Widget _buildSettingsScreen() {
     return new SettingsScreen(_bList, _theme);
-  }
-
-  Widget build(BuildContext context){
-    return PageView(
-      children: <Widget>[
-        _buildSettingsScreen(),
-        _buildBubbleView(),
-        _buildListView(),
-      ],
-      controller: PageController(initialPage: 1),
-      pageSnapping: true,
-    );
   }
 }
