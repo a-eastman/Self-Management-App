@@ -607,7 +607,7 @@ class DB{
   }
 
   ///Gathers the settigns and returns them for initialziation
-  ///@return map : map collection of the settings
+  ///@return mapi : map collection of the settings
   Future<Map<String, Map<dynamic, dynamic>>> getSettings() async{
     await initXML();
     Map font = {_font_size: getStoredFontSize()};

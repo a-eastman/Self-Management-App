@@ -79,9 +79,8 @@ class BubbleAppState extends State<BubbleApp>{
     populatedBubbles = false;
     db.getSettings().then((result){
       setState(() {
-        _theme.selectedTheme.add(_theme.getSelectedTheme(result['theme']['current_theme']));
-        //_theme.selectedTheme.add(_theme.getSelectedFont(context, result['font']['font_size']));
-        populatedSettings = true; 
+        _theme.selectedTheme.add(_theme.getSelectedFont(context, result['font']['font_size']));
+        _theme.selectedTheme.add(_theme.getSelectedTheme(result['theme']['current_theme']));        populatedSettings = true; 
       });
     });
     _bList.populateBubblesForWidget().then((result){
