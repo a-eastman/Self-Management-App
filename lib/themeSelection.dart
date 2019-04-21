@@ -57,9 +57,9 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     bubbleColor = Colors.blue;
     previewColor = bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Bubble',
         ThemeData(
@@ -76,9 +76,9 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     bubbleColor = Colors.deepOrange[200];
     previewColor = bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Sunset',
         ThemeData(
@@ -95,9 +95,9 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     bubbleColor = Colors.purple[200];
     previewColor =bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Dusk',
         ThemeData(
@@ -114,9 +114,9 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     this.bubbleColor = Colors.yellow[200];
     previewColor = bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Sunny',
         ThemeData(
@@ -135,9 +135,9 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     bubbleColor = Colors.blue[100];
     previewColor = bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Ocean',
         ThemeData(
@@ -168,7 +168,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            new Center(child: _previewBubble(_screenHeight),),
+            new Center(),
             RaisedButton(
                 onPressed:() => theme.selectedTheme.add(_buildBubbleTheme()),
                 child: Text("Bubble")

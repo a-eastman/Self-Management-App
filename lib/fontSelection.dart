@@ -114,6 +114,15 @@ class FontSelectorPageState extends State<FontSelectorPage>{
     return bubbleColor;
   }
 
+  ///Returns the font size for initialization
+  DemoTheme getFontTheme(double fontSize){
+    switch(fontSize.truncate()){
+      case 10 : return _buildSmallTheme();
+      case 14 : return _buildMediumTheme();
+      case 18 : return _buildLargeTheme();
+    }
+  }
+
   @override
   Widget build(BuildContext context){
     double _screenHeight =MediaQuery.of(context).size.height;

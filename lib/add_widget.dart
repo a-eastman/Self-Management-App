@@ -86,6 +86,7 @@ class AddWidgetState extends State<AddWidget> {
 
   /// Makes the new Bubble
   void _makeBubble(){
+    int _frequency = 0;
     if(!_bubbleCreated){
       print('Make a new bubble!');
       if(!_repeat){
@@ -104,7 +105,7 @@ class AddWidgetState extends State<AddWidget> {
       }
 
       _newBubble = new Bubble(_myController.text, _myController2.text, _bColor,
-          _sizeIndex, true, 0.5, 0.5, 1.0, _repeat, _repeatMonday,
+          _sizeIndex, true, 0.5, 0.5, 1.0, _frequency, _repeat, _repeatMonday,
           _repeatTuesday, _repeatWednesday, _repeatThursday, _repeatFriday,
           _repeatSaturday, _repeatSunday);
       _bubbleCreated = true;

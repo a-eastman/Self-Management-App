@@ -73,7 +73,12 @@ class DetailWidgetState extends State<DetailWidget> {
   /// Builds the row to be shown in the details screen of
   /// the repeat text with the checkbox.
   Widget _buildRepeat(Bubble _bubble) {
-    final bool _repeat = _bubble.getRepeat();
+    bool _placeholder = false;
+    if (_bubble.getRepeat() != null)
+    {
+      _placeholder = _bubble.getRepeat();
+    }
+    final bool _repeat = _placeholder;
     return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -113,7 +118,11 @@ class DetailWidgetState extends State<DetailWidget> {
   /// Creates the row of days of the week that will appear if the
   /// bubble has repeat set to true.
   Widget _buildWeek(Bubble _bubble) {
-    if (_bubble.getRepeat()) {
+    bool _ph = false;
+    if (_bubble.getRepeat() != null){
+      _ph = _bubble.getRepeat();
+    }
+    if (_ph) {
       return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         _buildDay("Sun", _bubble),
         _buildDay("Mon", _bubble),
@@ -185,7 +194,7 @@ class DetailWidgetState extends State<DetailWidget> {
               ),
               Container(height: 20),
               Text(
-                "Size: " + _bubble.getSize().toInt().toString(),
+                "Size: " + _bubble.getSizeIndex().toString(),
                 style: _biggerFont,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,

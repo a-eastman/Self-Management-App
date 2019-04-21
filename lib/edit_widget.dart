@@ -50,6 +50,7 @@ class EditWidgetState extends State<EditWidget> {
   void initState() {
     super.initState();
     _temp = new Bubble.defaultBubble();
+    print('REPEAT: ' + _bubble.getRepeat().toString());
     _temp.setRepeat(_bubble.getRepeat());
     _temp.setRepeatDay("Mon", _bubble.getRepeatDay("Mon"));
     _temp.setRepeatDay("Tue", _bubble.getRepeatDay("Tue"));
@@ -77,7 +78,7 @@ class EditWidgetState extends State<EditWidget> {
     _bubble.setEntry(_myController.text);
     _bubble.setDescription(_myController2.text);
     _bubble.setSize(_temp.getSizeIndex());
-
+    _bubble.setColor(_temp.getColor());
     /// If none of the days are selected to repeat, then set
     /// the repeat value to false.
     if(!_temp.getRepeatDay("Mon") && !_temp.getRepeatDay("Tue") &&
@@ -117,7 +118,7 @@ class EditWidgetState extends State<EditWidget> {
       title: new Text("Repeat"),
       trailing: new Icon(
         repeat ? Icons.check_box : Icons.check_box_outline_blank,
-        color: repeat ? getBubbleColor(_myList) : Colors.black,
+        color: repeat ? _temp.getColor() : Colors.black,
       ),
       onTap: () {
         setState(() {
@@ -139,7 +140,7 @@ class EditWidgetState extends State<EditWidget> {
             child: new FlatButton(
                 child: new Icon(
                   _repeat ? Icons.check_box : Icons.check_box_outline_blank,
-                  color: _repeat ? getBubbleColor(_myList) : Colors.black,
+                  color: _repeat ? _temp.getColor() : Colors.black,
                 ),
                 onPressed: () {
                   setState(() {
@@ -215,11 +216,12 @@ class EditWidgetState extends State<EditWidget> {
                 })
                     .toList(),
               ),
+              _buildColorOptions(_screenWidth),
               _buildRepeat(),
               _buildWeek(_screenWidth),
               Container(height: 20),
               RaisedButton(
-                color: getBubbleColor(_myList),
+                color: _temp.getColor(),
                 onPressed: () {
                   _editBubble();
                   Navigator.pop(context);
@@ -229,6 +231,42 @@ class EditWidgetState extends State<EditWidget> {
             ],
           ),
         ]));
+  }
+
+  // Builds the individual buttons to select a color
+  Widget _buildColorOptionButton(String color, Color bubbleColor, double _screenWidth){
+    double _w = _screenWidth / 8;
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        new Container(
+          width: _w,
+          child: new RaisedButton(
+            color: bubbleColor,
+            onPressed: (){
+              setState(() {
+                _temp.setColor(bubbleColor);
+              });
+            },
+          ),
+        ),
+        new Text(color),
+      ],
+    );
+  }
+
+  // Builds the row of buttons
+  Widget _buildColorOptions(double _screenWidth){
+    return new Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        _buildColorOptionButton("Blue", Colors.blue[300], _screenWidth),
+        _buildColorOptionButton("Orange", Colors.orange[300], _screenWidth),
+        _buildColorOptionButton("Purple", Colors.purple[300], _screenWidth),
+        _buildColorOptionButton("Red", Colors.red[300], _screenWidth),
+        _buildColorOptionButton("Yellow", Colors.yellow[300], _screenWidth),
+      ],
+    );
   }
 
   /// Determines what color to make the bubble
