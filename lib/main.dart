@@ -5,6 +5,7 @@ import 'bubbles.dart';
 import 'themes.dart';
 import 'database.dart';
 import 'settingsScreen.dart';
+import 'stats.dart';
 
 final db = DB.instance;
 void main() => runApp(BubbleView());
@@ -105,6 +106,7 @@ class BubbleAppState extends State<BubbleApp>{
           _buildSettingsScreen(),
           _buildBubbleView(),
           _buildListView(),
+          _buildStatsScreen(),
         ],
         controller: PageController(initialPage: 1),
         pageSnapping: true,
@@ -121,5 +123,9 @@ class BubbleAppState extends State<BubbleApp>{
 
   Widget _buildSettingsScreen() {
     return new SettingsScreen(_bList, _theme);
+  }
+
+  Widget _buildStatsScreen(){
+    return new StatsWidget(_theme);
   }
 }

@@ -146,6 +146,13 @@ class DB{
     catch (e) { return null; }
   }
 
+  ///@return bubble, all columns
+  Future<Map<String, dynamic>> queryFullBubbleByID(int bID) async{
+    Database db = await instance.database;
+    try{ return (await db.query(_bubble, where: '$_bID = ?', whereArgs: [bID])).first;}
+    catch(e) {print(e); return null; }
+  }
+
   ///@return the bubble with matching bID
   Future<Map<String, dynamic>> queryBubbleByID(int bID, List<String> col) async
   {
