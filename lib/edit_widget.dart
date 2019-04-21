@@ -168,6 +168,42 @@ class EditWidgetState extends State<EditWidget> {
     }
   }
 
+    /// Builds the individual buttons to select a color based upon the screen width.
+  Widget _buildColorOptionButton(String _color, Color _bubbleColor, double _screenWidth){
+    double _w = _screenWidth / 8;
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        new Container(
+          width: _w,
+          child: new RaisedButton(
+            color: _bubbleColor,
+            onPressed: (){
+              setState(() {
+                _temp.setColor(_bubbleColor);
+              });
+            },
+          ),
+        ),
+        new Text(_color),
+      ],
+    );
+  }
+
+  /// Builds the row of buttons to change the color.
+  Widget _buildColorOptions(double _screenWidth){
+    return new Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        _buildColorOptionButton("Blue", Colors.blue[300], _screenWidth),
+        _buildColorOptionButton("Orange", Colors.orange[300], _screenWidth),
+        _buildColorOptionButton("Purple", Colors.purple[300], _screenWidth),
+        _buildColorOptionButton("Red", Colors.red[300], _screenWidth),
+        _buildColorOptionButton("Yellow", Colors.yellow[300], _screenWidth),
+      ],
+    );
+}
+
   @override
   Widget build(BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
@@ -215,6 +251,7 @@ class EditWidgetState extends State<EditWidget> {
                 })
                     .toList(),
               ),
+              _buildColorOptions(_screenWidth),
               _buildRepeat(),
               _buildWeek(_screenWidth),
               Container(height: 20),

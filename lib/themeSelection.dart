@@ -28,14 +28,14 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   //Bubble preview = new Bubble.defaultBubble();
 
   Widget _previewBubble(double _screenHeight){
-    if(bublist.getSize() == 0){
-      previewColor = Colors.blue;
-    }else{
-      previewColor = bublist.getBubbleAt(0).getColor();
-    }
-    preview.setColor(previewColor);
-    preview.setSize(1);
-    preview.setEntry("Preview Bubble");
+    // if(bublist.getSize() == 0){
+    //   previewColor = Colors.blue;
+    // }else{
+    //   previewColor = bublist.getBubbleAt(0).getColor();
+    // }
+    // preview.setColor(previewColor);
+    // preview.setSize(1);
+    // preview.setEntry("Preview Bubble");
     return new Container(
       width: preview.getSize() * _screenHeight,
       height: preview.getSize() * _screenHeight,
@@ -54,12 +54,12 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   DemoTheme _buildBubbleTheme() {
     db.enterThemeID(1);
     print('Theme is now ${db.getStoredThemeID()}');
-    bubbleColor = Colors.blue;
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // bubbleColor = Colors.blue;
+    // previewColor = bubbleColor;
+    // preview.setColor(previewColor);
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Bubble',
         ThemeData(
@@ -73,12 +73,12 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   DemoTheme _buildSunsetTheme() {
     db.enterThemeID(2);
     print('Theme is now ${db.getStoredThemeID()}');
-    bubbleColor = Colors.deepOrange[200];
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // bubbleColor = Colors.deepOrange[200];
+    // previewColor = bubbleColor;
+    // preview.setColor(previewColor);
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Sunset',
         ThemeData(
@@ -92,12 +92,12 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   DemoTheme _buildDuskTheme() {
     db.enterThemeID(3);
     print('Theme is now ${db.getStoredThemeID()}');
-    bubbleColor = Colors.purple[200];
-    previewColor =bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // bubbleColor = Colors.purple[200];
+    // previewColor =bubbleColor;
+    // preview.setColor(previewColor);
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Dusk',
         ThemeData(
@@ -112,11 +112,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     db.enterThemeID(4);
     print('Theme is now ${db.getStoredThemeID()}');
     this.bubbleColor = Colors.yellow[200];
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // previewColor = bubbleColor;
+    // preview.setColor(previewColor);
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Sunny',
         ThemeData(
@@ -133,11 +133,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     db.enterThemeID(5);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.blue[100];
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // previewColor = bubbleColor;
+    // preview.setColor(previewColor);
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Ocean',
         ThemeData(
