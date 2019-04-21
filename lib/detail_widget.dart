@@ -64,7 +64,7 @@ class DetailWidgetState extends State<DetailWidget> {
           shape: BoxShape.circle,
         ),
         child: new Center(
-          child: Text(_bubble.getEntry(), style: _bubbleFont),
+          child: Text(_bubble.getEntry()),
         ),
       ),
     );
@@ -84,7 +84,7 @@ class DetailWidgetState extends State<DetailWidget> {
       children: <Widget>[
         new Text(
           "Repeat      ",
-          textScaleFactor: 1.25,
+          //textScaleFactor: 1.25,
         ),
         new Icon(
           _repeat ? Icons.check_box : Icons.check_box_outline_blank,
@@ -181,28 +181,28 @@ class DetailWidgetState extends State<DetailWidget> {
               getSpacing(_bubble),
               Text(
                 "Title: " + _bubble.getEntry(),
-                style: _biggerFont,
+                //style: _biggerFont,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),
               Container(height: 20),
               Text(
                 "Description: " + _bubble.getDescription(),
-                style: _biggerFont,
+                //style: _biggerFont,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
               ),
               Container(height: 20),
               Text(
                 "Size: " + _bubble.getSizeIndex().toString(),
-                style: _biggerFont,
+                //style: _biggerFont,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),
               Container(height: 20),
               Text(
                 "Completed: " + _bubble.getNumPressed().toString(),
-                style: _biggerFont,
+                //style: _biggerFont,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),

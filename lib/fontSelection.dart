@@ -67,8 +67,9 @@ class FontSelectorPageState extends State<FontSelectorPage>{
         accentColor: Theme.of(context).accentColor,
         primaryColor: Theme.of(context).primaryColor,
         textTheme: TextTheme(
-          body1: TextStyle(fontSize: 10.0),
-          button: TextStyle(fontSize: 10.0),
+          body1: TextStyle(fontSize: 12.0),
+          button: TextStyle(fontSize: 12.0),
+          subhead: TextStyle(fontSize: 12.0),
         ),
       )
     );
@@ -87,6 +88,7 @@ class FontSelectorPageState extends State<FontSelectorPage>{
           textTheme: TextTheme(
             body1: TextStyle(fontSize: 14.0),
             button: TextStyle(fontSize: 14.0),
+            subhead: TextStyle(fontSize: 14.0),
           ),
         )
     );
@@ -105,6 +107,7 @@ class FontSelectorPageState extends State<FontSelectorPage>{
           textTheme: TextTheme(
             body1: TextStyle(fontSize: 18.0),
             button: TextStyle(fontSize: 18.0),
+            subhead: TextStyle(fontSize: 18.0),
           ),
         )
     );
