@@ -94,15 +94,76 @@ class BubbleTheme {
     );
   }
 
-  DemoTheme getSelectedTheme(){
-    DB.instance.initXML();
-    int currTheme = DB.instance.getStoredThemeID();
+  ///
+  ///Brought in methods from FontSelection to change the font
+  /// Without changing the theme
+  /// 
+
+  DemoTheme _buildSmallTheme(BuildContext context) {
+    return DemoTheme(
+      'Small',
+      ThemeData(
+        brightness: Theme.of(context).brightness,
+        buttonColor: Theme.of(context).buttonColor,
+        accentColor: Theme.of(context).accentColor,
+        primaryColor: Theme.of(context).primaryColor,
+        textTheme: TextTheme(
+          body1: TextStyle(fontSize: 10.0),
+          button: TextStyle(fontSize: 10.0),
+        ),
+      )
+    );
+  }
+
+  DemoTheme _buildMediumTheme(BuildContext context) {
+    return DemoTheme(
+        'Medium',
+        ThemeData(
+          brightness: Theme.of(context).brightness,
+          buttonColor: Theme.of(context).buttonColor,
+          accentColor: Theme.of(context).accentColor,
+          primaryColor: Theme.of(context).primaryColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: 14.0),
+            button: TextStyle(fontSize: 14.0),
+          ),
+        )
+    );
+  }
+
+  DemoTheme _buildLargeTheme(BuildContext context) {
+    return DemoTheme(
+        'Large',
+        ThemeData(
+          brightness: Theme.of(context).brightness,
+          buttonColor: Theme.of(context).buttonColor,
+          accentColor: Theme.of(context).accentColor,
+          primaryColor: Theme.of(context).primaryColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: 18.0),
+            button: TextStyle(fontSize: 18.0),
+          ),
+        )
+    );
+  }
+
+  ///@returns the specific theme based on param
+  DemoTheme getSelectedTheme(int currTheme){
     switch(currTheme){
       case 1: return initialTheme(); break;
       case 2: return buildSunsetTheme(); break;
       case 3: return buildDuskTheme(); break;
       case 4: return buildSunnyTheme(); break;
       case 5: return buildOceanTheme(); break;
+    }
+  }
+
+  ///Returns the font size for initialization
+  DemoTheme getSelectedFont(BuildContext context, double fontSize){
+    switch(fontSize.truncate()){
+      case 10 : return _buildSmallTheme(context); break;
+      case 14 : return _buildMediumTheme(context); break;
+      case 18 : return _buildLargeTheme(context); break;
     }
   }
 }

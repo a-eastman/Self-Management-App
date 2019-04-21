@@ -54,7 +54,8 @@ class BubbleAppState extends State<BubbleApp>{
   Color globalBubbleColor;
   List<BubbleWidget> _myList;
   BubblesList _bList;
-  bool populated;
+  bool populatedSettings;
+  bool populatedBubbles;
   BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList,
       this._theme, this.globalBubbleColor){
     this._bList =_bList;
@@ -74,18 +75,25 @@ class BubbleAppState extends State<BubbleApp>{
   @override
   void initState(){
     super.initState();
-    populated = false;
-    db.initXML();
+    populatedSettings = false;
+    populatedBubbles = false;
+    db.getSettings().then((result){
+      setState(() {
+        _theme.selectedTheme.add(_theme.getSelectedTheme(result['theme']['current_theme']));
+        //_theme.selectedTheme.add(_theme.getSelectedFont(context, result['font']['font_size']));
+        populatedSettings = true; 
+      });
+    });
     _bList.populateBubblesForWidget().then((result){
       setState(() {
-        populated = true;
+        populatedBubbles = true;
       });
     });
     _myList = [];
   }
 
   Widget build(BuildContext context){
-    if(populated == false){
+    if(populatedSettings == false){
       return Scaffold(
         appBar: AppBar(
           title: Text('Loading in'),
@@ -101,18 +109,36 @@ class BubbleAppState extends State<BubbleApp>{
       );
     }
     else{
-      return PageView(
-        children: <Widget>[
-          _buildSettingsScreen(),
-          _buildBubbleView(),
-          _buildListView(),
-          _buildStatsScreen(),
-        ],
-        controller: PageController(initialPage: 1),
-        pageSnapping: true,
-      );
+      if(populatedBubbles == false){
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Loading in'),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(),
+              ],
+            ),
+          ),
+        );
+      }
+      else{
+        return PageView(
+          children: <Widget>[
+            _buildSettingsScreen(),
+            _buildBubbleView(),
+            _buildListView(),
+            _buildStatsScreen(),
+          ],
+          controller: PageController(initialPage: 1),
+          pageSnapping: true,
+        );
+      }
     }
   }
+
   ListWidget _buildListView(){
     return new ListWidget(_bList, _theme);
   }

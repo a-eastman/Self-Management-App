@@ -605,4 +605,13 @@ class DB{
      _settingsXML = await createXML();
     print('Generated XML');
   }
+
+  ///Gathers the settigns and returns them for initialziation
+  ///@return map : map collection of the settings
+  Future<Map<String, Map<dynamic, dynamic>>> getSettings() async{
+    await initXML();
+    Map font = {_font_size: getStoredFontSize()};
+    Map theme = {_current_theme: getStoredThemeID()};
+    return {'font':font,'theme':theme};
+  }
 }
