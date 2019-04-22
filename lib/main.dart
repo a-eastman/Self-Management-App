@@ -23,6 +23,7 @@ class BubbleView extends StatelessWidget {
       stream: theme.themeDataStream,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Bubl with DB Integrated',
           theme: snapshot.data,
           home: BubbleApp(
