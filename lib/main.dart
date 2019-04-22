@@ -23,7 +23,8 @@ class BubbleView extends StatelessWidget {
       stream: theme.themeDataStream,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
         return MaterialApp(
-          title: 'Bubl with DB Integrated',
+          debugShowCheckedModeBanner: false,
+          title: 'BUBL',
           theme: snapshot.data,
           home: BubbleApp(
             theme: theme,
@@ -96,7 +97,7 @@ class BubbleAppState extends State<BubbleApp>{
     if(populatedSettings == false){
       return Scaffold(
         appBar: AppBar(
-          title: Text('Loading in'),
+          title: Text('BUBL'),
         ),
         body: Center(
           child: Column(
@@ -112,7 +113,7 @@ class BubbleAppState extends State<BubbleApp>{
       if(populatedBubbles == false){
         return Scaffold(
           appBar: AppBar(
-            title: Text('Loading in'),
+            title: Text('BUBL'),
           ),
           body: Center(
             child: Column(
@@ -130,7 +131,7 @@ class BubbleAppState extends State<BubbleApp>{
             //_buildSettingsScreen(),
             _buildBubbleView(),
             _buildListView(),
-            _buildStatsScreen(),
+            //_buildStatsScreen(),
           ],
           controller: PageController(initialPage: 0),
           pageSnapping: true,

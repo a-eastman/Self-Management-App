@@ -9,6 +9,7 @@ import 'detail_widget.dart';
 import 'pop_particles.dart';
 import 'dart:async';
 import 'settingsScreen.dart';
+import 'stats.dart';
 //import 'package:audioplayer/audioplayer.dart';
 
 // ignore: must_be_immutable
@@ -254,6 +255,17 @@ class BubbleWidgetState extends State<BubbleWidget>{
         ),
         title: Text('BUBL'),
         actions: <Widget>[
+          new IconButton(
+            icon: Icon(Icons.equalizer),
+            onPressed: () {
+              setState(() {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      StatsWidget(_theme),
+                ));
+              });
+            },
+          ),
           new IconButton(
             icon: Icon(Icons.add_circle_outline),
             onPressed: (){

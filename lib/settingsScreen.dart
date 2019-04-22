@@ -12,6 +12,7 @@ import 'bubbles.dart';
 import 'themeSelection.dart';
 import 'themes.dart';
 import 'fontSelection.dart';
+import 'stats.dart';
 
 // ignore: must_be_immutable
 class SettingsScreen extends StatefulWidget {
@@ -50,6 +51,7 @@ class SettingsScreenState extends State<SettingsScreen> {
       _buildThemeButton(),
       _buildFontSelection(),
       _buildTutorialButton(),
+      _buildStatsButton(),
     ],);
   }
 
@@ -96,6 +98,21 @@ class SettingsScreenState extends State<SettingsScreen> {
         title: Text(
           'Replay Tutorial',
         )
+    );
+  }
+
+  Widget _buildStatsButton() {
+    //TODO: make font selection update font size on settings screen
+    return ListTile(
+        title: Text(
+          'Statistics',
+        ),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                StatsWidget(_theme),
+          ));
+        }
     );
   }
 }

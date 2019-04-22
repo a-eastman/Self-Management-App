@@ -12,6 +12,7 @@ import 'add_widget.dart';
 import 'detail_widget.dart';
 import 'main.dart';
 import 'settingsScreen.dart';
+import 'stats.dart';
 
 // ignore: must_be_immutable
 class ListWidget extends StatefulWidget {
@@ -90,6 +91,17 @@ class ListWidgetState extends State<ListWidget> {
         ),
         title: Text("BUBL List View"),
         actions: <Widget>[
+          new IconButton(
+            icon: Icon(Icons.equalizer),
+            onPressed: () {
+              BubbleAppState.instance.setState(() {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      StatsWidget(_theme),
+                ));
+              });
+            },
+          ),
           new IconButton(
             icon: Icon(Icons.add_circle_outline),
             onPressed: () {
