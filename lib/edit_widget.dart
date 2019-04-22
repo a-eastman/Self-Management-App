@@ -60,6 +60,7 @@ class EditWidgetState extends State<EditWidget> {
     _temp.setRepeatDay("Sat", _bubble.getRepeatDay("Sat"));
     _temp.setRepeatDay("Sun", _bubble.getRepeatDay("Sun"));
     _temp.setSize(_bubble.getSizeIndex());
+    _temp.setColor(_bubble.getColor());
     _myController = TextEditingController(text: _bubble.getEntry());
     _myController2 = TextEditingController(text: _bubble.getDescription());
   }
