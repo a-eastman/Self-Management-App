@@ -121,7 +121,7 @@ class AddWidgetState extends State<AddWidget> {
       title: new Text("Repeat"),
       trailing: new Icon(
         _repeat ? Icons.check_box : Icons.check_box_outline_blank,
-        color: _repeat ? getBubbleColor(_myList) : Colors.black,
+        color: _repeat ? _bColor : Colors.black,
       ),
       onTap: () {
         setState(() {
@@ -145,7 +145,7 @@ class AddWidgetState extends State<AddWidget> {
             child: new FlatButton(
                 child: new Icon(
                   dayRepeat ? Icons.check_box : Icons.check_box_outline_blank,
-                  color: dayRepeat ? getBubbleColor(_myList) : Colors.black,
+                  color: dayRepeat ? _bColor : Colors.black,
                 ),
                 onPressed: () {
                   setState(() {
