@@ -1,3 +1,9 @@
+///Screen for showing the details of a bubble
+///@author Abigail Eastman, Caeleb Nasoff, Chris Malitsky
+///
+///
+///LAST EDIT : April 19, 2019
+
 import 'package:flutter/material.dart';
 import 'themeSelection.dart';
 import 'themes.dart';
@@ -9,17 +15,22 @@ import 'edit_widget.dart';
 class DetailWidget extends StatefulWidget {
   BubblesList myList; //List of bubbles
   BubbleTheme _theme;
-  Bubble bubble;
+  Bubble _bubble;
+  double _screenHeight;
+  double _screenWidth;
 
   //ListWidget({Key key, this.myList}) : super(key : key);
-  DetailWidget(BubblesList myList, BubbleTheme _theme, Bubble bubble) {
-    this.myList = myList;
+  DetailWidget(BubblesList _myList, BubbleTheme _theme, Bubble _bubble,
+      double _screenHeight, double _screenWidth) {
+    this.myList = _myList;
     this._theme = _theme;
-    this.bubble = bubble;
+    this._bubble = _bubble;
+    this._screenHeight = _screenHeight;
+    this._screenWidth = _screenWidth;
   }
 
   DetailWidgetState createState() =>
-      DetailWidgetState(this.myList, this._theme, this.bubble);
+      DetailWidgetState(this.myList, this._theme, this._bubble, this._screenHeight, this._screenWidth);
 }
 
 class DetailWidgetState extends State<DetailWidget> {
@@ -29,44 +40,55 @@ class DetailWidgetState extends State<DetailWidget> {
   BubblesList _myList;
   BubbleTheme _theme;
   Bubble _bubble;
+  double _screenHeight;
+  double _screenWidth;
 
-  DetailWidgetState(BubblesList myList, BubbleTheme _theme, Bubble bubble) {
-    this._myList = myList;
+  DetailWidgetState(BubblesList _myList, BubbleTheme _theme, Bubble _bubble,
+      double _screenHeight, double _screenWidth) {
+    this._myList = _myList;
     this._theme = _theme;
-    this._bubble = bubble;
+    this._bubble = _bubble;
+    this._screenHeight = _screenHeight;
+    this._screenWidth = _screenWidth;
   }
 
-  /// Creates a fake bubble to show in the details screen
-  Widget fakeBubble(Bubble _bubble) {
+  /// Creates a fake bubble to show in the details screen.
+  Widget fakeBubble(Bubble _bubble, double _screenHeight) {
+    double _bSize = _screenHeight * _bubble.getSize();
     return new Container(
-      width: _bubble.getSize(),
-      height: _bubble.getSize(),
+      width: _bSize,
+      height: _bSize,
       child: new Container(
         decoration: new BoxDecoration(
           color: _bubble.getColor(),
           shape: BoxShape.circle,
         ),
         child: new Center(
-          child: Text(_bubble.getEntry(), style: _bubbleFont),
+          child: Text(_bubble.getEntry()),
         ),
       ),
     );
   }
 
   /// Builds the row to be shown in the details screen of
-  /// the repeat text with the checkbox
+  /// the repeat text with the checkbox.
   Widget _buildRepeat(Bubble _bubble) {
-    final bool repeat = _bubble.getRepeat();
+    bool _placeholder = false;
+    if (_bubble.getRepeat() != null)
+    {
+      _placeholder = _bubble.getRepeat();
+    }
+    final bool _repeat = _placeholder;
     return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         new Text(
           "Repeat      ",
-          textScaleFactor: 1.25,
+          //textScaleFactor: 1.25,
         ),
         new Icon(
-          repeat ? Icons.check_box : Icons.check_box_outline_blank,
-          color: repeat ? _bubble.getColor() : Colors.black,
+          _repeat ? Icons.check_box : Icons.check_box_outline_blank,
+          color: _repeat ? _bubble.getColor() : Colors.black,
         ),
       ],
     );
@@ -76,11 +98,13 @@ class DetailWidgetState extends State<DetailWidget> {
   /// detail screen.
   Widget _buildDay(String day, Bubble _bubble) {
     final bool repeat = _bubble.getRepeatDay(day);
+    double _w = this._screenWidth / 7.5;
     return new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           new Container(
-            width: 55,
+            // width: 55,
+            width: _w,
             child: new FlatButton(
               child: new Icon(
                 repeat ? Icons.check_box : Icons.check_box_outline_blank,
@@ -91,11 +115,14 @@ class DetailWidgetState extends State<DetailWidget> {
           new Text(day),
         ]);
   }
-
   /// Creates the row of days of the week that will appear if the
   /// bubble has repeat set to true.
   Widget _buildWeek(Bubble _bubble) {
-    if (_bubble.getRepeat()) {
+    bool _ph = false;
+    if (_bubble.getRepeat() != null){
+      _ph = _bubble.getRepeat();
+    }
+    if (_ph) {
       return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         _buildDay("Sun", _bubble),
         _buildDay("Mon", _bubble),
@@ -110,40 +137,26 @@ class DetailWidgetState extends State<DetailWidget> {
     }
   }
 
-  /// Configures the Container on top of the
-  /// example bubble
-  Widget getBottomSpacing(Bubble _bubble) {
-    double height = 0;
+  /// Configures the Container on bottom and top of the
+  /// example bubble.
+  Widget getSpacing(Bubble _bubble) {
+    double _height = 0;
     if (_bubble.getSizeIndex() == 3) {
-      height = 10;
+      _height = 10;
     } else if (_bubble.getSizeIndex() == 2) {
-      height = 25;
+      _height = 25;
     } else if (_bubble.getSizeIndex() == 1) {
-      height = 35;
+      _height = 35;
     } else if (_bubble.getSizeIndex() == 0) {
-      height = 50;
+      _height = 50;
     }
-    return new Container(height: height);
-  }
-
-  /// Configures the Container on bottom of the
-  /// example bubble
-  Widget getTopSpacing(Bubble _bubble) {
-    double height = 0;
-    if (_bubble.getSizeIndex() == 3) {
-      height = 10;
-    } else if (_bubble.getSizeIndex() == 2) {
-      height = 25;
-    } else if (_bubble.getSizeIndex() == 1) {
-      height = 35;
-    } else if (_bubble.getSizeIndex() == 0) {
-      height = 50;
-    }
-    return new Container(height: height);
+    return new Container(height: _height);
   }
 
   @override
   Widget build(BuildContext context) {
+    double _screenHeight =MediaQuery.of(context).size.height;
+    double _screenWidth = MediaQuery.of(context).size.width;
     return new Scaffold(
       appBar: new AppBar(
         title: Text("Bubble: " + _bubble.getEntry()),
@@ -163,33 +176,33 @@ class DetailWidgetState extends State<DetailWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              getTopSpacing(_bubble),
-              fakeBubble(_bubble),
-              getBottomSpacing(_bubble),
+              getSpacing(_bubble),
+              fakeBubble(_bubble, _screenHeight),
+              getSpacing(_bubble),
               Text(
                 "Title: " + _bubble.getEntry(),
-                style: _biggerFont,
+                //style: _biggerFont,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),
               Container(height: 20),
               Text(
                 "Description: " + _bubble.getDescription(),
-                style: _biggerFont,
+                //style: _biggerFont,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
               ),
               Container(height: 20),
               Text(
-                "Size: " + _bubble.getSize().toInt().toString(),
-                style: _biggerFont,
+                "Size: " + _bubble.getSizeIndex().toString(),
+                //style: _biggerFont,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),
               Container(height: 20),
               Text(
                 "Completed: " + _bubble.getNumPressed().toString(),
-                style: _biggerFont,
+                //style: _biggerFont,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),
