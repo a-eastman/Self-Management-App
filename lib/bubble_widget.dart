@@ -9,6 +9,7 @@ import 'edit_widget.dart';
 import 'detail_widget.dart';
 import 'pop_particles.dart';
 import 'dart:async';
+import 'settingsScreen.dart';
 //import 'package:audioplayer/audioplayer.dart';
 
 // ignore: must_be_immutable
@@ -241,17 +242,19 @@ class BubbleWidgetState extends State<BubbleWidget>{
     //ThemeBloc themeBloc = new ThemeBloc();
     return Scaffold(
       appBar: AppBar(
-        title: Text('BUBL'),
-        actions: <Widget>[
-          new IconButton(
-            icon: Icon(Icons.brush),
-            onPressed: (){
+        leading: new IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            setState(() {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
-                    ThemeSelectorPage(theme: _theme, bublist: _bList),
+                    SettingsScreen(this._bList, _theme),
               ));
-            },
-          ),
+            });
+          },
+        ),
+        title: Text('BUBL'),
+        actions: <Widget>[
           new IconButton(
             icon: Icon(Icons.add_circle_outline),
             onPressed: (){

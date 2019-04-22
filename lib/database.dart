@@ -146,6 +146,13 @@ class DB{
     catch (e) { return null; }
   }
 
+  ///@return bubble, all columns
+  Future<Map<String, dynamic>> queryFullBubbleByID(int bID) async{
+    Database db = await instance.database;
+    try{ return (await db.query(_bubble, where: '$_bID = ?', whereArgs: [bID])).first;}
+    catch(e) {print(e); return null; }
+  }
+
   ///@return the bubble with matching bID
   Future<Map<String, dynamic>> queryBubbleByID(int bID, List<String> col) async
   {
@@ -597,5 +604,14 @@ class DB{
     print('Generating XML');     
      _settingsXML = await createXML();
     print('Generated XML');
+  }
+
+  ///Gathers the settigns and returns them for initialziation
+  ///@return map : map collection of the settings
+  Future<Map<String, Map<dynamic, dynamic>>> getSettings() async{
+    await initXML();
+    Map font = {_font_size: getStoredFontSize()};
+    Map theme = {_current_theme: getStoredThemeID()};
+    return {'font':font,'theme':theme};
   }
 }

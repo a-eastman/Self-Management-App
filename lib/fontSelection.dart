@@ -66,9 +66,12 @@ class FontSelectorPageState extends State<FontSelectorPage>{
         buttonColor: Theme.of(context).buttonColor,
         accentColor: Theme.of(context).accentColor,
         primaryColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).backgroundColor,
+        canvasColor: Theme.of(context).canvasColor,
         textTheme: TextTheme(
-          body1: TextStyle(fontSize: 10.0),
-          button: TextStyle(fontSize: 10.0),
+          body1: TextStyle(fontSize: 12.0),
+          button: TextStyle(fontSize: 12.0),
+          subhead: TextStyle(fontSize: 12.0),
         ),
       )
     );
@@ -84,9 +87,12 @@ class FontSelectorPageState extends State<FontSelectorPage>{
           buttonColor: Theme.of(context).buttonColor,
           accentColor: Theme.of(context).accentColor,
           primaryColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).backgroundColor,
+          canvasColor: Theme.of(context).canvasColor,
           textTheme: TextTheme(
             body1: TextStyle(fontSize: 14.0),
             button: TextStyle(fontSize: 14.0),
+            subhead: TextStyle(fontSize: 14.0),
           ),
         )
     );
@@ -102,9 +108,12 @@ class FontSelectorPageState extends State<FontSelectorPage>{
           buttonColor: Theme.of(context).buttonColor,
           accentColor: Theme.of(context).accentColor,
           primaryColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).backgroundColor,
+          canvasColor: Theme.of(context).canvasColor,
           textTheme: TextTheme(
             body1: TextStyle(fontSize: 18.0),
             button: TextStyle(fontSize: 18.0),
+            subhead: TextStyle(fontSize: 18.0),
           ),
         )
     );
@@ -112,6 +121,15 @@ class FontSelectorPageState extends State<FontSelectorPage>{
 
   Color getBubbleColor(){
     return bubbleColor;
+  }
+
+  ///Returns the font size for initialization
+  DemoTheme getFontTheme(double fontSize){
+    switch(fontSize.truncate()){
+      case 10 : return _buildSmallTheme();
+      case 14 : return _buildMediumTheme();
+      case 18 : return _buildLargeTheme();
+    }
   }
 
   @override

@@ -11,6 +11,7 @@ import 'bubbles.dart';
 import 'add_widget.dart';
 import 'detail_widget.dart';
 import 'main.dart';
+import 'settingsScreen.dart';
 
 // ignore: must_be_immutable
 class ListWidget extends StatefulWidget {
@@ -76,17 +77,19 @@ class ListWidgetState extends State<ListWidget> {
     _curList.orderBubbles(); // Puts the bubbles in order of highest priority.
     return Scaffold(
       appBar: AppBar(
-        title: Text("BUBL List View"),
-        actions: <Widget>[
-          new IconButton(
-            icon: Icon(Icons.brush),
-            onPressed: () {
+        leading: new IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            setState(() {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
-                    ThemeSelectorPage(theme: _theme, bublist: _curList),
+                    SettingsScreen(this._myList, _theme),
               ));
-            },
-          ),
+            });
+          },
+        ),
+        title: Text("BUBL List View"),
+        actions: <Widget>[
           new IconButton(
             icon: Icon(Icons.add_circle_outline),
             onPressed: () {
