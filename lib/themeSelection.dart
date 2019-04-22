@@ -22,7 +22,9 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   Color bubbleColor;
   final db = DB.instance;
   Bubble preview = new Bubble.defaultBubble();
-
+  
+  double get size => db.getStoredFontSize();
+  
   ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 
   //Bubble preview = new Bubble.defaultBubble();
@@ -67,6 +69,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           buttonColor: bubbleColor,
           accentColor: bubbleColor,
           primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
         ));
   }
 
@@ -86,6 +93,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           accentColor: bubbleColor,
           buttonColor: bubbleColor,
           primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
         ));
   }
 
@@ -105,6 +117,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           buttonColor: bubbleColor,
           accentColor: bubbleColor,
           primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
         ));
   }
 
@@ -125,7 +142,13 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
             canvasColor: Colors.blue[100],
             brightness: Brightness.light,
             accentColor: bubbleColor,
-            primaryColor: bubbleColor)
+            primaryColor: bubbleColor,
+            textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
+        )
     );
   }
 
@@ -146,7 +169,13 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
             canvasColor: Colors.lightBlue[300],
             brightness: Brightness.light,
             accentColor: bubbleColor,
-            primaryColor: bubbleColor)
+            primaryColor: bubbleColor,
+            textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
+        )
     );
   }
 
