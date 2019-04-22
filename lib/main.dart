@@ -132,7 +132,7 @@ class BubbleAppState extends State<BubbleApp>{
             _buildListView(),
             _buildStatsScreen(),
           ],
-          controller: PageController(initialPage: 1),
+          controller: PageController(initialPage: 0),
           pageSnapping: true,
         );
       }

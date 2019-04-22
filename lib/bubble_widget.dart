@@ -256,15 +256,6 @@ class BubbleWidgetState extends State<BubbleWidget>{
         title: Text('BUBL'),
         actions: <Widget>[
           new IconButton(
-            icon: Icon(Icons.brush),
-            onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ThemeSelectorPage(theme: _theme, bublist: _bList),
-              ));
-            },
-          ),
-          new IconButton(
             icon: Icon(Icons.add_circle_outline),
             onPressed: (){
               setState(() {

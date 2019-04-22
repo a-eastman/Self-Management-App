@@ -141,7 +141,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     return DemoTheme(
         'Ocean',
         ThemeData(
-            backgroundColor: bubbleColor,
+            backgroundColor: Colors.blue[300],
             buttonColor: bubbleColor,
             canvasColor: Colors.lightBlue[300],
             brightness: Brightness.light,

@@ -91,15 +91,6 @@ class ListWidgetState extends State<ListWidget> {
         title: Text("BUBL List View"),
         actions: <Widget>[
           new IconButton(
-            icon: Icon(Icons.brush),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ThemeSelectorPage(theme: _theme, bublist: _curList),
-              ));
-            },
-          ),
-          new IconButton(
             icon: Icon(Icons.add_circle_outline),
             onPressed: () {
               BubbleAppState.instance.setState(() {
