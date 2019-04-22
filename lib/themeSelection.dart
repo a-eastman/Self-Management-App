@@ -8,14 +8,14 @@ class ThemeSelectorPage extends StatefulWidget {
   final BubblesList bublist;
   final Color bubbleColor;
 
-  ThemeSelectorPage({Key key, this.theme, this.bublist,
-    this.bubbleColor}) : super(key: key);
+  ThemeSelectorPage({Key key, this.theme, this.bublist, this.bubbleColor})
+      : super(key: key);
 
   ThemeSelectorPageState createState() =>
       ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 }
 
-class ThemeSelectorPageState extends State<ThemeSelectorPage>{
+class ThemeSelectorPageState extends State<ThemeSelectorPage> {
   BubbleTheme theme;
   BubblesList bublist;
   Color previewColor;
@@ -23,14 +23,16 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   final db = DB.instance;
   Bubble preview = new Bubble.defaultBubble();
 
+  double get size => db.getStoredFontSize();
+
   ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 
   //Bubble preview = new Bubble.defaultBubble();
 
-  Widget _previewBubble(double _screenHeight){
-    if(bublist.getSize() == 0){
+  Widget _previewBubble(double _screenHeight) {
+    if (bublist.getSize() == 0) {
       previewColor = Colors.blue;
-    }else{
+    } else {
       previewColor = bublist.getBubbleAt(0).getColor();
     }
     preview.setColor(previewColor);
@@ -42,10 +44,12 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
       child: new Container(
         decoration: new BoxDecoration(
           color: preview.getColor(),
-          shape:BoxShape.circle,
+          shape: BoxShape.circle,
         ),
         child: new Center(
-          child: Text(preview.getEntry(),),
+          child: Text(
+            preview.getEntry(),
+          ),
         ),
       ),
     );
@@ -67,6 +71,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           buttonColor: bubbleColor,
           accentColor: bubbleColor,
           primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
         ));
   }
 
@@ -86,6 +95,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           accentColor: bubbleColor,
           buttonColor: bubbleColor,
           primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
         ));
   }
 
@@ -93,7 +107,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     db.enterThemeID(3);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.purple[200];
-    previewColor =bubbleColor;
+    previewColor = bubbleColor;
     preview.setColor(previewColor);
     // for(int i = 0; i < bublist.getSize(); i++){
     //   bublist.getBubbleAt(i).setColor(bubbleColor);
@@ -105,10 +119,15 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           buttonColor: bubbleColor,
           accentColor: bubbleColor,
           primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
         ));
   }
 
-  DemoTheme _buildSunnyTheme(){
+  DemoTheme _buildSunnyTheme() {
     db.enterThemeID(4);
     print('Theme is now ${db.getStoredThemeID()}');
     this.bubbleColor = Colors.yellow[200];
@@ -120,16 +139,21 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     return DemoTheme(
         'Sunny',
         ThemeData(
-            backgroundColor: Colors.blue[100],
-            buttonColor: bubbleColor,
-            canvasColor: Colors.blue[100],
-            brightness: Brightness.light,
-            accentColor: bubbleColor,
-            primaryColor: bubbleColor)
-    );
+          backgroundColor: Colors.blue[100],
+          buttonColor: bubbleColor,
+          canvasColor: Colors.blue[100],
+          brightness: Brightness.light,
+          accentColor: bubbleColor,
+          primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
+        ));
   }
 
-  DemoTheme _buildOceanTheme(){
+  DemoTheme _buildOceanTheme() {
     db.enterThemeID(5);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.blue[100];
@@ -141,24 +165,29 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     return DemoTheme(
         'Ocean',
         ThemeData(
-            backgroundColor: Colors.blue[300],
-            buttonColor: bubbleColor,
-            canvasColor: Colors.lightBlue[300],
-            brightness: Brightness.light,
-            accentColor: bubbleColor,
-            primaryColor: bubbleColor)
-    );
+          backgroundColor: Colors.blue[300],
+          buttonColor: bubbleColor,
+          canvasColor: Colors.lightBlue[300],
+          brightness: Brightness.light,
+          accentColor: bubbleColor,
+          primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
+        ));
   }
 
-  Color getBubbleColor(){
+  Color getBubbleColor() {
     return bubbleColor;
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     //Widget preview = _previewBubble();
     //String themeValue = 'Sunny Day';
-    double _screenHeight =MediaQuery.of(context).size.height;
+    double _screenHeight = MediaQuery.of(context).size.height;
     double _screenWidth = MediaQuery.of(context).size.width;
     return new Scaffold(
       appBar: new AppBar(
@@ -170,9 +199,8 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           children: <Widget>[
             new Center(),
             RaisedButton(
-                onPressed:() => theme.selectedTheme.add(_buildBubbleTheme()),
-                child: Text("Bubble")
-            ),
+                onPressed: () => theme.selectedTheme.add(_buildBubbleTheme()),
+                child: Text("Bubble")),
             RaisedButton(
               onPressed: () => theme.selectedTheme.add(_buildSunsetTheme()),
               child: Text("Sunset"),
@@ -189,9 +217,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
               onPressed: () => theme.selectedTheme.add(_buildOceanTheme()),
               child: Text("Ocean"),
             ),
-          ]
-      ),
+          ]),
     );
   }
-
 }
