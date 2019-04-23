@@ -2,7 +2,7 @@
 ///@author Abigail Eastman
 ///
 ///
-///LAST EDIT : April 13, 2019
+///LAST EDIT : April 19, 2019
 ///@author for EDIT ONLY : Martin Price
 ///
 ///Updated the add bubble functionality to only add a bubble at the end of the screen
@@ -16,16 +16,18 @@ import 'bubbles.dart';
 
 // ignore: must_be_immutable
 class AddWidget extends StatefulWidget {
-  BubblesList myList; //List of bubbles
+   /// The list of bubbles.
+  BubblesList _myList;
+  /// The theme data for this page.
   BubbleTheme _theme;
 
   //ListWidget({Key key, this.myList}) : super(key : key);
-  AddWidget(BubblesList myList, BubbleTheme _theme) {
-    this.myList = myList;
+  AddWidget(BubblesList _myList, BubbleTheme _theme) {
+    this._myList = _myList;
     this._theme = _theme;
   }
 
-  AddWidgetState createState() => AddWidgetState(this.myList, this._theme);
+  AddWidgetState createState() => AddWidgetState(this._myList, this._theme);
 }
 
 class AddWidgetState extends State<AddWidget> {
@@ -34,32 +36,32 @@ class AddWidgetState extends State<AddWidget> {
   BubblesList _myList;
   BubbleTheme _theme;
 
-  AddWidgetState(BubblesList myList, BubbleTheme _theme) {
-    this._myList = myList;
+  AddWidgetState(BubblesList _myList, BubbleTheme _theme) {
+    this._myList = _myList;
     this._theme = _theme;
   }
 
-  final myController = TextEditingController();
-  final myController2 = TextEditingController();
-  final myController3 = TextEditingController();
+  final _myController = TextEditingController();
+  final _myController2 = TextEditingController();
+  final _myController3 = TextEditingController();
 
   //Bubble newBubble = new Bubble.defaultBubble();
-  Bubble newBubble;
-  bool bubbleCreated = false;
+  Bubble _newBubble;
+  bool _bubbleCreated = false;
   //String entry = 'New Bubble Entry';
   //String desc = 'New Bubble Description';
-  int sizeIndex = 0;
-  bool repeat = false;
-  bool repeatMonday = false;
-  bool repeatTuesday = false;
-  bool repeatWednesday = false;
-  bool repeatThursday = false;
-  bool repeatFriday = false;
-  bool repeatSaturday = false;
-  bool repeatSunday = false;
-  Color bColor = Colors.blue;
-  FocusNode fn = FocusNode();
-  FocusNode fn2 = FocusNode();
+  int _sizeIndex = 0;
+  bool _repeat = false;
+  bool _repeatMonday = false;
+  bool _repeatTuesday = false;
+  bool _repeatWednesday = false;
+  bool _repeatThursday = false;
+  bool _repeatFriday = false;
+  bool _repeatSaturday = false;
+  bool _repeatSunday = false;
+  Color _bColor = Colors.blue;
+  FocusNode _fn = FocusNode();
+  FocusNode _fn2 = FocusNode();
 
   void initState() {
     super.initState();
@@ -68,52 +70,69 @@ class AddWidgetState extends State<AddWidget> {
   }
 
   void dispose() {
-    fn.dispose();
-    fn2.dispose();
-    myController.dispose();
-    myController2.dispose();
-    myController3.dispose();
+    _fn.dispose();
+    _fn2.dispose();
+    _myController.dispose();
+    _myController2.dispose();
+    _myController3.dispose();
     super.dispose();
   }
 
-  /// Edits the bubble with the information entered
+  /// Edits the bubble with the information entered by the user.
   void _editBubble() {
-    newBubble.setEntry(myController.text);
-    newBubble.setDescription(myController2.text);
+    _newBubble.setEntry(_myController.text);
+    _newBubble.setDescription(_myController2.text);
   }
 
-  ///Makes the new Bubble
+  /// Makes the new Bubble
   void _makeBubble(){
-    if(!bubbleCreated){
+    int _frequency = 0;
+    if(!_bubbleCreated){
       print('Make a new bubble!');
-      newBubble = new Bubble(myController.text, myController2.text, bColor, 
-        sizeIndex, true, 0.5, 0.5, 1.0, repeat, repeatMonday, repeatTuesday, repeatWednesday,
-        repeatThursday, repeatFriday, repeatSaturday, repeatSunday);
-      bubbleCreated = true;
+      if(!_repeat){
+        _repeatMonday = false;
+        _repeatTuesday = false;
+        _repeatWednesday = false;
+        _repeatThursday = false;
+        _repeatFriday = false;
+        _repeatSaturday = false;
+        _repeatSunday = false;
+      }
+      if(!_repeatMonday && !_repeatTuesday && !_repeatWednesday &&
+         !_repeatThursday && !_repeatFriday && !_repeatSaturday &&
+          !_repeatSunday){
+        _repeat = false;
+      }
+
+      _newBubble = new Bubble(_myController.text, _myController2.text, _bColor,
+          _sizeIndex, true, 0.5, 0.5, 1.0, _frequency, _repeat, _repeatMonday,
+          _repeatTuesday, _repeatWednesday, _repeatThursday, _repeatFriday,
+          _repeatSaturday, _repeatSunday);
+      _bubbleCreated = true;
     }
     else print('Bubble has already been made!');
   }
 
-  /// Creates the checkbox for repeating
+  /// Creates the checkbox for the repeating option.
   Widget _buildRepeat() {
     //final bool repeat = newBubble.getRepeat();
     //final bool bubRepeat = false;
     return new ListTile(
       title: new Text("Repeat"),
       trailing: new Icon(
-        repeat ? Icons.check_box : Icons.check_box_outline_blank,
-        color: repeat ? getBubbleColor(_myList) : Colors.black,
+        _repeat ? Icons.check_box : Icons.check_box_outline_blank,
+        color: _repeat ? _bColor : Colors.black,
       ),
       onTap: () {
         setState(() {
-          repeat = !repeat;
+          _repeat = !_repeat;
           //newBubble.changeRepeat();
         });
       },
     );
   }
 
-  /// Makes the day checkbox and label
+  /// Makes the day checkbox and label.
   Widget _buildDay(String day, double _screenWidth) {
     //final bool repeat = newBubble.getRepeatDay(day);
     final bool dayRepeat = getRepeatDay(day);
@@ -126,7 +145,7 @@ class AddWidgetState extends State<AddWidget> {
             child: new FlatButton(
                 child: new Icon(
                   dayRepeat ? Icons.check_box : Icons.check_box_outline_blank,
-                  color: dayRepeat ? getBubbleColor(_myList) : Colors.black,
+                  color: dayRepeat ? _bColor : Colors.black,
                 ),
                 onPressed: () {
                   setState(() {
@@ -139,50 +158,53 @@ class AddWidgetState extends State<AddWidget> {
         ]);
   }
 
-  ///Brought in @author Abigail methods from Bubble
-  bool getRepeatDay(String day){
-    bool result = true;
-    switch(day) {
-      case "Mon": {result = repeatMonday; }
+  /// Brought in @author Abigail methods from [Bubble].
+  /// Determines which day is being used.
+  bool getRepeatDay(String _day){
+    bool _result = true;
+    switch(_day) {
+      case "Mon": {_result = _repeatMonday; }
       break;
-      case "Tue": {result = repeatTuesday;}
+      case "Tue": {_result = _repeatTuesday;}
       break;
-      case "Wed": {result = repeatWednesday;}
+      case "Wed": {_result = _repeatWednesday;}
       break;
-      case "Thu": {result = repeatThursday;}
+      case "Thu": {_result = _repeatThursday;}
       break;
-      case "Fri": {result = repeatFriday;}
+      case "Fri": {_result = _repeatFriday;}
       break;
-      case "Sat": {result = repeatSaturday;}
+      case "Sat": {_result = _repeatSaturday;}
       break;
-      case "Sun": {result = repeatSunday;}
+      case "Sun": {_result = _repeatSunday;}
       break;
     }
-    return result;
+    return _result;
   }
-  void changeDayRepeat(String day){
-    switch(day) {
-      case "Mon": {repeatMonday = !repeatMonday; print('Monday is $repeatMonday');}
+  
+  /// Uses the [_day] to determine which boolean to change.
+  void changeDayRepeat(String _day){
+    switch(_day) {
+      case "Mon": {_repeatMonday = !_repeatMonday; print('Monday is $_repeatMonday');}
       break;
-      case "Tue": {repeatTuesday = !repeatTuesday;}
+      case "Tue": {_repeatTuesday = !_repeatTuesday;}
       break;
-      case "Wed": {repeatWednesday = !repeatWednesday;}
+      case "Wed": {_repeatWednesday = !_repeatWednesday;}
       break;
-      case "Thu": {repeatThursday = !repeatThursday;}
+      case "Thu": {_repeatThursday = !_repeatThursday;}
       break;
-      case "Fri": {repeatFriday = !repeatFriday;}
+      case "Fri": {_repeatFriday = !_repeatFriday;}
       break;
-      case "Sat": {repeatSaturday = !repeatSaturday;}
+      case "Sat": {_repeatSaturday = !_repeatSaturday;}
       break;
-      case "Sun": {repeatSunday = !repeatSunday;}
+      case "Sun": {_repeatSunday = !_repeatSunday;}
       break;
     }
   }
 
-  /// Creates the row of days of the week
+  /// Creates the row of days of the week.
   Widget _buildWeek(double _screenWidth) {
     //if (newBubble.getRepeat()) {
-    if(repeat){
+    if(_repeat){
       return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         _buildDay("Sun", _screenWidth),
         _buildDay("Mon", _screenWidth),
@@ -197,8 +219,8 @@ class AddWidgetState extends State<AddWidget> {
     }
   }
 
-    // Builds the individual buttons to select a color
-  Widget _buildColorOptionButton(String color, Color bubbleColor, double _screenWidth){
+  /// Builds the individual buttons to select a color based upon the screen width.
+  Widget _buildColorOptionButton(String _color, Color _bubbleColor, double _screenWidth){
     double _w = _screenWidth / 8;
     return new Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -206,20 +228,20 @@ class AddWidgetState extends State<AddWidget> {
         new Container(
           width: _w,
           child: new RaisedButton(
-            color: bubbleColor,
+            color: _bubbleColor,
             onPressed: (){
               setState(() {
-                bColor = bubbleColor;
+                _bColor = _bubbleColor;
               });
             },
           ),
         ),
-        new Text(color),
+        new Text(_color),
       ],
     );
   }
 
-  // Builds the row of buttons
+  /// Builds the row of buttons to change the color.
   Widget _buildColorOptions(double _screenWidth){
     return new Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -233,6 +255,7 @@ class AddWidgetState extends State<AddWidget> {
     );
 }
 
+  /// Builds the screen for the user to add a new bubble.
   @override
   Widget build(BuildContext context) {
     double _screenHeight =MediaQuery.of(context).size.height;
@@ -248,15 +271,15 @@ class AddWidgetState extends State<AddWidget> {
             children: <Widget>[
               TextFormField(
                 autofocus: true,
-                controller: myController,
+                controller: _myController,
                 decoration: const InputDecoration(
                   labelText: 'Task Name',
                 ),
               ),
               TextFormField(
                 autofocus: false,
-                focusNode: fn,
-                controller: myController2,
+                focusNode: _fn,
+                controller: _myController2,
                 decoration: const InputDecoration(
                   labelText: 'Description',
                 ),
@@ -266,10 +289,10 @@ class AddWidgetState extends State<AddWidget> {
                   labelText: 'Priority (0 to 3)',
                 ),
                 //value: newBubble.getSizeIndex(),
-                value: sizeIndex,
-                onChanged: (int newValue) {
+                value: _sizeIndex,
+                onChanged: (int _newValue) {
                   setState(() {
-                    sizeIndex = newValue;
+                    _sizeIndex = _newValue;
                     //newBubble.setSize(newValue);
                   });
                 },
@@ -287,11 +310,11 @@ class AddWidgetState extends State<AddWidget> {
               _buildWeek(_screenWidth),
               Container(height: 20),
               RaisedButton(
-                color: bColor,
+                color: _bColor,
                 onPressed: () {
                   //_editBubble();
                   _makeBubble();
-                  _myList.addBubble(newBubble);
+                  _myList.addBubble(_newBubble);
                   //newBubble.setColor(getBubbleColor(_myList));
                   Navigator.pop(context);
                 },
@@ -302,7 +325,7 @@ class AddWidgetState extends State<AddWidget> {
         ]));
   }
 
-  /// Determines what color to make the new bubble
+  /// Determines what color to make the new bubble.
   Color getBubbleColor(BubblesList _myList) {
     if (_myList.getSize() == 0) {
       return Colors.blue;

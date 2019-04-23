@@ -23,6 +23,7 @@ class Bubble
   bool _dotAppear = false;
   bool _lastActionGrabbed = true;
   int _globalIndex = 0;
+  int _frequency;
 
   bool repeat;
   bool repeatMonday;
@@ -54,7 +55,7 @@ class Bubble
   final db = DB.instance;
 
   Bubble(String _entry, String _description, Color _color, int _sizeIndex,
-      bool _pressed, double _xPos, double _yPos, double _orgOpacity, bool _frequency,
+      bool _pressed, double _xPos, double _yPos, double _orgOpacity, int _frequency, bool _repeat,
       bool _repeatMonday, bool _repeatTuesday, bool _repeatWednesday, 
       bool _repeatThursday, bool _repeatFriday, bool _repeatSaturday, bool _repeatSunday){
     this._entry = _entry;
@@ -85,14 +86,16 @@ class Bubble
                                  // overlapping bubbles, set to 1.0 by default
     this._shouldDelete = false;
 
-    repeat = _frequency;
-    repeatMonday = _repeatMonday;
-    repeatTuesday = _repeatTuesday;
-    repeatWednesday = _repeatWednesday;
-    repeatThursday = _repeatThursday;
-    repeatFriday = _repeatFriday;
-    repeatSaturday = _repeatSaturday;
-    repeatSunday = _repeatSunday;
+    this._frequency = _frequency;
+
+    this.repeat = _repeat;
+    this.repeatMonday = _repeatMonday;
+    this.repeatTuesday = _repeatTuesday;
+    this.repeatWednesday = _repeatWednesday;
+    this.repeatThursday = _repeatThursday;
+    this.repeatFriday = _repeatFriday;
+    this.repeatSaturday = _repeatSaturday;
+    this.repeatSunday = _repeatSunday;
     insertBubble();
   }
 
@@ -112,15 +115,15 @@ class Bubble
     this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
     this._shouldDelete = false;
-    repeat = false;
-    repeatMonday = false;
-    repeatTuesday =false;
-    repeatWednesday =false;
-    repeatThursday =false;
-    repeatFriday =false;
-    repeatSaturday =false;
-    repeatSunday =false;
-    this._bubbleID = -1;
+    this._frequency = 0;
+    this.repeat = false;
+    this.repeatMonday = false;
+    this.repeatTuesday =false;
+    this.repeatWednesday =false;
+    this.repeatThursday =false;
+    this.repeatFriday =false;
+    this.repeatSaturday =false;
+    this.repeatSunday =false;
 
     //when this bubble is created, inserts new values into the database
     //insertBubble();
@@ -132,7 +135,7 @@ class Bubble
   ///@version 1.1
   Bubble.BubbleFromDatabase(int _bID, String _entry, String _description,
       Color _color, int _sizeIndex, double _xPos, double _yPos,
-      double _orgOpacity, int times_popped, int frequency, String days)
+      double _orgOpacity, int times_popped, int frequency, bool repeat, String days)
   {
     this._bubbleID = _bID;
     this._entry = _entry;
@@ -156,6 +159,12 @@ class Bubble
     this._orgOpacity = _orgOpacity;
     this._opacity = _orgOpacity; 
     this._shouldDelete = false;
+    this._frequency = frequency;
+    if(frequency == 1){
+     this.repeat = true;
+   } else{
+     this.repeat = false;
+   }
     repeatFromString(days);
   }
 
@@ -175,9 +184,8 @@ class Bubble
     this._bubbleID = await db.queryLastCreatedBubbleID(); 
   }
 
-  int getBubbleID(){ 
-    return _bubbleID; 
-  }
+  int getBubbleID()
+  { return _bubbleID; }
 
   int globalIndex() => _bubbleID;
 
@@ -306,9 +314,57 @@ class Bubble
 
   ///Sets all the repeat varaibles based on the string from the DB
   void repeatFromString(String days){
-    try{ days.split('|').forEach((f) => {setRepeatDay(f, true)}); }
-    catch(e) {print('No days to repeat'); }
-  } 
+   //try{ days.split('|').forEach((f) => {setRepeatDay(f, true)}); }
+   //catch(e) {print('No days to repeat'); }
+
+   try{
+     List<String> day = days.split("|");
+     if(day.contains("Mon")){
+       repeatMonday = true;
+     }else{
+       repeatMonday = false;
+     }
+     if(day.contains("Tue")){
+       repeatTuesday = true;
+     }else{
+       repeatTuesday = false;
+     }
+     if(day.contains("Wed")){
+       repeatWednesday = true;
+     }else{
+       repeatWednesday = false;
+     }
+     if(day.contains("Thu")){
+       repeatThursday = true;
+     }else{
+       repeatThursday = false;
+     }
+     if(day.contains("Fri")){
+       repeatFriday = true;
+     }else{
+       repeatFriday = false;
+     }
+     if(day.contains("Sat")){
+       repeatSaturday = true;
+     }else{
+       repeatSaturday = false;
+     }
+     if(day.contains("Sun")){
+       repeatSunday = true;
+     }else{
+       repeatSunday = false;
+     }
+   }catch(e) {
+     print('No days to repeat');
+     repeatMonday = false;
+     repeatTuesday =false;
+     repeatWednesday =false;
+     repeatThursday =false;
+     repeatFriday =false;
+     repeatSaturday =false;
+     repeatSunday =false;
+   }
+ }
 
   bool getPressed(){
     return this._pressed;
@@ -321,7 +377,7 @@ class Bubble
       print('Bubble $_bubbleID Popped');
       db.updateBubbleTimesPopped(this._bubbleID);
     }
-    //increment();
+    increment();
   }
 
   ///Performs the same action as changePressed without updating DB
@@ -349,6 +405,7 @@ class Bubble
     if(_pressed == false){
       _numPressed++;
     }
+    print("PRESSED: " + _numPressed.toString());
   }
 
   // For testing purposes only!
@@ -377,11 +434,11 @@ class Bubble
   }
 
   double getXPos(){
-    return this._xPos;
+    return _xPos > 2.0 ? .5 :_xPos;
   }
 
   double getYPos(){
-    return this._yPos;
+    return _yPos > 2.0 ? .5 :_yPos;
   }
 
   double getOpacity(){
@@ -441,26 +498,30 @@ class Bubble
 
   //Changes the X position
   void changeXPos(double newXPos, double actualSize, double screenWidth){
+    
     if ((newXPos + actualSize) > screenWidth){
       newXPos = screenWidth - actualSize;
     }
     else if(newXPos < 3.0){ //TODO: update to use screen constraint
       newXPos = 3.0;
     }
-    this._xPos = newXPos;
-    updateXPos(_bubbleID, newXPos);
+    
+    this._xPos = (newXPos + (actualSize / 2.0)) / screenWidth;
+    updateXPos(_bubbleID, this._xPos);
     print('Updating X Pos to $newXPos');
   }
   //Changes the Y position
   void changeYPos(double newYPos, double actualSize, double screenHeight){
+    
     if ((newYPos + actualSize) > screenHeight){
       newYPos = screenHeight - actualSize;
     }
     else if(newYPos < 3.0){ //TODO: update to use screen constraint
       newYPos = 3.0;
     }
-    this._yPos = newYPos;
-    updateYPos(_bubbleID, newYPos);
+    
+    this._yPos = (newYPos + (actualSize / 2.0) - 80) / screenHeight; // App bar height is 70
+    updateYPos(_bubbleID, this._yPos);
     print('Updating Y Pos to $newYPos');
   }
   //Changes the opacity (0.0 to 1.0)
@@ -511,16 +572,15 @@ class Bubble
   ///@param bID : the bubble ID that is being looked for
   ///@param columnID : the column or attribute to return
   ///@return the attribute
-  Future<dynamic> queryBubble(int bID, List<String> columnID) async{
+  Future<dynamic> queryBubble(int bID, List<String> columnID) async
+  {
     Map<String, dynamic> result = await db.queryBubbleByID(bID, columnID);
     return result[columnID[0]];
   }
-  dynamic queryTitle(int bID){ 
-    return queryBubble(bID, ['title']); 
-  }
-  dynamic queryDesc(int bID){ 
-    return queryBubble(bID, ["description"]); 
-  }
+  dynamic queryTitle(int bID)
+  { return queryBubble(bID, ['title']); }
+  dynamic queryDesc(int bID)
+  { return queryBubble(bID, ["description"]); }
   dynamic querySize(int bID)
   { return queryBubble(bID, ["size"]); }
   dynamic queryXPos(int bID)
@@ -596,6 +656,17 @@ class BubblesList {
     this._numBubbles = 0; //Initial size is 0
   }
 
+  Future<bool> populateBubblesForWidget() async{
+    bool newDay = await db.login();
+    print('Logged in!');
+    if(newDay){
+      print('New Day!');
+      return await populateBubbles();
+    }
+    print('Same Day');
+    return await unpoppedBubbles();
+  }
+
   ///Default Contrustor that calls the database for populating bubbles
   ///@author Martin Price
   BubblesList()
@@ -608,7 +679,7 @@ class BubblesList {
   ///@return bubbles : a populated list of bubbles
   ///@return [] : error or no bubbles
   ///@author Martin Price
-  void populateBubbles() async
+  Future<bool> populateBubbles() async
   {
     this._numBubbles = 0;
     this._myList = [];
@@ -619,10 +690,12 @@ class BubblesList {
         addBubble(new Bubble.BubbleFromDatabase(y['bID'],y['title'],y['description'],
           new Color.fromRGBO(y['color_red'],y['color_green'],y['color_blue'],y['opacity']),
             y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped'], y['frequency'],
+            y['repeat'],
             y['days_to_repeat']));
       
       }
     }
+    print('finished bubbles for today');
   }
 
   ///Contructor used to gather bubbles that have not been popped yet today
@@ -635,7 +708,7 @@ class BubblesList {
   ///Queries the database for bubbles that have not been popped today
   ///@return bubbles : a populated list of bubbles that have NOT been popped
   ///@author Martin Price 
-  void unpoppedBubbles() async
+  Future<bool> unpoppedBubbles() async
   {
     this._numBubbles = 0;
     this._myList = [];
@@ -647,12 +720,14 @@ class BubblesList {
         addBubble(new Bubble.BubbleFromDatabase(y['bID'],y['title'],y['description'],
           new Color.fromRGBO(y['color_red'],y['color_green'], y['color_blue'],y['opacity']),
           y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped'], y['frequency'], 
+          y['repeat'],
           y['days_to_repeat']));
         if(!popped){
           _myList[_numBubbles-1].silentPop();
         } 
       }
     }
+    print('Finished unpopped bubbles');
   }
 
   List<Bubble> getList() {

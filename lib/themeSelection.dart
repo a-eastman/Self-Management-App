@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'themes.dart';
 import 'bubbles.dart';
+import 'database.dart';
 
 class ThemeSelectorPage extends StatefulWidget {
   final BubbleTheme theme;
@@ -19,8 +20,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   BubblesList bublist;
   Color previewColor;
   Color bubbleColor;
+  final db = DB.instance;
   Bubble preview = new Bubble.defaultBubble();
-
+  
+  double get size => db.getStoredFontSize();
+  
   ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 
   //Bubble preview = new Bubble.defaultBubble();
@@ -50,12 +54,14 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   }
 
   DemoTheme _buildBubbleTheme() {
+    db.enterThemeID(1);
+    print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.blue;
     previewColor = bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Bubble',
         ThemeData(
@@ -63,16 +69,23 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           buttonColor: bubbleColor,
           accentColor: bubbleColor,
           primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
         ));
   }
 
   DemoTheme _buildSunsetTheme() {
+    db.enterThemeID(2);
+    print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.deepOrange[200];
     previewColor = bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Sunset',
         ThemeData(
@@ -80,16 +93,23 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           accentColor: bubbleColor,
           buttonColor: bubbleColor,
           primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
         ));
   }
 
   DemoTheme _buildDuskTheme() {
+    db.enterThemeID(3);
+    print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.purple[200];
     previewColor =bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Dusk',
         ThemeData(
@@ -97,16 +117,23 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           buttonColor: bubbleColor,
           accentColor: bubbleColor,
           primaryColor: bubbleColor,
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
         ));
   }
 
   DemoTheme _buildSunnyTheme(){
+    db.enterThemeID(4);
+    print('Theme is now ${db.getStoredThemeID()}');
     this.bubbleColor = Colors.yellow[200];
     previewColor = bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Sunny',
         ThemeData(
@@ -115,26 +142,40 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
             canvasColor: Colors.blue[100],
             brightness: Brightness.light,
             accentColor: bubbleColor,
-            primaryColor: bubbleColor)
+            primaryColor: bubbleColor,
+            textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
+        )
     );
   }
 
   DemoTheme _buildOceanTheme(){
+    db.enterThemeID(5);
+    print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.blue[100];
     previewColor = bubbleColor;
     preview.setColor(previewColor);
-    for(int i = 0; i < bublist.getSize(); i++){
-      bublist.getBubbleAt(i).setColor(bubbleColor);
-    }
+    // for(int i = 0; i < bublist.getSize(); i++){
+    //   bublist.getBubbleAt(i).setColor(bubbleColor);
+    // }
     return DemoTheme(
         'Ocean',
         ThemeData(
-            backgroundColor: bubbleColor,
+            backgroundColor: Colors.blue[300],
             buttonColor: bubbleColor,
             canvasColor: Colors.lightBlue[300],
             brightness: Brightness.light,
             accentColor: bubbleColor,
-            primaryColor: bubbleColor)
+            primaryColor: bubbleColor,
+            textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),
+        )
     );
   }
 
@@ -156,7 +197,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            new Center(child: _previewBubble(_screenHeight),),
+            new Center(),
             RaisedButton(
                 onPressed:() => theme.selectedTheme.add(_buildBubbleTheme()),
                 child: Text("Bubble")

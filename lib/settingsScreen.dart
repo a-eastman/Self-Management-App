@@ -1,5 +1,6 @@
 ///Launches the settings screen
-///@author Matt Rubien
+///@author Matt Rubin
+///created the screen and added functionality to access theme and font selection
 ///@date April 16, 2019
 ///
 ///@author FOR EDIT ONLY Martin Price
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'bubbles.dart';
 import 'themeSelection.dart';
 import 'themes.dart';
-import 'database.dart';
+import 'fontSelection.dart';
 
 // ignore: must_be_immutable
 class SettingsScreen extends StatefulWidget {
@@ -28,12 +29,6 @@ class SettingsScreen extends StatefulWidget {
 class SettingsScreenState extends State<SettingsScreen> {
   BubblesList _bubList;
   BubbleTheme _theme;
-  final Map<String, double> _sizeMap = { //maps strings to font sizes
-    'small' : 10.0,
-    'medium' : 14.0,
-    'large' : 18.0,
-  };
-  String _sizeString = 'medium';
 
   SettingsScreenState(BubblesList list, BubbleTheme theme) {
     this._bubList = list;
@@ -70,7 +65,6 @@ class SettingsScreenState extends State<SettingsScreen> {
     return ListTile(
       title: Text(
         'Themes',
-        style: new TextStyle(fontSize: getFontSize()),
       ),
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
@@ -86,23 +80,12 @@ class SettingsScreenState extends State<SettingsScreen> {
     return ListTile(
       title: Text(
         'Font Size',
-        style: new TextStyle(fontSize: getFontSize()),
       ),
       onTap: () {
-        switch (_sizeString) {//test toggle
-          case 'small':
-            _sizeString = 'medium';
-            break;
-          case 'medium' :
-            _sizeString = 'large';
-            break;
-          case 'large' :
-            _sizeString = 'small';
-            break;
-          default:
-            _sizeString = 'medium';
-            break;
-        }
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              FontSelectorPage(theme: _theme, bublist: _bubList),
+        ));
       }
     );
   }
@@ -112,29 +95,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     return ListTile(
       title: Text(
         'Replay Tutorial',
-        style: new TextStyle(fontSize: getFontSize()),
       )
     );
-  }
-
-  //sets the font size using 'small', 'medium', or 'large'
-  //returns true if the value was successfully set
-  bool setFontSize(String s) {
-    if (_sizeMap.containsKey(s.toLowerCase())) {
-      _sizeString = s.toLowerCase();
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  //returns the current font size
-  double getFontSize() {
-    return _sizeMap[_sizeString];
-  }
-
-  //returns the current font size as a String containing 'small', 'medium', or 'large'
-  String getFontSizeString() {
-    return _sizeString;
   }
 }
