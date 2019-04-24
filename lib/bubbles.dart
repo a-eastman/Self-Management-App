@@ -332,11 +332,15 @@ class Bubble
     _pressed = !_pressed;
     if(!_pressed)
     {
-      db.insertPop(this._bubbleID);
+      db.insertPop(this._bubbleID).then((onValue){ print('Successful pop'); });
       print('Bubble $_bubbleID Popped');
-      db.updateBubbleTimesPopped(this._bubbleID);
+      db.incrementBubbleTimesPopped(this._bubbleID).then((onValue){ print('Successful increment'); });
     }
-    //increment();
+    else{
+      db.undoPop(this._bubbleID).then((onValue){ print('Successful unpop'); });
+      print('Bubble $_bubbleID Unpopped');
+      db.decrementBubbleTimesPopped(this._bubbleID).then((onValue){ print('Successful decrement'); });
+    }
   }
 
   ///Performs the same action as changePressed without updating DB
@@ -680,6 +684,7 @@ class BubblesList {
           y['days_to_repeat']));
         if(!popped){
           _myList[_numBubbles-1].silentPop();
+          print('Silent popping bubble ${_myList[_numBubbles-1].getBubbleID()}');
         } 
       }
     }
