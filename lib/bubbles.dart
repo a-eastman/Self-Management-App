@@ -306,6 +306,23 @@ class Bubble
   void repeatFromString(String days){
     try{ days.split('|').forEach((f) => {setRepeatDay(f, true)}); }
     catch(e) {print('No days to repeat'); }
+  }
+
+  ///determines if the bubble repeats today
+  ///if bubble is non repeating, defaults to true
+  bool repeatesToday(){
+    if(!this.repeat)
+      return true;
+    int day = new DateTime.now().weekday;
+    switch(day){
+      case 1: return this.repeatMonday; break;
+      case 2: return this.repeatTuesday; break;
+      case 3: return this.repeatWednesday; break;
+      case 4: return this.repeatThursday; break;
+      case 5: return this.repeatFriday; break;
+      case 6: return this.repeatSaturday; break;
+      case 7: return this.repeatSunday; break;
+    }
   } 
 
   bool getPressed(){
