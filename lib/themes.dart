@@ -34,7 +34,7 @@ class BubbleTheme {
     );
   }
 
-  DemoTheme buildOceanTheme() {
+  DemoTheme buildBubbleTheme() {
     return DemoTheme(
       'Bubble',
       ThemeData(
@@ -81,13 +81,14 @@ class BubbleTheme {
     );
   }
 
-  DemoTheme buildBubbleTheme(){
+  DemoTheme buildOceanTheme(){
     return DemoTheme(
       'Ocean',
       ThemeData(
+        
       backgroundColor: Colors.blue[300],
       buttonColor: Colors.blue[300],
-      canvasColor: Colors.lightBlue[50],
+      canvasColor: Colors.lightBlue[300],
       brightness: Brightness.light,
       accentColor: Colors.blue[300],
       primaryColor: Colors.blue[300])
@@ -157,7 +158,7 @@ class BubbleTheme {
       case 5: return buildOceanTheme(); break;
     }
   }
-
+  
   ///Returns the font size for initialization
   DemoTheme getSelectedFont(BuildContext context, double fontSize){
     switch(fontSize.truncate()){
@@ -167,4 +168,3 @@ class BubbleTheme {
     }
   }
 }
-

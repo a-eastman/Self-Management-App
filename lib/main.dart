@@ -23,6 +23,7 @@ class BubbleView extends StatelessWidget {
       stream: theme.themeDataStream,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Bubl with DB Integrated',
           theme: snapshot.data,
           home: BubbleApp(
@@ -80,7 +81,8 @@ class BubbleAppState extends State<BubbleApp>{
     db.getSettings().then((result){
       setState(() {
         _theme.selectedTheme.add(_theme.getSelectedFont(context, result['font']['font_size']));
-        _theme.selectedTheme.add(_theme.getSelectedTheme(result['theme']['current_theme']));        populatedSettings = true; 
+        _theme.selectedTheme.add(_theme.getSelectedTheme(result['theme']['current_theme']));        
+        populatedSettings = true; 
       });
     });
     _bList.populateBubblesForWidget().then((result){

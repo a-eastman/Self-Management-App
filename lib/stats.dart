@@ -62,7 +62,8 @@ class StatsWidgetState extends State<StatsWidget>{
     final y = await db.queryFullBubbleByID(bubbleMostPopped);
     preview = new Bubble.BubbleFromDatabase(y['bID'],y['title'],y['description'],
           new Color.fromRGBO(y['color_red'],y['color_green'], y['color_blue'],y['opacity']),
-          y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped'], y['frequency'], 
+          y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped'], y['frequency'],
+          y['repeat'], 
           y['days_to_repeat']);
     return true;
   }

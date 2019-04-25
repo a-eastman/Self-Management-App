@@ -23,6 +23,7 @@ class Bubble
   bool _dotAppear = false;
   bool _lastActionGrabbed = true;
   int _globalIndex = 0;
+  int _frequency;
 
   bool repeat;
   bool repeatMonday;
@@ -54,7 +55,7 @@ class Bubble
   final db = DB.instance;
 
   Bubble(String _entry, String _description, Color _color, int _sizeIndex,
-      bool _pressed, double _xPos, double _yPos, double _orgOpacity, bool _frequency,
+      bool _pressed, double _xPos, double _yPos, double _orgOpacity, int _frequency, bool _repeat,
       bool _repeatMonday, bool _repeatTuesday, bool _repeatWednesday, 
       bool _repeatThursday, bool _repeatFriday, bool _repeatSaturday, bool _repeatSunday){
     this._entry = _entry;
@@ -85,14 +86,16 @@ class Bubble
                                  // overlapping bubbles, set to 1.0 by default
     this._shouldDelete = false;
 
-    repeat = _frequency;
-    repeatMonday = _repeatMonday;
-    repeatTuesday = _repeatTuesday;
-    repeatWednesday = _repeatWednesday;
-    repeatThursday = _repeatThursday;
-    repeatFriday = _repeatFriday;
-    repeatSaturday = _repeatSaturday;
-    repeatSunday = _repeatSunday;
+    this._frequency = _frequency;
+
+    this.repeat = _repeat;
+    this.repeatMonday = _repeatMonday;
+    this.repeatTuesday = _repeatTuesday;
+    this.repeatWednesday = _repeatWednesday;
+    this.repeatThursday = _repeatThursday;
+    this.repeatFriday = _repeatFriday;
+    this.repeatSaturday = _repeatSaturday;
+    this.repeatSunday = _repeatSunday;
     insertBubble();
   }
 
@@ -112,14 +115,15 @@ class Bubble
     this._orgOpacity = _defOpacity;
     this._opacity =_defOpacity;
     this._shouldDelete = false;
-    repeat = false;
-    repeatMonday = false;
-    repeatTuesday =false;
-    repeatWednesday =false;
-    repeatThursday =false;
-    repeatFriday =false;
-    repeatSaturday =false;
-    repeatSunday =false;
+    this._frequency = 0;
+    this.repeat = false;
+    this.repeatMonday = false;
+    this.repeatTuesday =false;
+    this.repeatWednesday =false;
+    this.repeatThursday =false;
+    this.repeatFriday =false;
+    this.repeatSaturday =false;
+    this.repeatSunday =false;
 
     //when this bubble is created, inserts new values into the database
     //insertBubble();
@@ -131,7 +135,7 @@ class Bubble
   ///@version 1.1
   Bubble.BubbleFromDatabase(int _bID, String _entry, String _description,
       Color _color, int _sizeIndex, double _xPos, double _yPos,
-      double _orgOpacity, int times_popped, int frequency, String days)
+      double _orgOpacity, int times_popped, int frequency, bool repeat, String days)
   {
     this._bubbleID = _bID;
     this._entry = _entry;
@@ -155,6 +159,12 @@ class Bubble
     this._orgOpacity = _orgOpacity;
     this._opacity = _orgOpacity; 
     this._shouldDelete = false;
+    this._frequency = frequency;
+    if(frequency == 1){
+     this.repeat = true;
+   } else{
+     this.repeat = false;
+   }
     repeatFromString(days);
   }
 
@@ -301,13 +311,7 @@ class Bubble
       days += 'Sun|';
     return days;
   }
-
-  ///Sets all the repeat varaibles based on the string from the DB
-  void repeatFromString(String days){
-    try{ days.split('|').forEach((f) => {setRepeatDay(f, true)}); }
-    catch(e) {print('No days to repeat'); }
-  }
-
+  
   ///determines if the bubble repeats today
   ///if bubble is non repeating, defaults to true
   bool repeatesToday(){
@@ -324,6 +328,57 @@ class Bubble
       case 7: return this.repeatSunday; break;
     }
   } 
+  
+  ///Sets all the repeat varaibles based on the string from the DB
+  void repeatFromString(String days){
+   try{
+     List<String> day = days.split("|");
+     if(day.contains("Mon")){
+       repeatMonday = true;
+     }else{
+       repeatMonday = false;
+     }
+     if(day.contains("Tue")){
+       repeatTuesday = true;
+     }else{
+       repeatTuesday = false;
+     }
+     if(day.contains("Wed")){
+       repeatWednesday = true;
+     }else{
+       repeatWednesday = false;
+     }
+     if(day.contains("Thu")){
+       repeatThursday = true;
+     }else{
+       repeatThursday = false;
+     }
+     if(day.contains("Fri")){
+       repeatFriday = true;
+     }else{
+       repeatFriday = false;
+     }
+     if(day.contains("Sat")){
+       repeatSaturday = true;
+     }else{
+       repeatSaturday = false;
+     }
+     if(day.contains("Sun")){
+       repeatSunday = true;
+     }else{
+       repeatSunday = false;
+     }
+   }catch(e) {
+     print('No days to repeat');
+     repeatMonday = false;
+     repeatTuesday =false;
+     repeatWednesday =false;
+     repeatThursday =false;
+     repeatFriday =false;
+     repeatSaturday =false;
+     repeatSunday =false;
+   }
+ }
 
   bool getPressed(){
     return this._pressed;
@@ -341,6 +396,7 @@ class Bubble
       print('Bubble $_bubbleID Unpopped');
       db.decrementBubbleTimesPopped(this._bubbleID).then((onValue){ print('Successful decrement'); });
     }
+    //increment();
   }
 
   ///Performs the same action as changePressed without updating DB
@@ -368,6 +424,7 @@ class Bubble
     if(_pressed == false){
       _numPressed++;
     }
+    print("PRESSED: " + _numPressed.toString());
   }
 
   // For testing purposes only!
@@ -652,6 +709,7 @@ class BubblesList {
         addBubble(new Bubble.BubbleFromDatabase(y['bID'],y['title'],y['description'],
           new Color.fromRGBO(y['color_red'],y['color_green'],y['color_blue'],y['opacity']),
             y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped'], y['frequency'],
+            y['repeat'],
             y['days_to_repeat']));
       
       }
@@ -681,6 +739,7 @@ class BubblesList {
         addBubble(new Bubble.BubbleFromDatabase(y['bID'],y['title'],y['description'],
           new Color.fromRGBO(y['color_red'],y['color_green'], y['color_blue'],y['opacity']),
           y['size'], y['posX'], y['posX'], y['opacity'], y['times_popped'], y['frequency'], 
+          y['repeat'],
           y['days_to_repeat']));
         if(!popped){
           _myList[_numBubbles-1].silentPop();
