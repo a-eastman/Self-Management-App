@@ -128,12 +128,12 @@ class BubbleAppState extends State<BubbleApp>{
       else{
         return PageView(
           children: <Widget>[
-            _buildSettingsScreen(),
+            //_buildSettingsScreen(),
             _buildBubbleView(),
             _buildListView(),
             _buildStatsScreen(),
           ],
-          controller: PageController(initialPage: 1),
+          controller: PageController(initialPage: 0),
           pageSnapping: true,
         );
       }
