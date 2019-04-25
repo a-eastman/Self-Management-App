@@ -158,7 +158,7 @@ class BubbleTheme {
       case 5: return buildOceanTheme(); break;
     }
   }
-
+  
   ///Returns the font size for initialization
   DemoTheme getSelectedFont(BuildContext context, double fontSize){
     switch(fontSize.truncate()){

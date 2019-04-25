@@ -314,7 +314,8 @@ class AddWidgetState extends State<AddWidget> {
                 onPressed: () {
                   //_editBubble();
                   _makeBubble();
-                  _myList.addBubble(_newBubble);
+                  _addBubbleToList();
+                  //_myList.addBubble(_newBubble);
                   //newBubble.setColor(getBubbleColor(_myList));
                   Navigator.pop(context);
                 },
@@ -323,6 +324,12 @@ class AddWidgetState extends State<AddWidget> {
             ],
           ),
         ]));
+  }
+
+  ///If bubble repeats today, add it to the list
+  void _addBubbleToList(){
+    if(_newBubble.repeatesToday())
+      _myList.addBubble(_newBubble);
   }
 
   /// Determines what color to make the new bubble.

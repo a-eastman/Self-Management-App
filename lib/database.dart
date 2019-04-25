@@ -218,12 +218,25 @@ class DB{
   ///@param bID : bubble just popped
   ///@return 1 : successful update
   ///@return 0 : error thrown
-  Future<int> updateBubbleTimesPopped(int bID) async{
+  Future<int> incrementBubbleTimesPopped(int bID) async{
     Database db = await instance.database;
     int currPop;
     try { currPop = (await db.query(_bubble, columns: ['$_times_popped'], where: '$_bID = ?', whereArgs: [bID])).first['$_times_popped']; }
     catch(e) {print(e); return 0; }
     try { return await db.update(_bubble, {'$_times_popped': currPop+1}, where: '$_bID = ?', whereArgs: [bID]); }
+    catch(e) {print(e); return 0; }
+  }
+
+  ///decrements the time_popped column by 1
+  ///@param bID : bubble just popped
+  ///@return 1 : successful update
+  ///@return 0 : error thrown
+  Future<int> decrementBubbleTimesPopped(int bID) async{
+    Database db = await instance.database;
+    int currPop;
+    try { currPop = (await db.query(_bubble, columns: ['$_times_popped'], where: '$_bID = ?', whereArgs: [bID])).first['$_times_popped']; }
+    catch(e) {print(e); return 0; }
+    try { return await db.update(_bubble, {'$_times_popped': currPop-1}, where: '$_bID = ?', whereArgs: [bID]); }
     catch(e) {print(e); return 0; }
   }
 

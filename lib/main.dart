@@ -80,8 +80,8 @@ class BubbleAppState extends State<BubbleApp>{
     populatedBubbles = false;
     db.getSettings().then((result){
       setState(() {
-        _theme.selectedTheme.add(_theme.getSelectedTheme(result['theme']['current_theme']));
-        //_theme.selectedTheme.add(_theme.getSelectedFont(context, result['font']['font_size']));
+        _theme.selectedTheme.add(_theme.getSelectedFont(context, result['font']['font_size']));
+        _theme.selectedTheme.add(_theme.getSelectedTheme(result['theme']['current_theme']));        
         populatedSettings = true; 
       });
     });
@@ -128,12 +128,12 @@ class BubbleAppState extends State<BubbleApp>{
       else{
         return PageView(
           children: <Widget>[
-            //_buildSettingsScreen(),
+            _buildSettingsScreen(),
             _buildBubbleView(),
             _buildListView(),
             _buildStatsScreen(),
           ],
-          controller: PageController(initialPage: 0),
+          controller: PageController(initialPage: 1),
           pageSnapping: true,
         );
       }
