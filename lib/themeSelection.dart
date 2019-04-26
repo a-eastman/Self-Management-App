@@ -56,20 +56,20 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   DemoTheme _buildBubbleTheme() {
     db.enterThemeID(1);
     print('Theme is now ${db.getStoredThemeID()}');
-    bubbleColor = Colors.blue;
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
+    bubbleColor = Colors.blue[300];
     // for(int i = 0; i < bublist.getSize(); i++){
     //   bublist.getBubbleAt(i).setColor(bubbleColor);
     // }
     return DemoTheme(
         'Bubble',
         ThemeData(
-          brightness: Brightness.light,
-          buttonColor: bubbleColor,
-          accentColor: bubbleColor,
-          primaryColor: bubbleColor,
-          textTheme: TextTheme(
+         backgroundColor: bubbleColor,
+            buttonColor: bubbleColor,
+            canvasColor: Colors.lightBlue[50],
+            brightness: Brightness.light,
+            accentColor: bubbleColor,
+            primaryColor: bubbleColor,
+            textTheme: TextTheme(
             body1: TextStyle(fontSize: size),
             button: TextStyle(fontSize: size),
             subhead: TextStyle(fontSize: size),
@@ -81,8 +81,6 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     db.enterThemeID(2);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.deepOrange[200];
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
     // for(int i = 0; i < bublist.getSize(); i++){
     //   bublist.getBubbleAt(i).setColor(bubbleColor);
     // }
@@ -93,6 +91,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           accentColor: bubbleColor,
           buttonColor: bubbleColor,
           primaryColor: bubbleColor,
+          canvasColor: Colors.grey[800],
           textTheme: TextTheme(
             body1: TextStyle(fontSize: size),
             button: TextStyle(fontSize: size),
@@ -104,9 +103,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   DemoTheme _buildDuskTheme() {
     db.enterThemeID(3);
     print('Theme is now ${db.getStoredThemeID()}');
-    bubbleColor = Colors.purple[200];
-    previewColor =bubbleColor;
-    preview.setColor(previewColor);
+    bubbleColor = Colors.purple[100];
     // for(int i = 0; i < bublist.getSize(); i++){
     //   bublist.getBubbleAt(i).setColor(bubbleColor);
     // }
@@ -114,6 +111,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
         'Dusk',
         ThemeData(
           brightness: Brightness.dark,
+          canvasColor: Colors.grey[800],
           buttonColor: bubbleColor,
           accentColor: bubbleColor,
           primaryColor: bubbleColor,
@@ -128,9 +126,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   DemoTheme _buildSunnyTheme(){
     db.enterThemeID(4);
     print('Theme is now ${db.getStoredThemeID()}');
-    this.bubbleColor = Colors.yellow[200];
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
+    bubbleColor = Colors.yellow[200];
     // for(int i = 0; i < bublist.getSize(); i++){
     //   bublist.getBubbleAt(i).setColor(bubbleColor);
     // }
@@ -155,19 +151,16 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   DemoTheme _buildOceanTheme(){
     db.enterThemeID(5);
     print('Theme is now ${db.getStoredThemeID()}');
-    bubbleColor = Colors.blue[100];
-    previewColor = bubbleColor;
-    preview.setColor(previewColor);
+    bubbleColor = Colors.teal[300];
     // for(int i = 0; i < bublist.getSize(); i++){
     //   bublist.getBubbleAt(i).setColor(bubbleColor);
     // }
     return DemoTheme(
         'Ocean',
         ThemeData(
-            backgroundColor: Colors.blue[300],
-            buttonColor: bubbleColor,
-            canvasColor: Colors.lightBlue[300],
+            canvasColor: Colors.teal[100],
             brightness: Brightness.light,
+            buttonColor: bubbleColor,
             accentColor: bubbleColor,
             primaryColor: bubbleColor,
             textTheme: TextTheme(

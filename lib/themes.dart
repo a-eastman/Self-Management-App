@@ -25,12 +25,15 @@ class BubbleTheme {
 
   DemoTheme initialTheme() {
     return DemoTheme(
-        'initial',
-        ThemeData(
-          brightness: Brightness.light,
-          accentColor: Colors.blue,
-          primaryColor: Colors.blue,
-        )
+      'initial',
+      ThemeData(
+        backgroundColor: Colors.blue[300],
+        buttonColor: Colors.blue[300],
+        canvasColor: Colors.lightBlue[50],
+        brightness: Brightness.light,
+        accentColor: Colors.blue[300],
+        primaryColor: Colors.blue[300],
+      )
     );
   }
 
@@ -38,11 +41,12 @@ class BubbleTheme {
     return DemoTheme(
       'Bubble',
       ThemeData(
-        canvasColor: Colors.teal[100],
+        backgroundColor: Colors.blue[300],
+        buttonColor: Colors.blue[300],
+        canvasColor: Colors.lightBlue[50],
         brightness: Brightness.light,
-        buttonColor: Colors.teal[300],
-        accentColor: Colors.teal[300],
-        primaryColor: Colors.teal[300],
+        accentColor: Colors.blue[300],
+        primaryColor: Colors.blue[300],
       ));
   }
 
@@ -54,6 +58,7 @@ class BubbleTheme {
         accentColor: Colors.deepOrange[200],
         buttonColor: Colors.deepOrange[200],
         primaryColor: Colors.deepOrange[200],
+        canvasColor: Colors.grey[800],
       ));
   }
 
@@ -62,9 +67,10 @@ class BubbleTheme {
       'Dusk',
       ThemeData(
         brightness: Brightness.dark,
-        buttonColor: Colors.purple[200],
-        accentColor: Colors.purple[200],
-        primaryColor: Colors.purple[200],
+        buttonColor: Colors.purple[100],
+        accentColor: Colors.purple[100],
+        primaryColor: Colors.purple[100],
+        canvasColor: Colors.grey[800],
       ));
   }
 
@@ -85,13 +91,11 @@ class BubbleTheme {
     return DemoTheme(
       'Ocean',
       ThemeData(
-        
-      backgroundColor: Colors.blue[300],
-      buttonColor: Colors.blue[300],
-      canvasColor: Colors.lightBlue[300],
-      brightness: Brightness.light,
-      accentColor: Colors.blue[300],
-      primaryColor: Colors.blue[300])
+        canvasColor: Colors.teal[100],
+        brightness: Brightness.light,
+        buttonColor: Colors.teal[300],
+        accentColor: Colors.teal[300],
+        primaryColor: Colors.teal[300])
     );
   }
 
