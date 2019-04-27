@@ -1,10 +1,15 @@
-import 'package:flutter/material.dart';
+///Module for creating single-use particle effects
+///@author Brian Intile
+///
+///
+///LAST EDIT : April 19, 2019
 import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 
 import 'bubbles.dart';
 import 'dart:async';
 
+///Main particle widget, will create a single burst of particles that disposes of itself after finishing
 class PopParticles extends StatefulWidget {
 
   static int _globalIndex = 1;
@@ -15,6 +20,7 @@ class PopParticles extends StatefulWidget {
   final DateTime _timeCreated = DateTime.now();
   final Key key = Key((_globalIndex++).toString());
 
+  ///Constructor needs bubble and screen size parameters
   PopParticles(this._bubble, this._screenWidth, this._screenHeight);
 
   bool expired()
@@ -45,8 +51,8 @@ class PopParticlesState extends State<PopParticles> {
     _particles.clear();
   }
 
+  //Resets our particle node list, used to originally populate nodes
   void reset() {
-    print("pop reset");
     for (int i = 0; i < 10; i++) {
       _particles.add(PopParticleNode(this._bubble, _screenWidth, _screenHeight, _key + "." + i.toString()));
     }
@@ -61,6 +67,7 @@ class PopParticlesState extends State<PopParticles> {
   }
 }
 
+///Single node class for PopParticles, each individual particle is an instance of this
 class PopParticleNode extends StatefulWidget {
   final Bubble _bubble;
   final double _screenWidth;
@@ -82,26 +89,27 @@ class PopParticleNodeState extends State<PopParticleNode>
 
   PopParticleNodeState(this._bubble, this._screenWidth, this._screenHeight, this._key);
 
+  ///Each particle ahs its own animation controller and handles its own animations
   AnimationController _controller;
   Animation _xAnimation;
   Animation _yAnimation;
   Animation _scaleAnimation;
 
-  // Edit animation parameters here
+  ///Edit animation parameters here
   
   final int _durationMs = 600;
 
-  // X extents multiplied by screen width
+  ///X extents multiplied by screen width
   final double _xExtents = .15;
   final double _minXMult = -1.0;
   final double _maxXMult = 1.0;
 
-  // Y extents multiplied by screen height
+  ///Y extents multiplied by screen height
   final double _yExtents = -.3;
   final double _minYMult = .7;
   final double _maxYMult = 1.3;
 
-  // Base size multiplied by screen height * base bubble size
+  ///Base size multiplied by screen height * base bubble size
   final double _baseSizeMin = .2;
   final double _baseSizeMax = .45;
   final double _minShrinkTime = 0.3;
@@ -112,6 +120,7 @@ class PopParticleNodeState extends State<PopParticleNode>
 
   double _baseSize;
 
+  ///Updatse the animation controller and builds the state of the particle node widget using data from the animations
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -148,12 +157,19 @@ class PopParticleNodeState extends State<PopParticleNode>
         });
   }
 
+  ///initState constructs each animation and multiplies the strength of its size/scale/etc by randomized values (tweakable above)
+  ///This makes each particle move differently but follow the same pattern of floating up
+  ///Randomized animations apply to x position, y position, and scale of node
   @override
   void initState() {
     super.initState();
+
+    ///Create our AnimationController with specified duration
     _controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: _durationMs));
 
+    ///Create random number generator and determine random range of each animation
+    
     var rand = new math.Random();
     var xMult = randomBetween(rand, _minXMult, _maxXMult)
       * _screenHeight;
@@ -164,15 +180,14 @@ class PopParticleNodeState extends State<PopParticleNode>
     var bSize = _bubble.getSize() * _screenHeight;
 
     _baseSize = randomBetween(rand, _baseSizeMin, _baseSizeMax)
-       //* (_bubble.getSizeIndex() + 2.0)
        * bSize;
     _baseXPos = (_bubble.getXPos() * _screenWidth)
       + randomBetween(rand, -bSize / 3.0, bSize  / 3.0);
     _baseYPos = (_bubble.getYPos() * _screenHeight)
       + (bSize / 4)
-      //- (bSize / 2)
       + randomBetween(rand, -bSize / 3.0, bSize / 3.0);
-      //+ (bHeight / (_bubble.getSizeIndex() + 3.0));
+
+    //Create animations themselves to determine general movement
 
     _xAnimation = Tween(begin: 0.0, end: xMult).animate(CurvedAnimation(
       parent: _controller,
@@ -191,10 +206,12 @@ class PopParticleNodeState extends State<PopParticleNode>
     ));
   }
 
+  ///Helper class for retrieving random numbers for animation values
   double randomBetween(math.Random rand, double min, double max) {
     return min + (rand.nextDouble() * (max - min));
   }
 
+  ///Dispose of the AnimationController on widget disposal
   @override
   void dispose() {
     _controller.dispose();
