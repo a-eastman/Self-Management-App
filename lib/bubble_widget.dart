@@ -1,3 +1,8 @@
+///Main screen that displays all the bubbles in graphical form
+///@author Caeleb Nasoff, Chris Malitsky, Brian Intile, Martin Price
+///
+///
+///LAST EDIT : April 27, 2019
 
 import 'themeSelection.dart';
 import 'package:flutter/material.dart';
