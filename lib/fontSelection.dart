@@ -1,4 +1,4 @@
-///Handles the font selection
+///Selection page for selecting font size in app
 ///@author Matt Rubin
 ///Created using [themeSelection.dart] as a base
 ///LAST EDIT : April 19, 2019
@@ -30,8 +30,7 @@ class FontSelectorPageState extends State<FontSelectorPage> {
 
   FontSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 
-  //Bubble preview = new Bubble.defaultBubble();
-
+  ///Creates a bubble to preview changes in
   Widget _previewBubble(double _screenHeight) {
     if (bublist.getSize() == 0) {
       previewColor = Colors.blue;
@@ -58,6 +57,8 @@ class FontSelectorPageState extends State<FontSelectorPage> {
     );
   }
 
+  ///Small font size theme characteristics
+  ///Uses [context] to maintain theme colors
   DemoTheme _buildSmallTheme() {
     db.enterFontSize(10.0);
     print('Font size is now ${db.getStoredFontSize()}');
@@ -78,6 +79,8 @@ class FontSelectorPageState extends State<FontSelectorPage> {
         ));
   }
 
+  ///Medium font size theme characteristics
+  ///Uses [context] to maintain theme colors
   DemoTheme _buildMediumTheme() {
     db.enterFontSize(14.0);
     print('Font size is now ${db.getStoredFontSize()}');
@@ -98,6 +101,8 @@ class FontSelectorPageState extends State<FontSelectorPage> {
         ));
   }
 
+  ///Large font size theme characteristics
+  ///Uses [context] to maintain theme colors
   DemoTheme _buildLargeTheme() {
     db.enterFontSize(18.0);
     print('Font size is now ${db.getStoredFontSize()}');
@@ -134,6 +139,7 @@ class FontSelectorPageState extends State<FontSelectorPage> {
     }
   }
 
+  ///Builds the selection page
   @override
   Widget build(BuildContext context) {
     double _screenHeight = MediaQuery.of(context).size.height;

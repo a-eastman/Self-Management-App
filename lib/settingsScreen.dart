@@ -1,11 +1,7 @@
 ///Launches the settings screen
 ///@author Matt Rubin
 ///created the screen and added functionality to access theme and font selection
-///@date April 16, 2019
-///
-///@author FOR EDIT ONLY Martin Price
-///editted to integrate with the Database to store and retrive settings
-///@date April 17, 2019
+///LAST EDIT: April 16, 2019
 
 import 'package:flutter/material.dart';
 import 'bubbles.dart';
@@ -35,6 +31,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     this._theme = theme;
   }
 
+  ///Builds the settings screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +42,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  ///Builds a [ListView] containing the settings buttons
   Widget _buildSelection(){
     return ListView(children: <Widget>[
       _buildThemeButton(),
@@ -53,14 +51,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     ],);
   }
 
-  Widget _buildRow(String s) {
-    return ListTile(
-      title: Text(
-        s,
-      ),
-    );
-  }
-
+  ///Builds the theme selection button and defines what it does when tapped
   Widget _buildThemeButton() {
     return ListTile(
       title: Text(
@@ -75,6 +66,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  ///Builds the font size selection button and defines what it does when pressed
   Widget _buildFontSelection() {
     //TODO: make font selection update font size on settings screen
     return ListTile(
@@ -90,6 +82,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  ///Builds the replay tutorial button, currently inactive do to missing tutorial
   Widget _buildTutorialButton() {
     //TODO: make interactive and work once tutorial is in place
     return ListTile(
