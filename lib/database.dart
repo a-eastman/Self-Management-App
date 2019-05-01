@@ -1,7 +1,7 @@
 /// Runs the SQLite database behind flutter
-/// @version 3.1: settings now integrated into a XML doc
-/// @author Martin Price
-/// @date April 2019
+/// version 3.1: settings now integrated into a XML doc
+/// author Martin Price
+/// written April 2019
 
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
@@ -122,8 +122,7 @@ class DB{
 ///BUBBLE TABLE
 ///
   /// inserts value used to make a new bubble into the bubble db
-  /// @return 1: successfully updated db
-  /// @return 0: error thrown
+  /// successfully updated db returns 1, unsuccessful will return 0
   Future<int> insertBubble(String entry, String description, int colorRed,
       int colorGreen, int colorBlue, double opacity, int size, double posX,
       double posY, int frequency, String days) async{
@@ -139,30 +138,29 @@ class DB{
     catch (e) { print(e); return 0; }
   }
 
-  ///@return all Bubbles
+  ///returns all Bubbles in a list
   Future<List<Map<String, dynamic>>> queryBubble() async{
     Database db = await instance.database;
     try{ return await db.query(_bubble); }
     catch (e) { return null; }
   }
 
-  ///@return bubble, all columns
+  ///returns a specific bubble, all columns - queries by the given bubbleID (bID)
   Future<Map<String, dynamic>> queryFullBubbleByID(int bID) async{
     Database db = await instance.database;
     try{ return (await db.query(_bubble, where: '$_bID = ?', whereArgs: [bID])).first;}
     catch(e) {print(e); return null; }
   }
 
-  ///@return the bubble with matching bID
-  Future<Map<String, dynamic>> queryBubbleByID(int bID, List<String> col) async
-  {
+  ///returns a specific bubble, given columns - queries by the given bubbleID(bID)
+  Future<Map<String, dynamic>> queryBubbleByID(int bID, List<String> col) async{
     Database db = await instance.database;
     try{ return (await db.query(_bubble, columns: col, where: '$_bID = ?', whereArgs: [bID])).first; }
     catch (e) { print(e); return null; }
   }
 
-  ///@return bubbles for re-population when app is opened
-  /// looks for only bubbles that have a 0 for 'deleted'
+  ///returns a list of bubbles for re-population when app is opened
+  ///looks for only bubbles that have a 'ALIVE' for 'time_deleted'
   Future<List<Map<String, dynamic>>> queryBubblesForRePop() async{
     Database db = await instance.database;
     try{ 
@@ -173,8 +171,7 @@ class DB{
     catch (e) {print(e); return null; }
   }
 
-  /// finds the last bubble created
-  /// @return bID : the latest bubble id
+  ///finds the last bubble created and returns it's bubbleID
   Future<int> queryLastCreatedBubbleID() async{
     Database db = await instance.database;
     try{ 
@@ -185,8 +182,7 @@ class DB{
     catch (e) {print(e); return 0; }
   }
 
-  ///@param bID : the specific bubbles id
-  ///@return the fields for the bubbles color
+  ///returns the fields for the given bubbles color
   Future<Map<String, dynamic>> queryBubbleColor(int bID) async{
     Database db = await instance.database;
     try{ return (await db.query(_bubble, columns: ['$_color_red', '$_color_green', '$_color_blue', '$_opacity'], 
@@ -194,30 +190,22 @@ class DB{
     catch (e) { print(e); return null; }
   }
 
-  ///Updates a bubble row
-  ///@param bID : bubble to update
-  ///@param row : row to update has the column and new value
+  ///Updates a given bubble by the values and columns to updated given in row
   Future<int> updateBubbleByID(int bID, Map<String, dynamic> row) async{
     Database db = await instance.database;
     try{ return await db.update(_bubble, row, where: '$_bID = ?', whereArgs: [bID]); }
     catch (e) { print(e); return 1; }
   }
 
-  ///Updates the color of a bubble
-  ///@param bID : bubble to update
-  ///@param row : color v
-  ///@return 1 : successful update
-  ///@return 0 : error thrown
+  ///Updates the color of a a specific bubble
+  ///New colors is brought in as a map of the RGBO attributes
   Future<int> updateBubbleColor(int bID, Map<String, dynamic> row) async{
     Database db = await instance.database;
     try{ return await db.update(_bubble, row, where: '$_bID = ?', whereArgs: [bID]); }
     catch(e) {print(e); return 0;}
   }
   
-  ///increments the time_popped column by 1
-  ///@param bID : bubble just popped
-  ///@return 1 : successful update
-  ///@return 0 : error thrown
+  ///increments the time_popped column of a specific bubble by 1
   Future<int> incrementBubbleTimesPopped(int bID) async{
     Database db = await instance.database;
     int currPop;
@@ -227,10 +215,7 @@ class DB{
     catch(e) {print(e); return 0; }
   }
 
-  ///decrements the time_popped column by 1
-  ///@param bID : bubble just popped
-  ///@return 1 : successful update
-  ///@return 0 : error thrown
+  ///decrements the time_popped column of a specific bubble by 1
   Future<int> decrementBubbleTimesPopped(int bID) async{
     Database db = await instance.database;
     int currPop;
@@ -240,10 +225,7 @@ class DB{
     catch(e) {print(e); return 0; }
   }
 
-  ///Queries Bubble to see if the Bubble repeats on this day
-  ///@param bID : bubble ID
-  ///@return true : repeats on this day
-  ///@return false : does not repeat
+  ///queries a specific bubble to see if it repeats today
   Future<bool> bubbleRepeatsToday(int bID) async{
     Database db = await instance.database;
     String currDay = dayToString(new DateTime.now().weekday);   //Monday = 1, Sunday = 7
@@ -272,7 +254,7 @@ class DB{
     return false;
   }
   
-  ///@return string of day determined in a switch
+  ///returns a string of the day, determined in a switch
   String dayToString(int currDay){
     switch(currDay){
       case 1: { return 'Mon'; } break;
@@ -285,10 +267,7 @@ class DB{
     }
   }
 
-  ///Inserts a time_deleted value into a bubble
-  ///@param bID : bubble ID
-  ///@return 1 : successfully update
-  ///@return 0 : error thrown
+  ///Updates a time_deleted value into a specifc bubble
   Future<int> insertDelete(int bID) async{
     Database db = await instance.database;
     String time = new DateTime.now().toString();
@@ -297,10 +276,7 @@ class DB{
     catch(e) { return 0; }
   }
 
-  ///Returns a deleted bubble to alive
-  ///@param bID : bubble ID
-  ///@return 1 : successfully update
-  ///@return 0 : error thrown
+  ///updates a specific deleted bubble to alive status
   Future<int> reverseDelete(int bID) async{
     Database db = await instance.database;
     try{ return await db.update(_bubble, {'$_time_deleted' : _not_deleted},
@@ -311,15 +287,15 @@ class DB{
 ///
 ///POP RECORD TABLE
 ///
-  ///@return all the pop records
+  ///returns all the pop records values in a list
   Future<List<Map<String, dynamic>>> queryPop() async{
     Database db = await instance.database;
     try{ return await db.query(_pop); }
     catch (e) { print(e); return null; }
   }
-
-  ///@return all pop records for a specific bubble,
-  ///@returns in order of most frequent pop down
+  
+  ///returns all the pop records of a specific bubble in order of
+  ///most recent pop (by date) to oldest
   Future<List<Map<String, dynamic>>> queryPopByBubble(int bID) async{
     Database db = await instance.database;
     try{ return await db.query(_pop, where: '$_bID = ?', whereArgs: [bID], 
@@ -327,7 +303,9 @@ class DB{
     catch (e) {print(e); return []; }
   }
 
-  ///@return all VALID pop records for a specific bubble
+  ///returns all VALID pop records for a specific bubble,
+  ///a valid pop has 'POPPED' as a value for action, an invalid bubble was unpopped
+  ///and has 'UNPOPPED' as an action value
   Future<List<Map<String, dynamic>>> queryValidPopsByBubble(int bID) async{
     Database db = await instance.database;
     try{ return await db.query(_pop, where: '$_bID = ? AND $_action = ?', whereArgs: [bID, _popped], 
@@ -335,10 +313,7 @@ class DB{
     catch (e) {print(e); return []; }
   }
 
-  /// Inserts value into the pop_bubble
-  /// @param bID : bubble ID that was popped
-  /// @return 1: suceessfully updated db
-  /// @return 0: error thrown
+  /// Inserts a new value into the pop_bubble for a specific bubble
   Future<int> insertPop(int bID) async{
     Database db = await instance.database;
     Map<String, dynamic> row = {'$_bID':bID, '$_time_of_pop':new DateTime.now().toString(),
@@ -347,10 +322,8 @@ class DB{
     catch (e) { print(e); return 0; }
   }
 
-  ///Changes tyhe action of the latest pop of a bubble to UNPOPPED
-  ///@param bID : bubble id to be reverted
-  ///@return 1: successfully updated db
-  ///@return 0: error thrown
+  ///finds and changes the last pop made by a specific bubble and make the pop invalid
+  ///an invalid pop will have 'UNPOPPED' as a value for the action field
   Future<int> undoPop(int bID) async{
     Database db = await instance.database;
     try{
@@ -561,8 +534,7 @@ class DB{
   }
 
   ///Recreates the XML page to update the info
-  ///@param font : new (or same) font
-  ///@param currTheme : new (or same) color theme id
+  
   Future<xml.XmlDocument> recreateXML(double font, int currTheme) async{
     var builder = new xml.XmlBuilder();
     builder.processing('xml', '$_xmlVersion');
@@ -581,7 +553,7 @@ class DB{
     catch(e) { print(e); }
   }
 
-  ///@return stored font_size
+  ///returns stored font_size
   double getStoredFontSize(){
     var settings = _settingsXML.findElements(_settings)
       .map((node) => node.findElements(_font_size).single.text.toString())
@@ -589,7 +561,7 @@ class DB{
     return double.parse(settings);
   }
 
-  ///@return stored theme id for database
+  ///returns stored theme id
   int getStoredThemeID(){
     var theme = _settingsXML.findElements(_settings)
       .map((node) => node.findElements(_current_theme).single.text.toString())
@@ -620,7 +592,7 @@ class DB{
   }
 
   ///Gathers the settigns and returns them for initialziation
-  ///@return map : map collection of the settings
+  ///sreturn a map of the collection of the settings
   Future<Map<String, Map<dynamic, dynamic>>> getSettings() async{
     await initXML();
     Map font = {_font_size: getStoredFontSize()};
