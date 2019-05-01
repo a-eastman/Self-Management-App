@@ -17,10 +17,8 @@ class ListWidget extends StatefulWidget {
   BubblesList _myList; // The list of bubbles
   BubbleTheme _theme; // Theme for the bubbles
 
-
   //ListWidget({Key key, this.myList}) : super(key : key);
-  ListWidget(
-      BubblesList _myList, BubbleTheme _theme) {
+  ListWidget(BubblesList _myList, BubbleTheme _theme) {
     this._myList = _myList;
     this._theme = _theme;
   }
@@ -29,10 +27,9 @@ class ListWidget extends StatefulWidget {
 }
 
 class ListWidgetState extends State<ListWidget> {
-
-  BubblesList _myList;  //Original list with deleted bubbles
+  BubblesList _myList; //Original list with deleted bubbles
   BubblesList _curList; //List of bubbles without those marked shouldDelete
-  BubbleTheme _theme;   //Theme for bubbles
+  BubbleTheme _theme; //Theme for bubbles
 
   ListWidgetState(BubblesList _myList, BubbleTheme _theme) {
     this._myList = _myList;
@@ -54,7 +51,8 @@ class ListWidgetState extends State<ListWidget> {
             return new Divider();
           }
           final int index = i ~/ 2;
-          return _buildRow(_curList.getBubbleAt(index), _screenHeight, _screenWidth);
+          return _buildRow(
+              _curList.getBubbleAt(index), _screenHeight, _screenWidth);
         });
   }
 
@@ -62,7 +60,7 @@ class ListWidgetState extends State<ListWidget> {
   @override
   Widget build(BuildContext context) {
     // The height of the screen.
-    double _screenHeight =MediaQuery.of(context).size.height;
+    double _screenHeight = MediaQuery.of(context).size.height;
     // Width of the screen.
     double _screenWidth = MediaQuery.of(context).size.width;
     _curList = new BubblesList.newEmptyBubbleList();
@@ -80,8 +78,7 @@ class ListWidgetState extends State<ListWidget> {
           onPressed: () {
             setState(() {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    SettingsScreen(this._myList, _theme),
+                builder: (context) => SettingsScreen(this._myList, _theme),
               ));
             });
           },
@@ -93,8 +90,7 @@ class ListWidgetState extends State<ListWidget> {
             onPressed: () {
               BubbleAppState.instance.setState(() {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      AddWidget(this._myList, _theme),
+                  builder: (context) => AddWidget(this._myList, _theme),
                 ));
               });
             },
@@ -128,11 +124,10 @@ class ListWidgetState extends State<ListWidget> {
       },
       onLongPress: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              DetailWidget(this._myList, _theme, _bubble, _screenHeight, _screenWidth),
+          builder: (context) => DetailWidget(
+              this._myList, _theme, _bubble, _screenHeight, _screenWidth),
         ));
       },
     );
   }
-
 }

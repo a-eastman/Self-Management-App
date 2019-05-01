@@ -26,7 +26,6 @@ class EditWidget extends StatefulWidget {
 }
 
 class EditWidgetState extends State<EditWidget> {
-
   BubblesList _myList; //List of bubbles
   BubbleTheme _theme; //Theme for the screen and bubbles
   Bubble _bubble; //Current bubble being edited
@@ -268,5 +267,4 @@ class EditWidgetState extends State<EditWidget> {
       ],
     );
   }
-
 }

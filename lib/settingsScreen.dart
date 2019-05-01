@@ -43,52 +43,51 @@ class SettingsScreenState extends State<SettingsScreen> {
   }
 
   ///Builds a [ListView] containing the settings buttons
-  Widget _buildSelection(){
-    return ListView(children: <Widget>[
-      _buildThemeButton(),
-      _buildFontSelection(),
-      _buildTutorialButton(),
-    ],);
+  Widget _buildSelection() {
+    return ListView(
+      children: <Widget>[
+        _buildThemeButton(),
+        _buildFontSelection(),
+        _buildTutorialButton(),
+      ],
+    );
   }
 
   ///Builds the theme selection button and defines what it does when tapped
   Widget _buildThemeButton() {
     return ListTile(
-      title: Text(
-        'Themes',
-      ),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              ThemeSelectorPage(theme: _theme, bublist: _bubList),
-        ));
-      }
-    );
+        title: Text(
+          'Themes',
+        ),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                ThemeSelectorPage(theme: _theme, bublist: _bubList),
+          ));
+        });
   }
 
   ///Builds the font size selection button and defines what it does when pressed
   Widget _buildFontSelection() {
     //TODO: make font selection update font size on settings screen
     return ListTile(
-      title: Text(
-        'Font Size',
-      ),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              FontSelectorPage(theme: _theme, bublist: _bubList),
-        ));
-      }
-    );
+        title: Text(
+          'Font Size',
+        ),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                FontSelectorPage(theme: _theme, bublist: _bubList),
+          ));
+        });
   }
 
   ///Builds the replay tutorial button, currently inactive do to missing tutorial
   Widget _buildTutorialButton() {
     //TODO: make interactive and work once tutorial is in place
     return ListTile(
-      title: Text(
-        'Replay Tutorial',
-      )
-    );
+        title: Text(
+      'Replay Tutorial',
+    ));
   }
 }

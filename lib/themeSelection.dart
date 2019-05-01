@@ -21,25 +21,25 @@ class ThemeSelectorPage extends StatefulWidget {
   final BubblesList bublist;
   final Color bubbleColor;
 
-  ThemeSelectorPage({Key key, this.theme, this.bublist,
-    this.bubbleColor}) : super(key: key);
+  ThemeSelectorPage({Key key, this.theme, this.bublist, this.bubbleColor})
+      : super(key: key);
 
   ThemeSelectorPageState createState() =>
       ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 }
 
-// Class ThemeSelectorPageState extends ThemeSelectorPage and defines the characteristics of 
+// Class ThemeSelectorPageState extends ThemeSelectorPage and defines the characteristics of
 // the page and generates the buttons which define theme state changes based on DemoThemes
-class ThemeSelectorPageState extends State<ThemeSelectorPage>{
+class ThemeSelectorPageState extends State<ThemeSelectorPage> {
   BubbleTheme theme;
   BubblesList bublist;
   Color previewColor;
   Color bubbleColor;
   final db = DB.instance;
   Bubble preview = new Bubble.defaultBubble();
-  
+
   double get size => db.getStoredFontSize();
-  
+
   ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 
   //Bubble Theme Characteristics
@@ -50,13 +50,13 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     return DemoTheme(
         'Bubble',
         ThemeData(
-         backgroundColor: bubbleColor,
-            buttonColor: bubbleColor,
-            canvasColor: Colors.lightBlue[50],
-            brightness: Brightness.light,
-            accentColor: bubbleColor,
-            primaryColor: bubbleColor,
-            textTheme: TextTheme(
+          backgroundColor: bubbleColor,
+          buttonColor: bubbleColor,
+          canvasColor: Colors.lightBlue[50],
+          brightness: Brightness.light,
+          accentColor: bubbleColor,
+          primaryColor: bubbleColor,
+          textTheme: TextTheme(
             body1: TextStyle(fontSize: size),
             button: TextStyle(fontSize: size),
             subhead: TextStyle(fontSize: size),
@@ -107,53 +107,51 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   }
 
   //Sunny Theme Characteristics
-  DemoTheme _buildSunnyTheme(){
+  DemoTheme _buildSunnyTheme() {
     db.enterThemeID(4);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.yellow[200];
     return DemoTheme(
         'Sunny',
         ThemeData(
-            backgroundColor: Colors.blue[100],
-            buttonColor: bubbleColor,
-            canvasColor: Colors.blue[100],
-            brightness: Brightness.light,
-            accentColor: bubbleColor,
-            primaryColor: bubbleColor,
-            textTheme: TextTheme(
+          backgroundColor: Colors.blue[100],
+          buttonColor: bubbleColor,
+          canvasColor: Colors.blue[100],
+          brightness: Brightness.light,
+          accentColor: bubbleColor,
+          primaryColor: bubbleColor,
+          textTheme: TextTheme(
             body1: TextStyle(fontSize: size),
             button: TextStyle(fontSize: size),
             subhead: TextStyle(fontSize: size),
           ),
-        )
-    );
+        ));
   }
 
   //Ocean Theme Characteristics
-  DemoTheme _buildOceanTheme(){
+  DemoTheme _buildOceanTheme() {
     db.enterThemeID(5);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.teal[300];
     return DemoTheme(
         'Ocean',
         ThemeData(
-            canvasColor: Colors.teal[100],
-            brightness: Brightness.light,
-            buttonColor: bubbleColor,
-            accentColor: bubbleColor,
-            primaryColor: bubbleColor,
-            textTheme: TextTheme(
+          canvasColor: Colors.teal[100],
+          brightness: Brightness.light,
+          buttonColor: bubbleColor,
+          accentColor: bubbleColor,
+          primaryColor: bubbleColor,
+          textTheme: TextTheme(
             body1: TextStyle(fontSize: size),
             button: TextStyle(fontSize: size),
             subhead: TextStyle(fontSize: size),
           ),
-        )
-    );
+        ));
   }
 
   //Build the page - takes parameter [context]
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: const Text("Change Theme"),
@@ -164,9 +162,8 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
           children: <Widget>[
             new Center(),
             RaisedButton(
-                onPressed:() => theme.selectedTheme.add(_buildBubbleTheme()),
-                child: Text("Bubble")
-            ),
+                onPressed: () => theme.selectedTheme.add(_buildBubbleTheme()),
+                child: Text("Bubble")),
             RaisedButton(
               onPressed: () => theme.selectedTheme.add(_buildSunsetTheme()),
               child: Text("Sunset"),
@@ -183,8 +180,7 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
               onPressed: () => theme.selectedTheme.add(_buildOceanTheme()),
               child: Text("Ocean"),
             ),
-          ]
-      ),
+          ]),
     );
   }
 }

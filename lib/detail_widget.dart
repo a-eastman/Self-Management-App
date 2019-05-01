@@ -32,7 +32,6 @@ class DetailWidget extends StatefulWidget {
 }
 
 class DetailWidgetState extends State<DetailWidget> {
-
   BubblesList _myList; // List of bubbles
   BubbleTheme _theme; // Theme for bubbles and screen
   Bubble _bubble; // Current bubble being shown
