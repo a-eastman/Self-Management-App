@@ -1,8 +1,21 @@
+///Theme Selection Page for altering themes in app and saving those selections in the DB
+///@author Chris Malitsky
+///@date March 2019
+///
+///@author FOR EDIT ONLY Martin Price
+///editted to integrate with the Database to store and retrive settings
+///@date April 17, 2019
+///RUN TIME
+///
+///Inspired by: https://medium.com/flutter-community/flutter-how-to-change-the-apps-theme-at-runtime-using-the-bloc-pattern-30a3e3ce5b6a
 import 'package:flutter/material.dart';
 import 'themes.dart';
 import 'bubbles.dart';
 import 'database.dart';
 
+// Class ThemeSelectorPage requires extension of StatefulWidget to allow for SetState changes
+// to [theme]. Takes as parameters [theme], [bublist], and [bubbleColor]. DemoThemes contain
+// the data used by the stream to change the appearance of the app
 class ThemeSelectorPage extends StatefulWidget {
   final BubbleTheme theme;
   final BubblesList bublist;
@@ -15,6 +28,8 @@ class ThemeSelectorPage extends StatefulWidget {
       ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 }
 
+// Class ThemeSelectorPageState extends ThemeSelectorPage and defines the characteristics of 
+// the page and generates the buttons which define theme state changes based on DemoThemes
 class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   BubbleTheme theme;
   BubblesList bublist;
@@ -27,39 +42,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
   
   ThemeSelectorPageState(this.theme, this.bublist, this.bubbleColor);
 
-  //Bubble preview = new Bubble.defaultBubble();
-
-  Widget _previewBubble(double _screenHeight){
-    if(bublist.getSize() == 0){
-      previewColor = Colors.blue;
-    }else{
-      previewColor = bublist.getBubbleAt(0).getColor();
-    }
-    preview.setColor(previewColor);
-    preview.setSize(1);
-    preview.setEntry("Preview Bubble");
-    return new Container(
-      width: preview.getSize() * _screenHeight,
-      height: preview.getSize() * _screenHeight,
-      child: new Container(
-        decoration: new BoxDecoration(
-          color: preview.getColor(),
-          shape:BoxShape.circle,
-        ),
-        child: new Center(
-          child: Text(preview.getEntry(),),
-        ),
-      ),
-    );
-  }
-
+  //Bubble Theme Characteristics
   DemoTheme _buildBubbleTheme() {
     db.enterThemeID(1);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.blue[300];
-    // for(int i = 0; i < bublist.getSize(); i++){
-    //   bublist.getBubbleAt(i).setColor(bubbleColor);
-    // }
     return DemoTheme(
         'Bubble',
         ThemeData(
@@ -77,13 +64,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
         ));
   }
 
+  //Sunset Theme Characteristics
   DemoTheme _buildSunsetTheme() {
     db.enterThemeID(2);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.deepOrange[200];
-    // for(int i = 0; i < bublist.getSize(); i++){
-    //   bublist.getBubbleAt(i).setColor(bubbleColor);
-    // }
     return DemoTheme(
         'Sunset',
         ThemeData(
@@ -100,13 +85,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
         ));
   }
 
+  //Dusk Theme Characteristics
   DemoTheme _buildDuskTheme() {
     db.enterThemeID(3);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.purple[100];
-    // for(int i = 0; i < bublist.getSize(); i++){
-    //   bublist.getBubbleAt(i).setColor(bubbleColor);
-    // }
     return DemoTheme(
         'Dusk',
         ThemeData(
@@ -123,13 +106,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
         ));
   }
 
+  //Sunny Theme Characteristics
   DemoTheme _buildSunnyTheme(){
     db.enterThemeID(4);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.yellow[200];
-    // for(int i = 0; i < bublist.getSize(); i++){
-    //   bublist.getBubbleAt(i).setColor(bubbleColor);
-    // }
     return DemoTheme(
         'Sunny',
         ThemeData(
@@ -148,13 +129,11 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     );
   }
 
+  //Ocean Theme Characteristics
   DemoTheme _buildOceanTheme(){
     db.enterThemeID(5);
     print('Theme is now ${db.getStoredThemeID()}');
     bubbleColor = Colors.teal[300];
-    // for(int i = 0; i < bublist.getSize(); i++){
-    //   bublist.getBubbleAt(i).setColor(bubbleColor);
-    // }
     return DemoTheme(
         'Ocean',
         ThemeData(
@@ -172,16 +151,9 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
     );
   }
 
-  Color getBubbleColor(){
-    return bubbleColor;
-  }
-
+  //Build the page - takes parameter [context]
   @override
   Widget build(BuildContext context){
-    //Widget preview = _previewBubble();
-    //String themeValue = 'Sunny Day';
-    double _screenHeight =MediaQuery.of(context).size.height;
-    double _screenWidth = MediaQuery.of(context).size.width;
     return new Scaffold(
       appBar: new AppBar(
         title: const Text("Change Theme"),
@@ -215,5 +187,4 @@ class ThemeSelectorPageState extends State<ThemeSelectorPage>{
       ),
     );
   }
-
 }

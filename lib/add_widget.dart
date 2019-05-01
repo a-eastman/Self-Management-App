@@ -1,5 +1,5 @@
 ///Screen for adding a new bubble
-///@author Abigail Eastman
+///@author Abigail Eastman, Chris Malitsky
 ///
 ///
 ///LAST EDIT : April 29, 2019

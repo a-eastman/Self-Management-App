@@ -1,8 +1,19 @@
+///Stores various themes for initialization purposes only - used to create initial themes
+///See themeSelection for in app theme changes - this class is used only to create the initial theme
+///so, when the theme is changed in app, the DB saves it and then, upon reopening the app, selects the
+///corresponding theme from the themes below for initialization.
+///This Class also contains the initialization for the stream and sink (stream handles data sent
+/// to it by the sink)
+/// COMPILE TIME
+///@author Chris Malitsky
+///@date March 2019
+///
+///Inspired by: https://medium.com/flutter-community/flutter-how-to-change-the-apps-theme-at-runtime-using-the-bloc-pattern-30a3e3ce5b6a
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:async';
-import 'database.dart';
 
+// Class DemoTheme used to create actual passable [theme] parameters 
 class DemoTheme {
   final String name;
   final ThemeData data;
@@ -10,14 +21,16 @@ class DemoTheme {
 }
 
 class BubbleTheme {
-  final Stream<ThemeData> themeDataStream;
-  final Sink<DemoTheme> selectedTheme;
+  final Stream<ThemeData> themeDataStream; //Accepts data sent by sink
+  final Sink<DemoTheme> selectedTheme; // Sends data to the stream
 
   factory BubbleTheme() {
     final selectedTheme = PublishSubject<DemoTheme>();
+    //This is where the theme data actually gets passed to the stream
     final themeDataStream = selectedTheme
         .distinct()
         .map((theme) => theme.data);
+    //Bubble theme returned with new theme data
     return BubbleTheme._(themeDataStream, selectedTheme,);
   }
 
