@@ -117,8 +117,10 @@ class BubbleWidgetState extends State<BubbleWidget> {
       child: new Draggable(
         onDraggableCanceled: (Velocity velocity, Offset offset) {
           setState(() {
+            //changes the saved position of the bubble
             _bubble.changeXPos(offset.dx, _bSize, _screenWidth);
             _bubble.changeYPos(offset.dy, _bSize, _screenHeight);
+            
             _bubble.setLastActiongrabbed(true);
 
             setState(() {
@@ -281,7 +283,7 @@ class BubbleWidgetState extends State<BubbleWidget> {
         ],
       ),
       body: new Stack(
-        children: _makeWidList(context),
+        children: _makeWidList(context), //builds all the buble widgets into a Stack
       ),
     );
   }

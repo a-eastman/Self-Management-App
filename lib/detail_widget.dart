@@ -47,7 +47,7 @@ class DetailWidgetState extends State<DetailWidget> {
     this._screenWidth = _screenWidth;
   }
 
-  /// Creates a fake bubble to show in the details screen.
+  /// Creates a fake, non-interactable bubble to show in the details screen.
   Widget fakeBubble(Bubble _bubble, double _screenHeight) {
     // Adjusts the bubble size to be based on the screen
     double _bSize = _screenHeight * _bubble.getSize();

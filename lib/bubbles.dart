@@ -18,8 +18,8 @@ class Bubble {
   int _numPressed; //How many times the bubble has been pressed
   double _xPos; // x screen position
   double _yPos; // y screen position
-  int _numBehind; //How many bubbles are behind current bubble
-  int _numInfront; //How many bubbles are in front of current bubble
+  int _numBehind; //How many bubbles are behind current bubble (NOT CURRENTLY ACTUALLY USED)
+  int _numInfront; //How many bubbles are in front of current bubble (NOT CURRENTLY ACTUALLY USED)
   double _opacity; //current opacity of the bubble
   double _orgOpacity; //The original opacity of the bubble
   int _bubbleID; // bID of the bubble from the DB
@@ -617,13 +617,10 @@ class Bubble {
 
   ///Changes the size of the bubble to the next in the array.
   void nextSize() {
-    //print("nextSize");
     this._sizeIndex++;
-    //print("HERE");
     if (_sizeIndex >= _sizes.length) {
       this._sizeIndex = 0;
     }
-    //print("INDEX" + _sizeIndex.toString());
     this._size = _sizes[_sizeIndex];
     updateSize(_bubbleID, _sizeIndex);
     print('Updating Size to $_sizeIndex');
@@ -647,8 +644,7 @@ class Bubble {
     if ((newXPos + actualSize) > screenWidth) {
       newXPos = screenWidth - actualSize;
     } else if (newXPos < 3.0) {
-      //TODO: update to use screen constraint
-      newXPos = 3.0;
+      newXPos = 3.0; //A constraint that is towards the beginning of the screen on the X axis
     }
 
     this._xPos = (newXPos + (actualSize / 2.0)) / screenWidth;
@@ -661,8 +657,7 @@ class Bubble {
     if ((newYPos + actualSize) > screenHeight) {
       newYPos = screenHeight - actualSize;
     } else if (newYPos < 3.0) {
-      //TODO: update to use screen constraint
-      newYPos = 3.0;
+      newYPos = 3.0; //A constraint that is towards the beginning of the screen on the Y axis
     }
 
     this._yPos = (newYPos + (actualSize / 2.0) - 80) /
@@ -671,7 +666,7 @@ class Bubble {
     print('Updating Y Pos to $newYPos');
   }
 
-  /// Changes the opacity (0.0 to 1.0)
+  /// Changes the opacity of a bubble
   void changeOpacity(double newOp) {
     if (newOp > _greatestOpacity) {
       newOp = _greatestOpacity;
@@ -838,8 +833,8 @@ class Bubble {
   }
 }
 
-///A BubblesList class, used to wrap the Bubbles in so that
-///pass by reference can be simulated.
+///A BubblesList class, used to store the Bubbles with additional methods
+///not limited to normal Lists
 class BubblesList {
   final db = DB.instance; //Instance of the database.
   List<Bubble> _myList; //List of bubbles

@@ -1,3 +1,5 @@
+//Author: Caeleb Nasoff, Chris Malitsky, Abigail Eastman
+
 import 'package:flutter/material.dart';
 import 'bubble_widget.dart';
 import 'list_widget.dart';

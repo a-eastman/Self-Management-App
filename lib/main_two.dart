@@ -1,3 +1,6 @@
+//Author: Martin Price
+//Used for developers to refresh the Database completely
+
 import 'package:flutter/material.dart';
 import 'database.dart';
 
