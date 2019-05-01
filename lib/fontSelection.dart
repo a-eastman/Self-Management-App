@@ -72,9 +72,9 @@ class FontSelectorPageState extends State<FontSelectorPage> {
           backgroundColor: Theme.of(context).backgroundColor,
           canvasColor: Theme.of(context).canvasColor,
           textTheme: TextTheme(
-            body1: TextStyle(fontSize: 12.0),
-            button: TextStyle(fontSize: 12.0),
-            subhead: TextStyle(fontSize: 12.0),
+            body1: TextStyle(fontSize: 10.0),
+            button: TextStyle(fontSize: 10.0),
+            subhead: TextStyle(fontSize: 10.0),
           ),
         ));
   }

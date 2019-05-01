@@ -128,6 +128,7 @@ class BubbleTheme {
         textTheme: TextTheme(
           body1: TextStyle(fontSize: 10.0),
           button: TextStyle(fontSize: 10.0),
+          subhead: TextStyle(fontSize: 10.0),
         ),
       )
     );
@@ -144,6 +145,7 @@ class BubbleTheme {
           textTheme: TextTheme(
             body1: TextStyle(fontSize: 14.0),
             button: TextStyle(fontSize: 14.0),
+            subhead: TextStyle(fontSize: 14.0),
           ),
         )
     );
@@ -160,6 +162,7 @@ class BubbleTheme {
           textTheme: TextTheme(
             body1: TextStyle(fontSize: 18.0),
             button: TextStyle(fontSize: 18.0),
+            subhead: TextStyle(fontSize: 18.0),
           ),
         )
     );
