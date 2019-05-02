@@ -147,10 +147,9 @@ class Bubble {
     //insertBubble();
   }
 
-  ///@author Martin Price
+  ///author Martin Price
   ///This constructor is used for reading in pre-created bubbles for
   ///re-population from the database
-  ///@version 1.1
   Bubble.BubbleFromDatabase(
       int _bID,
       String _entry,
@@ -204,7 +203,6 @@ class Bubble {
   }
 
   ///calls and finds the last created bubble for its bubble id
-  ///@author Martin Price
   void setBubbleID() async {
     this._bubbleID = await db.queryLastCreatedBubbleID();
   }
@@ -239,7 +237,6 @@ class Bubble {
     return _repeat;
   }
 
-  ///Last update Martin Price
   ///When repeat is updated, app updates the DB.
   void changeRepeat() {
     _repeat = !_repeat;
@@ -387,8 +384,7 @@ class Bubble {
     updateDaysToRepeat(_bubbleID, days);
   }
 
-  ///@return a formatted string of all Days to Repeat, stored in DB
-  ///@author Martin Price
+  ///returns a formatted string of all Days to Repeat, stored in DB
   String repeatToString() {
     String days = '';
     if (_repeatMonday) days += 'Mon|';
@@ -511,7 +507,6 @@ class Bubble {
   }
 
   ///Performs the same action as changePressed without updating DB
-  ///@author Martin Price
   void silentPop() {
     _pressed = false;
     setPopState();
@@ -718,51 +713,57 @@ class Bubble {
   }
 
   ///Database getters
-  ///@author Martin Price
-  ///@date March 2019
   ///Queries the enitre bubble data table
-  ///@param bID : the bubble ID that is being looked for
-  ///@param columnID : the column or attribute to return
-  ///@return the attribute
+  ///returns the specific bubble with the given column
   Future<dynamic> queryBubble(int bID, List<String> columnID) async {
     Map<String, dynamic> result = await db.queryBubbleByID(bID, columnID);
     return result[columnID[0]];
   }
-
+  
+  ///queries for title
   dynamic queryTitle(int bID) {
     return queryBubble(bID, ['title']);
   }
-
+  
+  ///queries for description
   dynamic queryDesc(int bID) {
     return queryBubble(bID, ["description"]);
   }
-
+  
+  ///queries for size
   dynamic querySize(int bID) {
     return queryBubble(bID, ["size"]);
   }
 
+  ///queries for xPos
   dynamic queryXPos(int bID) {
     return queryBubble(bID, ["posX"]);
   }
-
+  
+  ///queries for yPos
   dynamic queryYPos(int bID) {
     return queryBubble(bID, ["posY"]);
   }
 
+  ///queries for time_created
   dynamic queryTimeCreated(int bID) {
     return queryBubble(bID, ["time_created"]);
   }
-
+  
+  ///queries for time_deleted
   bool queryDeleted(int bID)
   // ignore: unrelated_type_equality_checks
   {
     return queryBubble(bID, ["deleted"]) == 0;
   }
 
+  ///queries for frequency
   dynamic queryFrequency(int bID) {
     return queryBubble(bID, ["frequency"]);
   }
 
+  ///queries for color attributes
+  ///recreates the color from these attributes
   Future<Color> queryColor(int bID) async {
     final colors = await db.queryBubbleByID(
         bID, ["color_red", "color_green", "color_blue", "opacity"]);
@@ -771,50 +772,55 @@ class Bubble {
   }
 
   ///Queries pop_record
-  ///@param bID: bubble to grab
+  ///queries for specific bubble with given columns
   Future<dynamic> queryPop(int bID, List<String> columns) async {
     return db.queryPop();
   }
 
   ///Database Setters
-  ///@author Martin Price
-  ///@date March 2019
   ///Updates the bubble table
-  ///@param bID: bubble to update
-  ///@param columnID : bubble attribute to update
-  ///@param value: new value
+  ///Specific bubble given by ID and the column and values to update
   void updateBubble(int bID, Map<String, dynamic> row) async {
     await db.updateBubbleByID(bID, row);
   }
 
+  ///Updates bubbles title
   void updateTitle(int bID, String value) {
     updateBubble(bID, {"title": value});
   }
 
+  ///Updates bubbles description
   void updateDesc(int bID, String value) {
     updateBubble(bID, {"description": value});
   }
 
+  ///Updates bubbles size
   void updateSize(int bID, int value) {
     updateBubble(bID, {'size': value});
   }
 
+  ///Updates bubbles xPos
   void updateXPos(int bID, double value) {
     updateBubble(bID, {"posX": value});
   }
 
+  ///Updates bubbles yPos
   void updateYPos(int bID, double value) {
     updateBubble(bID, {"posY": value});
   }
 
+  ///Updates bubbles deleted value
   void updateDeleted(int bID, int value) {
     updateBubble(bID, {"deleted": value});
   }
 
+  ///Updates bubbles frequency
   void updateFrequency(int bID, int value) {
     updateBubble(bID, {"frequency": value});
   }
 
+  ///Updates bubbles title
+  ///takes in a full color, seperates into attributes
   void updateColor(int bID, Color value) {
     updateBubble(bID, {
       "color_red": value.red,
@@ -824,10 +830,12 @@ class Bubble {
     });
   }
 
+  ///Updates bubbles days to repeat
   void updateDaysToRepeat(int bID, String value) {
     updateBubble(bID, {"days_to_repeat": value});
   }
 
+  ///simple to string for the bubble, returns id title desc
   String toString() {
     return "$_bubbleID $_entry $_description";
   }
@@ -840,11 +848,13 @@ class BubblesList {
   List<Bubble> _myList; //List of bubbles
   int _numBubbles; //Number of bubbles in list
 
+  ///initializes a new empty bubble list
   BubblesList.newEmptyBubbleList() {
     _myList = []; //Sets an empty list
     this._numBubbles = 0; //Initial size is 0
   }
 
+  ///logins and determines what repopulation method should be called
   Future<bool> populateBubblesForWidget() async {
     bool newDay = await db.login();
     print('Logged in!');
@@ -857,7 +867,6 @@ class BubblesList {
   }
 
   ///Default Contrustor that calls the database for populating bubbles
-  ///@author Martin Price
   BubblesList() {
     try {
       populateBubbles();
@@ -867,9 +876,8 @@ class BubblesList {
   }
 
   ///Queries the database for bubbles to be repopulated
-  ///@return bubbles : a populated list of bubbles
-  ///@return [] : error or no bubbles
-  ///@author Martin Price
+  ///grabs bubbles that are set to repeat today
+  ///called when a new day has occured
   Future<bool> populateBubbles() async {
     this._numBubbles = 0;
     this._myList = [];
@@ -906,8 +914,6 @@ class BubblesList {
   }
 
   ///Queries the database for bubbles that have not been popped today
-  ///@return bubbles : a populated list of bubbles that have NOT been popped
-  ///@author Martin Price
   Future<bool> unpoppedBubbles() async {
     this._numBubbles = 0;
     this._myList = [];
