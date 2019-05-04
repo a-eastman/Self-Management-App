@@ -12,6 +12,7 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:async';
+import 'database.dart';
 
 // Class DemoTheme used to create actual passable [theme] parameters 
 class DemoTheme {
@@ -23,6 +24,9 @@ class DemoTheme {
 class BubbleTheme {
   final Stream<ThemeData> themeDataStream; //Accepts data sent by sink
   final Sink<DemoTheme> selectedTheme; // Sends data to the stream
+  final db;
+ //final textSize; //TESTING
+  double get tempsize => db.getStoredFontSize();
 
   factory BubbleTheme() {
     final selectedTheme = PublishSubject<DemoTheme>();
@@ -30,13 +34,26 @@ class BubbleTheme {
     final themeDataStream = selectedTheme
         .distinct()
         .map((theme) => theme.data);
+    final db = DB.instance;
+    //final double textSize = 1.0; //TESTING
     //Bubble theme returned with new theme data
-    return BubbleTheme._(themeDataStream, selectedTheme,);
+    return BubbleTheme._(themeDataStream, selectedTheme, db,);
   }
 
-  const BubbleTheme._(this.themeDataStream, this.selectedTheme,);
+  const BubbleTheme._(this.themeDataStream, this.selectedTheme, this.db,);
+  //double get tempsize => db.getStoredFontSize();
+
+  // TESTING
+  // void getTextSize(double newSize){
+  //   // if(tempsize != null){
+  //   //   newSize = tempsize;
+  //   // }
+  //   newSize = textSize;
+  // }
 
   DemoTheme initialTheme() {
+    //double newSize;
+    //getTextSize(newSize);
     return DemoTheme(
       'initial',
       ThemeData(
@@ -46,11 +63,18 @@ class BubbleTheme {
         brightness: Brightness.light,
         accentColor: Colors.blue[300],
         primaryColor: Colors.blue[300],
+        textTheme: TextTheme(
+            body1: TextStyle(fontSize: tempsize),
+            button: TextStyle(fontSize: tempsize),
+            subhead: TextStyle(fontSize: tempsize),
+          ),
       )
     );
   }
 
   DemoTheme buildBubbleTheme() {
+    //double newSize;
+    //getTextSize(newSize);
     return DemoTheme(
       'Bubble',
       ThemeData(
@@ -60,10 +84,17 @@ class BubbleTheme {
         brightness: Brightness.light,
         accentColor: Colors.blue[300],
         primaryColor: Colors.blue[300],
+        textTheme: TextTheme(
+            body1: TextStyle(fontSize: tempsize),
+            button: TextStyle(fontSize: tempsize),
+            subhead: TextStyle(fontSize: tempsize),
+          ),
       ));
   }
 
   DemoTheme buildSunsetTheme() {
+    //double newSize;
+    //getTextSize(newSize);
     return DemoTheme(
       'Sunset',
       ThemeData(
@@ -72,6 +103,11 @@ class BubbleTheme {
         buttonColor: Colors.deepOrange[200],
         primaryColor: Colors.deepOrange[200],
         canvasColor: Colors.grey[800],
+        textTheme: TextTheme(
+            body1: TextStyle(fontSize: tempsize),
+            button: TextStyle(fontSize: tempsize),
+            subhead: TextStyle(fontSize: tempsize),
+          ),
       ));
   }
 

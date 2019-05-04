@@ -32,32 +32,6 @@ class FontSelectorPageState extends State<FontSelectorPage> {
 
   //Bubble preview = new Bubble.defaultBubble();
 
-  Widget _previewBubble(double _screenHeight) {
-    if (bublist.getSize() == 0) {
-      previewColor = Colors.blue;
-    } else {
-      previewColor = bublist.getBubbleAt(0).getColor();
-    }
-    preview.setColor(previewColor);
-    preview.setSize(1);
-    preview.setEntry("Preview Bubble");
-    return new Container(
-      width: preview.getSize() * _screenHeight,
-      height: preview.getSize() * _screenHeight,
-      child: new Container(
-        decoration: new BoxDecoration(
-          color: preview.getColor(),
-          shape: BoxShape.circle,
-        ),
-        child: new Center(
-          child: Text(
-            preview.getEntry(),
-          ),
-        ),
-      ),
-    );
-  }
-
   DemoTheme _buildSmallTheme() {
     db.enterFontSize(10.0);
     print('Font size is now ${db.getStoredFontSize()}');
@@ -146,12 +120,11 @@ class FontSelectorPageState extends State<FontSelectorPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            new Center(
-              child: _previewBubble(_screenHeight),
-            ),
-            RaisedButton(
-                onPressed: () => theme.selectedTheme.add(_buildSmallTheme()),
-                child: Text("Small")),
+            Center(
+              child: RaisedButton(
+                  onPressed: () => theme.selectedTheme.add(_buildSmallTheme()),
+                  child: Text("Small"),
+              )),
             RaisedButton(
               onPressed: () => theme.selectedTheme.add(_buildMediumTheme()),
               child: Text("Medium"),
