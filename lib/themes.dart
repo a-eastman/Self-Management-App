@@ -31,6 +31,7 @@ class BubbleTheme {
   final db;
  //final textSize; //TESTING
   //double get tempsize => db.getStoredFontSize();
+  double get size => db.getStoredFontSize();
 
   factory BubbleTheme() {
     final selectedTheme = PublishSubject<DemoTheme>();
@@ -67,11 +68,11 @@ class BubbleTheme {
         brightness: Brightness.light,
         accentColor: Colors.blue[300],
         primaryColor: Colors.blue[300],
-        // textTheme: TextTheme(
-        //     body1: TextStyle(fontSize: tempsize),
-        //     button: TextStyle(fontSize: tempsize),
-        //     subhead: TextStyle(fontSize: tempsize),
-        //   ),
+         textTheme: TextTheme(
+             body1: TextStyle(fontSize: size),
+             button: TextStyle(fontSize: size),
+             subhead: TextStyle(fontSize: size),
+           ),
       )
     );
   }
@@ -88,11 +89,11 @@ class BubbleTheme {
         brightness: Brightness.light,
         accentColor: Colors.blue[300],
         primaryColor: Colors.blue[300],
-        // textTheme: TextTheme(
-        //     body1: TextStyle(fontSize: tempsize),
-        //     button: TextStyle(fontSize: tempsize),
-        //     subhead: TextStyle(fontSize: tempsize),
-        //   ),
+        /** textTheme: TextTheme(
+             body1: TextStyle(fontSize: size),
+             button: TextStyle(fontSize: size),
+             subhead: TextStyle(fontSize: size),
+           ),*/
       ));
   }
 
@@ -107,11 +108,11 @@ class BubbleTheme {
         buttonColor: Colors.deepOrange[200],
         primaryColor: Colors.deepOrange[200],
         canvasColor: Colors.grey[800],
-        // textTheme: TextTheme(
-        //     body1: TextStyle(fontSize: tempsize),
-        //     button: TextStyle(fontSize: tempsize),
-        //     subhead: TextStyle(fontSize: tempsize),
-        //   ),
+         textTheme: TextTheme(
+             body1: TextStyle(fontSize: size),
+             button: TextStyle(fontSize: size),
+             subhead: TextStyle(fontSize: size),
+           ),
       ));
   }
 
@@ -124,6 +125,11 @@ class BubbleTheme {
           accentColor: Colors.purple[100],
           primaryColor: Colors.purple[100],
           canvasColor: Colors.grey[800],
+            textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+    ),
         ));
   }
 
@@ -136,7 +142,12 @@ class BubbleTheme {
             canvasColor: Colors.blue[100],
             brightness: Brightness.light,
             accentColor: Colors.yellow[200],
-            primaryColor: Colors.yellow[200]));
+            primaryColor: Colors.yellow[200],
+          textTheme: TextTheme(
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),));
   }
 
   DemoTheme buildOceanTheme() {
@@ -147,60 +158,12 @@ class BubbleTheme {
             brightness: Brightness.light,
             buttonColor: Colors.teal[300],
             accentColor: Colors.teal[300],
-            primaryColor: Colors.teal[300]));
-  }
-
-  ///
-  ///Brought in methods from FontSelection to change the font
-  /// Without changing the theme
-  ///
-
-  DemoTheme _buildSmallTheme(BuildContext context) {
-    return DemoTheme(
-        'Small',
-        ThemeData(
-          brightness: Theme.of(context).brightness,
-          buttonColor: Theme.of(context).buttonColor,
-          accentColor: Theme.of(context).accentColor,
-          primaryColor: Theme.of(context).primaryColor,
+            primaryColor: Colors.teal[300],
           textTheme: TextTheme(
-            body1: TextStyle(fontSize: 10.0),
-            button: TextStyle(fontSize: 10.0),
-            subhead: TextStyle(fontSize: 10.0),
-          ),
-        ));
-  }
-
-  DemoTheme _buildMediumTheme(BuildContext context) {
-    return DemoTheme(
-        'Medium',
-        ThemeData(
-          brightness: Theme.of(context).brightness,
-          buttonColor: Theme.of(context).buttonColor,
-          accentColor: Theme.of(context).accentColor,
-          primaryColor: Theme.of(context).primaryColor,
-          textTheme: TextTheme(
-            body1: TextStyle(fontSize: 14.0),
-            button: TextStyle(fontSize: 14.0),
-            subhead: TextStyle(fontSize: 14.0),
-          ),
-        ));
-  }
-
-  DemoTheme _buildLargeTheme(BuildContext context) {
-    return DemoTheme(
-        'Large',
-        ThemeData(
-          brightness: Theme.of(context).brightness,
-          buttonColor: Theme.of(context).buttonColor,
-          accentColor: Theme.of(context).accentColor,
-          primaryColor: Theme.of(context).primaryColor,
-          textTheme: TextTheme(
-            body1: TextStyle(fontSize: 18.0),
-            button: TextStyle(fontSize: 18.0),
-            subhead: TextStyle(fontSize: 18.0),
-          ),
-        ));
+            body1: TextStyle(fontSize: size),
+            button: TextStyle(fontSize: size),
+            subhead: TextStyle(fontSize: size),
+          ),));
   }
 
   ///@returns the specific theme based on param
@@ -224,18 +187,4 @@ class BubbleTheme {
     }
   }
 
-  ///Returns the font size for initialization
-  DemoTheme getSelectedFont(BuildContext context, double fontSize) {
-    switch (fontSize.truncate()) {
-      case 10:
-        return _buildSmallTheme(context);
-        break;
-      case 14:
-        return _buildMediumTheme(context);
-        break;
-      case 18:
-        return _buildLargeTheme(context);
-        break;
-    }
-  }
 }

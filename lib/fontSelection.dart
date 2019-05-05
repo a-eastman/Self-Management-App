@@ -25,6 +25,7 @@ class FontSelectorPageState extends State<FontSelectorPage> {
   Color previewColor;
   Color bubbleColor;
   final db = DB.instance;
+  double get size => db.getStoredFontSize();
 
   Bubble preview = new Bubble.defaultBubble();
 
@@ -45,9 +46,9 @@ class FontSelectorPageState extends State<FontSelectorPage> {
           backgroundColor: Theme.of(context).backgroundColor,
           canvasColor: Theme.of(context).canvasColor,
           textTheme: TextTheme(
-            body1: TextStyle(fontSize: 10.0),
-            button: TextStyle(fontSize: 10.0),
-            subhead: TextStyle(fontSize: 10.0),
+            body1: TextStyle(fontSize: 10),
+            button: TextStyle(fontSize: 10),
+            subhead: TextStyle(fontSize: 10),
           ),
         ));
   }
@@ -67,9 +68,9 @@ class FontSelectorPageState extends State<FontSelectorPage> {
           backgroundColor: Theme.of(context).backgroundColor,
           canvasColor: Theme.of(context).canvasColor,
           textTheme: TextTheme(
-            body1: TextStyle(fontSize: 14.0),
-            button: TextStyle(fontSize: 14.0),
-            subhead: TextStyle(fontSize: 14.0),
+            body1: TextStyle(fontSize: 14),
+            button: TextStyle(fontSize: 14),
+            subhead: TextStyle(fontSize: 14),
           ),
         ));
   }
@@ -89,9 +90,9 @@ class FontSelectorPageState extends State<FontSelectorPage> {
           backgroundColor: Theme.of(context).backgroundColor,
           canvasColor: Theme.of(context).canvasColor,
           textTheme: TextTheme(
-            body1: TextStyle(fontSize: 18.0),
-            button: TextStyle(fontSize: 18.0),
-            subhead: TextStyle(fontSize: 18.0),
+            body1: TextStyle(fontSize: 18),
+            button: TextStyle(fontSize: 18),
+            subhead: TextStyle(fontSize: 18),
           ),
         ));
   }
