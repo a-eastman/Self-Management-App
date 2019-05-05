@@ -648,8 +648,10 @@ class Bubble {
     }
 
     this._xPos = (newXPos + (actualSize / 2.0)) / screenWidth;
+    print("X POS: " + this._xPos.toString());
     updateXPos(_bubbleID, this._xPos);
     print('Updating X Pos to $newXPos');
+    
   }
 
   /// Changes the Y position.
@@ -662,6 +664,8 @@ class Bubble {
 
     this._yPos = (newYPos + (actualSize / 2.0) - 80) /
         screenHeight; // App bar height is 70
+    
+    print("Y POS: " + this._yPos.toString());
     updateYPos(_bubbleID, this._yPos);
     print('Updating Y Pos to $newYPos');
   }
@@ -800,10 +804,12 @@ class Bubble {
   }
 
   void updateXPos(int bID, double value) {
+    print("XPOS IN DB: " + value.toString());
     updateBubble(bID, {"posX": value});
   }
 
   void updateYPos(int bID, double value) {
+    print("YPOS IN DB: " + value.toString());
     updateBubble(bID, {"posY": value});
   }
 
@@ -829,7 +835,7 @@ class Bubble {
   }
 
   String toString() {
-    return "$_bubbleID $_entry $_description";
+    return "$_bubbleID $_entry $_description $_xPos $_yPos";
   }
 }
 
@@ -852,8 +858,12 @@ class BubblesList {
       print('New Day!');
       return await populateBubbles();
     }
-    print('Same Day');
-    return await unpoppedBubbles();
+    else{
+      print('Same Day');
+      await unpoppedBubbles();
+      toString2();
+      return true;
+    }
   }
 
   ///Default Contrustor that calls the database for populating bubbles
@@ -885,7 +895,7 @@ class BubblesList {
                 y['color_blue'], y['opacity']),
             y['size'],
             y['posX'],
-            y['posX'],
+            y['posY'],
             y['opacity'],
             y['times_popped'],
             y['frequency'],
@@ -924,7 +934,7 @@ class BubblesList {
                 y['color_blue'], y['opacity']),
             y['size'],
             y['posX'],
-            y['posX'],
+            y['posY'],
             y['opacity'],
             y['times_popped'],
             y['frequency'],

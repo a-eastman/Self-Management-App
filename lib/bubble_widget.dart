@@ -89,8 +89,9 @@ class BubbleWidgetState extends State<BubbleWidget> {
   Widget makeBubble(Bubble _bubble, BuildContext context) {
     double _screenHeight = MediaQuery.of(context).size.height;
     double _screenWidth = MediaQuery.of(context).size.width;
-    double _bSize = _screenHeight * _bubble.getSize();
-
+    double _bSize = _screenHeight * _bubble.getSize(); // the size of the bubble based off screen size
+    print("SCREENHEIGHT: " + _screenHeight.toString());
+    print("SCREENWIDTH: " + _screenWidth.toString());
     TextStyle _bubbleFont = TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: .15 * _bSize,
@@ -121,6 +122,9 @@ class BubbleWidgetState extends State<BubbleWidget> {
             _bubble.changeXPos(offset.dx, _bSize, _screenWidth);
             _bubble.changeYPos(offset.dy, _bSize, _screenHeight);
             
+            print('Bubble Widget X: ${_bubble.getXPos()}');
+            print('Bubble Widget Y: ${_bubble.getYPos()}');
+
             _bubble.setLastActiongrabbed(true);
 
             setState(() {
