@@ -29,8 +29,6 @@ class BubbleTheme {
   final Stream<ThemeData> themeDataStream; //Accepts data sent by sink
   final Sink<DemoTheme> selectedTheme; // Sends data to the stream
   final db;
- //final textSize; //TESTING
-  //double get tempsize => db.getStoredFontSize();
   double get size => db.getStoredFontSize();
 
   factory BubbleTheme() {
@@ -44,21 +42,9 @@ class BubbleTheme {
     //Bubble theme returned with new theme data
     return BubbleTheme._(themeDataStream, selectedTheme, db,);
   }
-
   const BubbleTheme._(this.themeDataStream, this.selectedTheme, this.db,);
-  //double get tempsize => db.getStoredFontSize();
-
-  // TESTING
-  // void getTextSize(double newSize){
-  //   // if(tempsize != null){
-  //   //   newSize = tempsize;
-  //   // }
-  //   newSize = textSize;
-  // }
 
   DemoTheme initialTheme() {
-    //double newSize;
-    //getTextSize(newSize);
     return DemoTheme(
       'initial',
       ThemeData(
@@ -78,8 +64,6 @@ class BubbleTheme {
   }
 
   DemoTheme buildBubbleTheme() {
-    //double newSize;
-    //getTextSize(newSize);
     return DemoTheme(
       'Bubble',
       ThemeData(
@@ -89,17 +73,15 @@ class BubbleTheme {
         brightness: Brightness.light,
         accentColor: Colors.blue[300],
         primaryColor: Colors.blue[300],
-        /** textTheme: TextTheme(
-             body1: TextStyle(fontSize: size),
-             button: TextStyle(fontSize: size),
-             subhead: TextStyle(fontSize: size),
-           ),*/
+        //  textTheme: TextTheme(
+        //      body1: TextStyle(fontSize: size),
+        //      button: TextStyle(fontSize: size),
+        //      subhead: TextStyle(fontSize: size),
+        //    ),
       ));
   }
 
   DemoTheme buildSunsetTheme() {
-    //double newSize;
-    //getTextSize(newSize);
     return DemoTheme(
       'Sunset',
       ThemeData(
@@ -129,7 +111,7 @@ class BubbleTheme {
             body1: TextStyle(fontSize: size),
             button: TextStyle(fontSize: size),
             subhead: TextStyle(fontSize: size),
-    ),
+          ),
         ));
   }
 
@@ -147,7 +129,8 @@ class BubbleTheme {
             body1: TextStyle(fontSize: size),
             button: TextStyle(fontSize: size),
             subhead: TextStyle(fontSize: size),
-          ),));
+          ),
+        ));
   }
 
   DemoTheme buildOceanTheme() {
@@ -163,7 +146,8 @@ class BubbleTheme {
             body1: TextStyle(fontSize: size),
             button: TextStyle(fontSize: size),
             subhead: TextStyle(fontSize: size),
-          ),));
+          ),
+        ));
   }
 
   ///@returns the specific theme based on param
