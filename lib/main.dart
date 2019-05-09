@@ -1,3 +1,5 @@
+//Author: Caeleb Nasoff, Chris Malitsky, Abigail Eastman
+
 import 'package:flutter/material.dart';
 import 'bubble_widget.dart';
 import 'list_widget.dart';
@@ -8,13 +10,16 @@ import 'settingsScreen.dart';
 import 'stats.dart';
 
 final db = DB.instance;
+
 void main() => runApp(BubbleView());
 
+// ignore: must_be_immutable
 class BubbleView extends StatelessWidget {
   bool newDay;
+
   @override
-  Widget build(BuildContext context){
-    final BubbleTheme theme =BubbleTheme();
+  Widget build(BuildContext context) {
+    final BubbleTheme theme = BubbleTheme();
     BubblesList _bList = new BubblesList.newEmptyBubbleList();
     //db.initXML().then((result){});
     return StreamBuilder<ThemeData>(
@@ -37,19 +42,20 @@ class BubbleView extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class BubbleApp extends StatefulWidget{
+class BubbleApp extends StatefulWidget {
   final BubbleTheme theme;
   final Color globalBubbleColor;
   BubblesList bList;
   List<BubbleWidget> _widList = [];
-  
+
   BubbleApp({Key key, this.theme, this.globalBubbleColor, this.bList});
+
   @override
   BubbleAppState createState() =>
       BubbleAppState(bList, _widList, theme, globalBubbleColor);
 }
 
-class BubbleAppState extends State<BubbleApp>{
+class BubbleAppState extends State<BubbleApp> {
   static BubbleAppState instance;
   BubbleTheme _theme;
   Color globalBubbleColor;
@@ -57,35 +63,37 @@ class BubbleAppState extends State<BubbleApp>{
   BubblesList _bList;
   bool populatedSettings;
   bool populatedBubbles;
-  BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList,
-      this._theme, this.globalBubbleColor){
-    this._bList =_bList;
+
+  BubbleAppState(BubblesList _bList, List<BubbleWidget> _widList, this._theme,
+      this.globalBubbleColor) {
+    this._bList = _bList;
     this._myList = _widList;
     instance = this;
   }
 
-  void updateState()
-  {
-    setState(() { });
+  void updateState() {
+    setState(() {});
   }
 
-  void setBubbleColor(Color newBubbleColor){
+  void setBubbleColor(Color newBubbleColor) {
     this.globalBubbleColor = newBubbleColor;
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     populatedSettings = false;
     populatedBubbles = false;
-    db.getSettings().then((result){
+    db.getSettings().then((result) {
       setState(() {
-        _theme.selectedTheme.add(_theme.getSelectedTheme(result['theme']['current_theme']));
-        //_theme.selectedTheme.add(_theme.getSelectedFont(context, result['font']['font_size']));
-        populatedSettings = true; 
+        //_theme.selectedTheme
+        //    .add(_theme.getSelectedFont(context, result['font']['font_size']));
+        _theme.selectedTheme
+            .add(_theme.getSelectedTheme(result['theme']['current_theme']));
+        populatedSettings = true;
       });
     });
-    _bList.populateBubblesForWidget().then((result){
+    _bList.populateBubblesForWidget().then((result) {
       setState(() {
         populatedBubbles = true;
       });
@@ -93,8 +101,8 @@ class BubbleAppState extends State<BubbleApp>{
     _myList = [];
   }
 
-  Widget build(BuildContext context){
-    if(populatedSettings == false){
+  Widget build(BuildContext context) {
+    if (populatedSettings == false) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Loading in'),
@@ -108,9 +116,8 @@ class BubbleAppState extends State<BubbleApp>{
           ),
         ),
       );
-    }
-    else{
-      if(populatedBubbles == false){
+    } else {
+      if (populatedBubbles == false) {
         return Scaffold(
           appBar: AppBar(
             title: Text('Loading in'),
@@ -124,8 +131,7 @@ class BubbleAppState extends State<BubbleApp>{
             ),
           ),
         );
-      }
-      else{
+      } else {
         return PageView(
           children: <Widget>[
             //_buildSettingsScreen(),
@@ -140,19 +146,23 @@ class BubbleAppState extends State<BubbleApp>{
     }
   }
 
-  ListWidget _buildListView(){
+  /// Creates the list screen.
+  ListWidget _buildListView() {
     return new ListWidget(_bList, _theme);
   }
 
-  Widget _buildBubbleView(){
+  /// Creates the bubble screen.
+  Widget _buildBubbleView() {
     return new BubbleWidget(_bList, _theme);
   }
 
+  /// Creates the settings screen
   Widget _buildSettingsScreen() {
     return new SettingsScreen(_bList, _theme);
   }
 
-  Widget _buildStatsScreen(){
+  /// Creates the stats screen.
+  Widget _buildStatsScreen() {
     return new StatsWidget(_theme);
   }
 }

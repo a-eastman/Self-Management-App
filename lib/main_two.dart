@@ -1,10 +1,14 @@
+//Author: Martin Price
+//Used for developers to refresh the Database completely
 
 import 'package:flutter/material.dart';
 import 'database.dart';
 
 final db = DB.instance;
 final xml = DB.instance;
+
 void main() => runApp(DBview());
+
 class DBview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,9 +22,9 @@ class DBview extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget{
+class MyHomePage extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     xml.initXML();
     return Scaffold(
       appBar: AppBar(
@@ -31,19 +35,30 @@ class MyHomePage extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             RaisedButton(
-              child: Text('Refresh', style: TextStyle(fontSize: 20),),
-              onPressed: () { _refresh(); },
+              child: Text(
+                'Refresh',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: () {
+                _refresh();
+              },
             ),
             RaisedButton(
-              child: Text('XML', style: TextStyle(fontSize: 20),),
-              onPressed: () { _printXML(); },
+              child: Text(
+                'XML',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: () {
+                _printXML();
+              },
             ),
           ],
         ),
       ),
     );
   }
-  void _refresh() async{
+
+  void _refresh() async {
     print("Refreshing Bubl.db");
     await db.refreshDB();
     print('DB refreshed');
@@ -52,12 +67,12 @@ class MyHomePage extends StatelessWidget{
     print('XML refreshed');
   }
 
-  void _printXML(){
+  void _printXML() {
     print('Printing XML');
     xml.printXML();
     print('Font Size ${xml.getStoredFontSize()}');
     print('Increasing font by 1');
-    xml.enterFontSize(xml.getStoredFontSize()+1);
+    xml.enterFontSize(xml.getStoredFontSize() + 1);
     print('Font Size ${xml.getStoredFontSize()}');
   }
 }

@@ -2,21 +2,19 @@
 ///@author Abigail Eastman, Caeleb Nasoff, Chris Malitsky
 ///
 ///
-///LAST EDIT : April 19, 2019
+///LAST EDIT : April 29, 2019
 ///
 
 import 'package:flutter/material.dart';
-import 'themeSelection.dart';
 import 'themes.dart';
 import 'bubbles.dart';
 
 // ignore: must_be_immutable
 class EditWidget extends StatefulWidget {
   BubblesList _myList; //List of bubbles
-  BubbleTheme _theme;
-  Bubble _bubble;
+  BubbleTheme _theme; //Theme for the screen and bubbles
+  Bubble _bubble; //Current bubble being edited
 
-  //ListWidget({Key key, this.myList}) : super(key : key);
   EditWidget(BubblesList _myList, BubbleTheme _theme, Bubble _bubble) {
     this._myList = _myList;
     this._theme = _theme;
@@ -28,11 +26,9 @@ class EditWidget extends StatefulWidget {
 }
 
 class EditWidgetState extends State<EditWidget> {
-  static final TextStyle _bubbleFont = const TextStyle(
-      fontWeight: FontWeight.bold, fontSize: 15.0, fontFamily: 'SoulMarker');
-  BubblesList _myList;
-  BubbleTheme _theme;
-  Bubble _bubble;
+  BubblesList _myList; //List of bubbles
+  BubbleTheme _theme; //Theme for the screen and bubbles
+  Bubble _bubble; //Current bubble being edited
 
   EditWidgetState(BubblesList _myList, BubbleTheme _theme, Bubble _bubble) {
     this._myList = _myList;
@@ -40,11 +36,10 @@ class EditWidgetState extends State<EditWidget> {
     this._bubble = _bubble;
   }
 
-  var _myController;
-  var _myController2;
-  FocusNode _fn = FocusNode();
-  FocusNode _fn2 = FocusNode();
-  Bubble _temp;
+  var _myController; //Controls the text of the first text box
+  var _myController2; //Controls the text of the second text box
+  FocusNode _fn = FocusNode(); //Controls focus for second text box
+  Bubble _temp; //Bubble to hold temporary value changes
 
   /// Set the initial values
   void initState() {
@@ -65,50 +60,53 @@ class EditWidgetState extends State<EditWidget> {
     _myController2 = TextEditingController(text: _bubble.getDescription());
   }
 
-  /// Get rid of memory used when closing the screen
+  /// Get rid of memory used when closing the screen.
   void dispose() {
     _fn.dispose();
-    _fn2.dispose();
     _myController.dispose();
     _myController2.dispose();
     super.dispose();
   }
 
-  /// Change the values entered in to the bubble
+  /// Changes the values entered into the bubble.
   void _editBubble() {
     _bubble.setEntry(_myController.text);
     _bubble.setDescription(_myController2.text);
     _bubble.setSize(_temp.getSizeIndex());
     _bubble.setColor(_temp.getColor());
-    /// If none of the days are selected to repeat, then set
-    /// the repeat value to false.
-    if(!_temp.getRepeatDay("Mon") && !_temp.getRepeatDay("Tue") &&
-       !_temp.getRepeatDay("Wed") && !_temp.getRepeatDay("Thu") &&
-       !_temp.getRepeatDay("Fri") && !_temp.getRepeatDay("Sat") &&
-       !_temp.getRepeatDay("Sun")){
+
+    // If none of the days are selected to repeat, then set
+    // the repeat value to false.
+    if (!_temp.getRepeatDay("Mon") &&
+        !_temp.getRepeatDay("Tue") &&
+        !_temp.getRepeatDay("Wed") &&
+        !_temp.getRepeatDay("Thu") &&
+        !_temp.getRepeatDay("Fri") &&
+        !_temp.getRepeatDay("Sat") &&
+        !_temp.getRepeatDay("Sun")) {
       _bubble.setRepeat(false);
-    } else{
+    } else {
       _bubble.setRepeat(_temp.getRepeat());
     }
 
-    /// When there is a repeat, set the days to the selected value.
-    /// If no repeat, set all the days to false.
-    if(_temp.getRepeat()){
-      _bubble.setRepeatDay("Mon",_temp.getRepeatDay("Mon"));
-      _bubble.setRepeatDay("Tue",_temp.getRepeatDay("Tue"));
-      _bubble.setRepeatDay("Wed",_temp.getRepeatDay("Wed"));
-      _bubble.setRepeatDay("Thu",_temp.getRepeatDay("Thu"));
-      _bubble.setRepeatDay("Fri",_temp.getRepeatDay("Fri"));
-      _bubble.setRepeatDay("Sat",_temp.getRepeatDay("Sat"));
-      _bubble.setRepeatDay("Sun",_temp.getRepeatDay("Sun"));
+    // When there is a repeat, set the days to the selected value.
+    // If no repeat, set all the days to false.
+    if (_temp.getRepeat()) {
+      _bubble.setRepeatDay("Mon", _temp.getRepeatDay("Mon"));
+      _bubble.setRepeatDay("Tue", _temp.getRepeatDay("Tue"));
+      _bubble.setRepeatDay("Wed", _temp.getRepeatDay("Wed"));
+      _bubble.setRepeatDay("Thu", _temp.getRepeatDay("Thu"));
+      _bubble.setRepeatDay("Fri", _temp.getRepeatDay("Fri"));
+      _bubble.setRepeatDay("Sat", _temp.getRepeatDay("Sat"));
+      _bubble.setRepeatDay("Sun", _temp.getRepeatDay("Sun"));
     } else {
-      _bubble.setRepeatDay("Mon",false);
-      _bubble.setRepeatDay("Tue",false);
-      _bubble.setRepeatDay("Wed",false);
-      _bubble.setRepeatDay("Thu",false);
-      _bubble.setRepeatDay("Fri",false);
-      _bubble.setRepeatDay("Sat",false);
-      _bubble.setRepeatDay("Sun",false);
+      _bubble.setRepeatDay("Mon", false);
+      _bubble.setRepeatDay("Tue", false);
+      _bubble.setRepeatDay("Wed", false);
+      _bubble.setRepeatDay("Thu", false);
+      _bubble.setRepeatDay("Fri", false);
+      _bubble.setRepeatDay("Sat", false);
+      _bubble.setRepeatDay("Sun", false);
     }
   }
 
@@ -172,7 +170,7 @@ class EditWidgetState extends State<EditWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double _screenHeight =MediaQuery.of(context).size.height;
+    double _screenHeight = MediaQuery.of(context).size.height;
     double _screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
@@ -208,14 +206,13 @@ class EditWidgetState extends State<EditWidget> {
                     _temp.setSize(newValue);
                   });
                 },
-                items: <int>[0, 1, 2, 3]
-                    .map<DropdownMenuItem<int>>((int value) {
+                items:
+                    <int>[0, 1, 2, 3].map<DropdownMenuItem<int>>((int value) {
                   return DropdownMenuItem<int>(
                     value: value,
                     child: Text(value.toString()),
                   );
-                })
-                    .toList(),
+                }).toList(),
               ),
               _buildColorOptions(_screenWidth),
               _buildRepeat(),
@@ -234,8 +231,9 @@ class EditWidgetState extends State<EditWidget> {
         ]));
   }
 
-  // Builds the individual buttons to select a color
-  Widget _buildColorOptionButton(String color, Color bubbleColor, double _screenWidth){
+  /// Builds the individual buttons to select a color
+  Widget _buildColorOptionButton(
+      String color, Color bubbleColor, double _screenWidth) {
     double _w = _screenWidth / 8;
     return new Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -244,7 +242,7 @@ class EditWidgetState extends State<EditWidget> {
           width: _w,
           child: new RaisedButton(
             color: bubbleColor,
-            onPressed: (){
+            onPressed: () {
               setState(() {
                 _temp.setColor(bubbleColor);
               });
@@ -256,8 +254,8 @@ class EditWidgetState extends State<EditWidget> {
     );
   }
 
-  // Builds the row of buttons
-  Widget _buildColorOptions(double _screenWidth){
+  /// Builds a row of buttons to select the bubble color.
+  Widget _buildColorOptions(double _screenWidth) {
     return new Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -268,14 +266,5 @@ class EditWidgetState extends State<EditWidget> {
         _buildColorOptionButton("Yellow", Colors.yellow[300], _screenWidth),
       ],
     );
-  }
-
-  /// Determines what color to make the bubble
-  Color getBubbleColor(BubblesList _myList) {
-    if (_myList.getSize() == 0) {
-      return Colors.blue;
-    } else {
-      return _myList.getBubbleAt(0).getColor();
-    }
   }
 }
